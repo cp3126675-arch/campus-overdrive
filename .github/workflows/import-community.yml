@@ -17,7 +17,7 @@ jobs:
           import hashlib, os, pathlib, zipfile
           p = pathlib.Path('source-bootstrap.zip')
           assert hashlib.sha256(p.read_bytes()).hexdigest() == os.environ['EXPECTED_SOURCE_SHA256']
-          allowed = {'app','components','hooks','lib','public','docs','scripts','.github'}
+          allowed = {'app','components','hooks','lib','public','docs','scripts','deploy','.github'}
           with zipfile.ZipFile(p) as z:
               assert z.testzip() is None
               names = set()
