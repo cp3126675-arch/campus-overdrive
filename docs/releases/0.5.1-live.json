@@ -1,0 +1,1447 @@
+{
+  "deploymentCommit": "5c33ab62bc377ec7d5c9ea884b88ef7d771d29d3",
+  "checked": 240,
+  "passed": 240,
+  "files": [
+    {
+      "file": "ASSET-CREDITS.txt",
+      "ok": true,
+      "expected": "5cf2ec79ee87b7d97eda89bfe6b7cca30b6246486ea90cf67267781eff9efe1e",
+      "actual": "5cf2ec79ee87b7d97eda89bfe6b7cca30b6246486ea90cf67267781eff9efe1e"
+    },
+    {
+      "file": "art/bike-photo.jpg",
+      "ok": true,
+      "expected": "43dd8a50e5ccce0e08eaa4f57d91d69714bc213bf987df9ca40698b891bc6447",
+      "actual": "43dd8a50e5ccce0e08eaa4f57d91d69714bc213bf987df9ca40698b891bc6447"
+    },
+    {
+      "file": "art/campus-arena.png",
+      "ok": true,
+      "expected": "d861759bc629f4d187707434dd7419ca864e6bae1d6db5d42c0113f1fa49f835",
+      "actual": "d861759bc629f4d187707434dd7419ca864e6bae1d6db5d42c0113f1fa49f835"
+    },
+    {
+      "file": "art/coder-pity.png",
+      "ok": true,
+      "expected": "abbba1585fc8f175593c83beb75c600892ab1cab7562c8d15ab3756ae76718e7",
+      "actual": "abbba1585fc8f175593c83beb75c600892ab1cab7562c8d15ab3756ae76718e7"
+    },
+    {
+      "file": "art/meme-atlas.png",
+      "ok": true,
+      "expected": "8028d7db107407a0f67e8e79929c3d380c601680b183e3ec0f58a5740fdc0024",
+      "actual": "8028d7db107407a0f67e8e79929c3d380c601680b183e3ec0f58a5740fdc0024"
+    },
+    {
+      "file": "art/photos/book-00619501.jpg",
+      "ok": true,
+      "expected": "234b4f3587baf3271d13ecf8b1a35393a78924a62c5e05d7742ebefd546fe1b7",
+      "actual": "234b4f3587baf3271d13ecf8b1a35393a78924a62c5e05d7742ebefd546fe1b7"
+    },
+    {
+      "file": "art/photos/book-00846301.jpg",
+      "ok": true,
+      "expected": "9ec42ad3d26a3c9229c3d68dab53070ce8a8a15ed31ba33e790cf2504d5b8b83",
+      "actual": "9ec42ad3d26a3c9229c3d68dab53070ce8a8a15ed31ba33e790cf2504d5b8b83"
+    },
+    {
+      "file": "art/photos/book-01308001.jpg",
+      "ok": true,
+      "expected": "c5b02f1de479d1da17fc7b29b377f7f753ae930918cb32917d622d789d818e15",
+      "actual": "c5b02f1de479d1da17fc7b29b377f7f753ae930918cb32917d622d789d818e15"
+    },
+    {
+      "file": "art/photos/book-01310601.jpg",
+      "ok": true,
+      "expected": "6b34f90488a39dde7af51988a763c5a10ed91066eb8a176bd3261c31552dd548",
+      "actual": "6b34f90488a39dde7af51988a763c5a10ed91066eb8a176bd3261c31552dd548"
+    },
+    {
+      "file": "art/photos/book-01479503.jpg",
+      "ok": true,
+      "expected": "302e8bd9612786c3be81fa0948587dcdfc85827e7d36c3bd6acb0a8cb5a313ac",
+      "actual": "302e8bd9612786c3be81fa0948587dcdfc85827e7d36c3bd6acb0a8cb5a313ac"
+    },
+    {
+      "file": "art/photos/book-01586801.jpg",
+      "ok": true,
+      "expected": "f1eec3142c4bef10f32d3854cc809982e765e2abd499b7792c2267d14486a2e1",
+      "actual": "f1eec3142c4bef10f32d3854cc809982e765e2abd499b7792c2267d14486a2e1"
+    },
+    {
+      "file": "art/photos/book-01674101.jpg",
+      "ok": true,
+      "expected": "6177cf879be188c9ad571ad552f965831ac3e99bb56864cdaba107cfd1fc33b9",
+      "actual": "6177cf879be188c9ad571ad552f965831ac3e99bb56864cdaba107cfd1fc33b9"
+    },
+    {
+      "file": "art/photos/book-01911501.jpg",
+      "ok": true,
+      "expected": "627851b88296ccf05c2f92b45b71ae8f0725a4d532f1a89f322602a4ce4dfb84",
+      "actual": "627851b88296ccf05c2f92b45b71ae8f0725a4d532f1a89f322602a4ce4dfb84"
+    },
+    {
+      "file": "art/photos/book-01912701.jpg",
+      "ok": true,
+      "expected": "c0e25f7f66b663468028096c2d946d2362c122b21537f292a6ea37c9761a4e9f",
+      "actual": "c0e25f7f66b663468028096c2d946d2362c122b21537f292a6ea37c9761a4e9f"
+    },
+    {
+      "file": "art/photos/book-01913201.jpg",
+      "ok": true,
+      "expected": "bb8d754681181c4c61f4210972727a05214e16c211b56ab3872e7e1b2dd66c46",
+      "actual": "bb8d754681181c4c61f4210972727a05214e16c211b56ab3872e7e1b2dd66c46"
+    },
+    {
+      "file": "art/photos/book-02097701.jpg",
+      "ok": true,
+      "expected": "adb05e04423765778667bfb36a2e57b37afd7712420e7a4b013debd44b60fe42",
+      "actual": "adb05e04423765778667bfb36a2e57b37afd7712420e7a4b013debd44b60fe42"
+    },
+    {
+      "file": "art/photos/book-02461901.jpg",
+      "ok": true,
+      "expected": "e25fc600dd5a5e595cee4a5969bb2b3a91585b0a42da75c14b0a1429b33d2065",
+      "actual": "e25fc600dd5a5e595cee4a5969bb2b3a91585b0a42da75c14b0a1429b33d2065"
+    },
+    {
+      "file": "art/photos/book-02516301.jpg",
+      "ok": true,
+      "expected": "d99cbedc01e60935276cd9131c1a13099a0d64415bfeec348f0a659216484d38",
+      "actual": "d99cbedc01e60935276cd9131c1a13099a0d64415bfeec348f0a659216484d38"
+    },
+    {
+      "file": "art/photos/book-02573001.jpg",
+      "ok": true,
+      "expected": "a7f56afad1c98e2daf5317d9639e0035d02173a8b47f2418e7a80bbb556f27c3",
+      "actual": "a7f56afad1c98e2daf5317d9639e0035d02173a8b47f2418e7a80bbb556f27c3"
+    },
+    {
+      "file": "art/photos/book-02736401.jpg",
+      "ok": true,
+      "expected": "275165b34637d1fbb24da7392f05efffeb499fbb98d91ab4edb2f01a77da6d34",
+      "actual": "275165b34637d1fbb24da7392f05efffeb499fbb98d91ab4edb2f01a77da6d34"
+    },
+    {
+      "file": "art/photos/book-02758201.jpg",
+      "ok": true,
+      "expected": "23633ccda0d0d2a2da685e9e791a0d3244bd58bf1204154f5354f07ad49d30eb",
+      "actual": "23633ccda0d0d2a2da685e9e791a0d3244bd58bf1204154f5354f07ad49d30eb"
+    },
+    {
+      "file": "art/photos/book-02849501.jpg",
+      "ok": true,
+      "expected": "cb7abdaf4ff7b65cfa7bbe0e5abf014defc52438daf06f94ed1e18f955f7f86d",
+      "actual": "cb7abdaf4ff7b65cfa7bbe0e5abf014defc52438daf06f94ed1e18f955f7f86d"
+    },
+    {
+      "file": "art/photos/book-02959101.jpg",
+      "ok": true,
+      "expected": "5313be94064d830b7040c7ba32b0dac8dc5a931405571340c813901fa78dcfb6",
+      "actual": "5313be94064d830b7040c7ba32b0dac8dc5a931405571340c813901fa78dcfb6"
+    },
+    {
+      "file": "art/photos/book-03173401.jpg",
+      "ok": true,
+      "expected": "b0171f7637cb618a4574651bab34120b232c1e1e81191c5293ca35c65783734a",
+      "actual": "b0171f7637cb618a4574651bab34120b232c1e1e81191c5293ca35c65783734a"
+    },
+    {
+      "file": "art/photos/book-03719901.jpg",
+      "ok": true,
+      "expected": "4b3856a73ceb1a971555858760ea8b807bd56361fbb6cb73f6d4fe8b8103be3a",
+      "actual": "4b3856a73ceb1a971555858760ea8b807bd56361fbb6cb73f6d4fe8b8103be3a"
+    },
+    {
+      "file": "art/photos/book-03726301.jpg",
+      "ok": true,
+      "expected": "cbf8da18f8e3145129814b215fb955591b2bacde573b261addf711ef6045183c",
+      "actual": "cbf8da18f8e3145129814b215fb955591b2bacde573b261addf711ef6045183c"
+    },
+    {
+      "file": "art/photos/book-03794801.jpg",
+      "ok": true,
+      "expected": "1554cdb68c9edd34822e2cb885207b5e4ebcd42b348dcd2e339d8764923c0bd6",
+      "actual": "1554cdb68c9edd34822e2cb885207b5e4ebcd42b348dcd2e339d8764923c0bd6"
+    },
+    {
+      "file": "art/photos/book-04281901.jpg",
+      "ok": true,
+      "expected": "551496379b90fce9cc9b8d0f06c5adc2f13abdc1463467958bf7da99dbe5d0b1",
+      "actual": "551496379b90fce9cc9b8d0f06c5adc2f13abdc1463467958bf7da99dbe5d0b1"
+    },
+    {
+      "file": "art/photos/book-04285502.jpg",
+      "ok": true,
+      "expected": "75794ad5b748e439335f056ec1d7f007aa07b959921163026174ce0aa2db483b",
+      "actual": "75794ad5b748e439335f056ec1d7f007aa07b959921163026174ce0aa2db483b"
+    },
+    {
+      "file": "art/photos/book-04290001.jpg",
+      "ok": true,
+      "expected": "d99cbedc01e60935276cd9131c1a13099a0d64415bfeec348f0a659216484d38",
+      "actual": "d99cbedc01e60935276cd9131c1a13099a0d64415bfeec348f0a659216484d38"
+    },
+    {
+      "file": "art/photos/book-04387701.jpg",
+      "ok": true,
+      "expected": "d99cbedc01e60935276cd9131c1a13099a0d64415bfeec348f0a659216484d38",
+      "actual": "d99cbedc01e60935276cd9131c1a13099a0d64415bfeec348f0a659216484d38"
+    },
+    {
+      "file": "art/photos/book-04468904.jpg",
+      "ok": true,
+      "expected": "ef1832a452b5df36bea86d2d43235aef06a2d362e626c7475840ceb122fcf6b3",
+      "actual": "ef1832a452b5df36bea86d2d43235aef06a2d362e626c7475840ceb122fcf6b3"
+    },
+    {
+      "file": "art/photos/book-04620301.jpg",
+      "ok": true,
+      "expected": "13119cbb7cc15d75dd25d177679a00aad4aed1003813b4a868d552dbc04dc0fd",
+      "actual": "13119cbb7cc15d75dd25d177679a00aad4aed1003813b4a868d552dbc04dc0fd"
+    },
+    {
+      "file": "art/photos/book-04641202.jpg",
+      "ok": true,
+      "expected": "4ff986fbb3c569807bab78555b5e7c1953deead40cc077ca1e02dcaa6230b641",
+      "actual": "4ff986fbb3c569807bab78555b5e7c1953deead40cc077ca1e02dcaa6230b641"
+    },
+    {
+      "file": "art/photos/book-04643503.jpg",
+      "ok": true,
+      "expected": "386e46f48716b348831e0f83700a03181099dabeefc81359b7438c85804f3124",
+      "actual": "386e46f48716b348831e0f83700a03181099dabeefc81359b7438c85804f3124"
+    },
+    {
+      "file": "art/photos/book-04691402.jpg",
+      "ok": true,
+      "expected": "a5f0177793a5559e2198eec7b6a5a1876c1e7a01cdf307c79b8495f3806e9375",
+      "actual": "a5f0177793a5559e2198eec7b6a5a1876c1e7a01cdf307c79b8495f3806e9375"
+    },
+    {
+      "file": "art/photos/book-04991801.jpg",
+      "ok": true,
+      "expected": "d274c5a0ef8fa948765f8db9a99e6763a66b0eb6615bbbb48fe257e0588b62ee",
+      "actual": "d274c5a0ef8fa948765f8db9a99e6763a66b0eb6615bbbb48fe257e0588b62ee"
+    },
+    {
+      "file": "art/photos/book-05052301.jpg",
+      "ok": true,
+      "expected": "87b235aa0cf0fb8ac6af8aeef2822bdbb9a8ea8e48f0096b934c099e1f2f45e0",
+      "actual": "87b235aa0cf0fb8ac6af8aeef2822bdbb9a8ea8e48f0096b934c099e1f2f45e0"
+    },
+    {
+      "file": "art/photos/book-05063201.jpg",
+      "ok": true,
+      "expected": "59cae531d1f865600d250ab8e0fe3b6fe5a861eb29bf6ccb34e30fadeb1f4168",
+      "actual": "59cae531d1f865600d250ab8e0fe3b6fe5a861eb29bf6ccb34e30fadeb1f4168"
+    },
+    {
+      "file": "art/photos/book-05105604.jpg",
+      "ok": true,
+      "expected": "45fae878b41eeba472e4ed5bd077dd10a3682d85284fe56598b0a63e822a0744",
+      "actual": "45fae878b41eeba472e4ed5bd077dd10a3682d85284fe56598b0a63e822a0744"
+    },
+    {
+      "file": "art/photos/book-05180401.jpg",
+      "ok": true,
+      "expected": "0afb1a1a1878b550e88a6699bfc4ad03c41618a811593830c03336dbdc10796d",
+      "actual": "0afb1a1a1878b550e88a6699bfc4ad03c41618a811593830c03336dbdc10796d"
+    },
+    {
+      "file": "art/photos/book-05183202.jpg",
+      "ok": true,
+      "expected": "94e0b74fe3c9055fdad18fbc77b11e5ca96ab9f7b3b56ec343c4a7c67e2aa7f1",
+      "actual": "94e0b74fe3c9055fdad18fbc77b11e5ca96ab9f7b3b56ec343c4a7c67e2aa7f1"
+    },
+    {
+      "file": "art/photos/book-05242702.jpg",
+      "ok": true,
+      "expected": "81c4ae6df7c4b348cfc4446eda0b3ef7b1a008b6c585e1f8eb8b00556021df67",
+      "actual": "81c4ae6df7c4b348cfc4446eda0b3ef7b1a008b6c585e1f8eb8b00556021df67"
+    },
+    {
+      "file": "art/photos/book-05266601.jpg",
+      "ok": true,
+      "expected": "ce431d530496fd61ad0d84ea51630d856b132510e25ccea1bf6346442eb50ef4",
+      "actual": "ce431d530496fd61ad0d84ea51630d856b132510e25ccea1bf6346442eb50ef4"
+    },
+    {
+      "file": "art/photos/book-05418301.jpg",
+      "ok": true,
+      "expected": "fda92c80e3f00619d872eeead3cf4cf56c54502a3a328ca5185a30194bf7335b",
+      "actual": "fda92c80e3f00619d872eeead3cf4cf56c54502a3a328ca5185a30194bf7335b"
+    },
+    {
+      "file": "art/photos/book-05754801.jpg",
+      "ok": true,
+      "expected": "c56fad67cb9df6fb70ccad87b090be729ceb3efd8f5587ae60c26b48d0d6faed",
+      "actual": "c56fad67cb9df6fb70ccad87b090be729ceb3efd8f5587ae60c26b48d0d6faed"
+    },
+    {
+      "file": "art/photos/book-05915602.jpg",
+      "ok": true,
+      "expected": "7cc4897fb24eba653612d0651f0168787dec7887406a9901a7fcf68b438256a9",
+      "actual": "7cc4897fb24eba653612d0651f0168787dec7887406a9901a7fcf68b438256a9"
+    },
+    {
+      "file": "art/photos/book-05980901.jpg",
+      "ok": true,
+      "expected": "25fc18fc7728af7a725da760ffbecfdd21e1ee22d7020741a86052975d64507d",
+      "actual": "25fc18fc7728af7a725da760ffbecfdd21e1ee22d7020741a86052975d64507d"
+    },
+    {
+      "file": "art/photos/book-06028201.jpg",
+      "ok": true,
+      "expected": "616c54ec42e60e06d88366672e38dc7c21be746fb928cad147f019ea76794646",
+      "actual": "616c54ec42e60e06d88366672e38dc7c21be746fb928cad147f019ea76794646"
+    },
+    {
+      "file": "art/photos/book-06074904.jpg",
+      "ok": true,
+      "expected": "b61d86d45b2946867d8c85c613312c444e04e60f8cd39b60cf0138b66d0df353",
+      "actual": "b61d86d45b2946867d8c85c613312c444e04e60f8cd39b60cf0138b66d0df353"
+    },
+    {
+      "file": "art/photos/book-06117201.jpg",
+      "ok": true,
+      "expected": "86816ae816d2a27bf2868b1105b8436a1bcbbaf2fd055197eca0240d77e07eda",
+      "actual": "86816ae816d2a27bf2868b1105b8436a1bcbbaf2fd055197eca0240d77e07eda"
+    },
+    {
+      "file": "art/photos/book-06227001.jpg",
+      "ok": true,
+      "expected": "85811859db900a000e09525edb9fc57b7b3d07679c1f86a2a342cfe1c887e826",
+      "actual": "85811859db900a000e09525edb9fc57b7b3d07679c1f86a2a342cfe1c887e826"
+    },
+    {
+      "file": "art/photos/book-06286204.jpg",
+      "ok": true,
+      "expected": "19844e4abac28b39bb8288235a9a2a98f1b457767e6bf50d15d8baeca1261c2b",
+      "actual": "19844e4abac28b39bb8288235a9a2a98f1b457767e6bf50d15d8baeca1261c2b"
+    },
+    {
+      "file": "art/photos/book-06302801.jpg",
+      "ok": true,
+      "expected": "ffd92a761bcf80c2bd86224150f26e2dde8eb63e66f03a152c0cd151268e88f6",
+      "actual": "ffd92a761bcf80c2bd86224150f26e2dde8eb63e66f03a152c0cd151268e88f6"
+    },
+    {
+      "file": "art/photos/book-06562301.jpg",
+      "ok": true,
+      "expected": "7c2784a4dbc3b6c0d074a44253d7cd6fdc1acdfd9544cff9d1f583feca52ca83",
+      "actual": "7c2784a4dbc3b6c0d074a44253d7cd6fdc1acdfd9544cff9d1f583feca52ca83"
+    },
+    {
+      "file": "art/photos/book-06691801.jpg",
+      "ok": true,
+      "expected": "18c58068d1c55d5df1e558b5b7da820f0d8581f44c493665bb8b4ae06486fe07",
+      "actual": "18c58068d1c55d5df1e558b5b7da820f0d8581f44c493665bb8b4ae06486fe07"
+    },
+    {
+      "file": "art/photos/book-06797401.jpg",
+      "ok": true,
+      "expected": "615c5596f1d3770c8e7eea516ce1f6d7d650020d56ceb294ed544e505b5f5fa7",
+      "actual": "615c5596f1d3770c8e7eea516ce1f6d7d650020d56ceb294ed544e505b5f5fa7"
+    },
+    {
+      "file": "art/photos/book-06853301.jpg",
+      "ok": true,
+      "expected": "c37b6914bbf7c4524c83c8c6d65a612166a300d2d44c6db0e8b625ce426e7921",
+      "actual": "c37b6914bbf7c4524c83c8c6d65a612166a300d2d44c6db0e8b625ce426e7921"
+    },
+    {
+      "file": "art/photos/book-06903501.jpg",
+      "ok": true,
+      "expected": "e0c96c49980809832c27cc6791c4cfd45afafbfe6ac6174ddf0fb69ce9840ed8",
+      "actual": "e0c96c49980809832c27cc6791c4cfd45afafbfe6ac6174ddf0fb69ce9840ed8"
+    },
+    {
+      "file": "art/photos/book-07061601.jpg",
+      "ok": true,
+      "expected": "bafb158d4ebc0b241ad0986fac4b439ae95863260e9b630afa78a1ce9dbe5f14",
+      "actual": "bafb158d4ebc0b241ad0986fac4b439ae95863260e9b630afa78a1ce9dbe5f14"
+    },
+    {
+      "file": "art/photos/book-07069001.jpg",
+      "ok": true,
+      "expected": "84cd22183b1ec168a02d3ab0625a8899a5cc67fb7865e36d9c1852861d4e8daf",
+      "actual": "84cd22183b1ec168a02d3ab0625a8899a5cc67fb7865e36d9c1852861d4e8daf"
+    },
+    {
+      "file": "art/photos/book-07072801.jpg",
+      "ok": true,
+      "expected": "a52826eec3668d0d7bda8d5d01b51076ce4d84a22390cba51c88cb978fd7cdde",
+      "actual": "a52826eec3668d0d7bda8d5d01b51076ce4d84a22390cba51c88cb978fd7cdde"
+    },
+    {
+      "file": "art/photos/book-07112802.jpg",
+      "ok": true,
+      "expected": "166b6974973bc6acb91a598cda0a7d25cd345a28c9015e15607ab50f216de00b",
+      "actual": "166b6974973bc6acb91a598cda0a7d25cd345a28c9015e15607ab50f216de00b"
+    },
+    {
+      "file": "art/photos/book-07221101.jpg",
+      "ok": true,
+      "expected": "38ad98d022010ca0c66d64f2b7ba0bfc339141414bdff5619f23dd69d3f4f79c",
+      "actual": "38ad98d022010ca0c66d64f2b7ba0bfc339141414bdff5619f23dd69d3f4f79c"
+    },
+    {
+      "file": "art/photos/book-07222101.jpg",
+      "ok": true,
+      "expected": "165ea87c917bc4115e7f164207b5162d26f36c0ec61acb825b23402cd70612e7",
+      "actual": "165ea87c917bc4115e7f164207b5162d26f36c0ec61acb825b23402cd70612e7"
+    },
+    {
+      "file": "art/photos/book-07294102.jpg",
+      "ok": true,
+      "expected": "82f4e396fd76d6dba6e5d2acfbe29ee0501ab5f078b15cf9bf4413d42a882458",
+      "actual": "82f4e396fd76d6dba6e5d2acfbe29ee0501ab5f078b15cf9bf4413d42a882458"
+    },
+    {
+      "file": "art/photos/book-07296801.jpg",
+      "ok": true,
+      "expected": "cf366b12a2897f445e85cf5893de9fb2e72027a284a10d52cd8c8499a5eac7c8",
+      "actual": "cf366b12a2897f445e85cf5893de9fb2e72027a284a10d52cd8c8499a5eac7c8"
+    },
+    {
+      "file": "art/photos/book-07350601.jpg",
+      "ok": true,
+      "expected": "8276b67c7680e282d8eb1f52db7505d050bfb15e53865418ef81de21f2f90591",
+      "actual": "8276b67c7680e282d8eb1f52db7505d050bfb15e53865418ef81de21f2f90591"
+    },
+    {
+      "file": "art/photos/book-07351701.jpg",
+      "ok": true,
+      "expected": "713076f5eb98244bcf600d43e76adf80eb7a43ea57230d5c008a5c0536a876ef",
+      "actual": "713076f5eb98244bcf600d43e76adf80eb7a43ea57230d5c008a5c0536a876ef"
+    },
+    {
+      "file": "art/photos/book-07601901.jpg",
+      "ok": true,
+      "expected": "215578e49b485891ac96bde7578b21d7e9f73f7abe17659f468f0601c2103256",
+      "actual": "215578e49b485891ac96bde7578b21d7e9f73f7abe17659f468f0601c2103256"
+    },
+    {
+      "file": "art/photos/book-07650702.jpg",
+      "ok": true,
+      "expected": "52409eb82a8ec1804e6f6f60e35e33d7b8917c7ac97f19463deb62ea8dc9e654",
+      "actual": "52409eb82a8ec1804e6f6f60e35e33d7b8917c7ac97f19463deb62ea8dc9e654"
+    },
+    {
+      "file": "art/photos/book-07662001.jpg",
+      "ok": true,
+      "expected": "e2381b0d94d4624a40d55ced2779b82b514385cc2d02e97b7e14fd924ace5523",
+      "actual": "e2381b0d94d4624a40d55ced2779b82b514385cc2d02e97b7e14fd924ace5523"
+    },
+    {
+      "file": "art/photos/book-07664002.jpg",
+      "ok": true,
+      "expected": "ec844940dcca4b99dbb61f2fc5bf1830fa8d1d7755132fdabc01217af2a797c9",
+      "actual": "ec844940dcca4b99dbb61f2fc5bf1830fa8d1d7755132fdabc01217af2a797c9"
+    },
+    {
+      "file": "art/photos/book-07709601.jpg",
+      "ok": true,
+      "expected": "f5c9406a132cad08f0202b0d96a4e41f2516b189b9e7be9a56a43a9af2dfa2ed",
+      "actual": "f5c9406a132cad08f0202b0d96a4e41f2516b189b9e7be9a56a43a9af2dfa2ed"
+    },
+    {
+      "file": "art/photos/book-07779302.jpg",
+      "ok": true,
+      "expected": "1e1e241a2485f157e2271f9d1bb9c2cabfa82d3731b0fce413420c00d66e617e",
+      "actual": "1e1e241a2485f157e2271f9d1bb9c2cabfa82d3731b0fce413420c00d66e617e"
+    },
+    {
+      "file": "art/photos/book-07904002.jpg",
+      "ok": true,
+      "expected": "2212da4d5cadb350855990116cd8d7c20e18b46be336cf5402536a65b54e9393",
+      "actual": "2212da4d5cadb350855990116cd8d7c20e18b46be336cf5402536a65b54e9393"
+    },
+    {
+      "file": "art/photos/book-07918901.jpg",
+      "ok": true,
+      "expected": "6a7ea52fbb4afd21366a6bb31a4c3e9342c5524e7cbbd4eb623d4dcef92e6e23",
+      "actual": "6a7ea52fbb4afd21366a6bb31a4c3e9342c5524e7cbbd4eb623d4dcef92e6e23"
+    },
+    {
+      "file": "art/photos/book-08069901.jpg",
+      "ok": true,
+      "expected": "e5351a27df17136cf26022adb8e85c345eba3483a6384291da9484aa5eefea90",
+      "actual": "e5351a27df17136cf26022adb8e85c345eba3483a6384291da9484aa5eefea90"
+    },
+    {
+      "file": "art/photos/book-08116902.jpg",
+      "ok": true,
+      "expected": "e9c3636c733a2aa39e1c89a1fc90096d113f515db2d8fdb68c824db4a56d6044",
+      "actual": "e9c3636c733a2aa39e1c89a1fc90096d113f515db2d8fdb68c824db4a56d6044"
+    },
+    {
+      "file": "art/photos/book-08227601.jpg",
+      "ok": true,
+      "expected": "6ae3b3d8932ad68bab836fd484949cd227b988bd065543d78d05e28a49c292c5",
+      "actual": "6ae3b3d8932ad68bab836fd484949cd227b988bd065543d78d05e28a49c292c5"
+    },
+    {
+      "file": "art/photos/book-08321001.jpg",
+      "ok": true,
+      "expected": "fe092ba19c0be99d6763e8d05438fd8d358b543a3978c4f65fbc1279dba10309",
+      "actual": "fe092ba19c0be99d6763e8d05438fd8d358b543a3978c4f65fbc1279dba10309"
+    },
+    {
+      "file": "art/photos/book-08346102.jpg",
+      "ok": true,
+      "expected": "f2a88295c28d725569eea1e81af9967b6ff561ce1163571b61d61f44f6b4114b",
+      "actual": "f2a88295c28d725569eea1e81af9967b6ff561ce1163571b61d61f44f6b4114b"
+    },
+    {
+      "file": "art/photos/book-08364601.jpg",
+      "ok": true,
+      "expected": "189e6d74eb35d53788da6d44d8347ad6136fe1aa2b08571b2a24dca37ee88e47",
+      "actual": "189e6d74eb35d53788da6d44d8347ad6136fe1aa2b08571b2a24dca37ee88e47"
+    },
+    {
+      "file": "art/photos/book-08479701.jpg",
+      "ok": true,
+      "expected": "1dfd9d58b4114ce04d81c1e607b83ca01e0804107104dd8206de79bfdd7f8fe5",
+      "actual": "1dfd9d58b4114ce04d81c1e607b83ca01e0804107104dd8206de79bfdd7f8fe5"
+    },
+    {
+      "file": "art/photos/book-08508502.jpg",
+      "ok": true,
+      "expected": "34b119826f8b8641f08bff6a919530ddade1eefcf8a1df65581deee0309e9449",
+      "actual": "34b119826f8b8641f08bff6a919530ddade1eefcf8a1df65581deee0309e9449"
+    },
+    {
+      "file": "art/photos/book-08610702.jpg",
+      "ok": true,
+      "expected": "0b50b775e932b7c23fb8e8074d926348e2d1c3e775a2d2f33a64be4a3a0af62d",
+      "actual": "0b50b775e932b7c23fb8e8074d926348e2d1c3e775a2d2f33a64be4a3a0af62d"
+    },
+    {
+      "file": "art/photos/book-08639601.jpg",
+      "ok": true,
+      "expected": "c88df1fecd63c0f91a41bfd993dbad17be2823146d124950f0148691c32a18d8",
+      "actual": "c88df1fecd63c0f91a41bfd993dbad17be2823146d124950f0148691c32a18d8"
+    },
+    {
+      "file": "art/photos/book-08647601.jpg",
+      "ok": true,
+      "expected": "5c4ff935edf446bf9ce914283d89edb7e194f7f3f362e0ff8e90559d395723ed",
+      "actual": "5c4ff935edf446bf9ce914283d89edb7e194f7f3f362e0ff8e90559d395723ed"
+    },
+    {
+      "file": "art/photos/book-08743001.jpg",
+      "ok": true,
+      "expected": "3c2c7eccbbd2a3ff7cb065b09e458e363ae79a283af7448da9f600933765f455",
+      "actual": "3c2c7eccbbd2a3ff7cb065b09e458e363ae79a283af7448da9f600933765f455"
+    },
+    {
+      "file": "art/photos/book-08849901.jpg",
+      "ok": true,
+      "expected": "d831d88954e8e4d2fc967d53c8e8c037db2c7b9cdea73eb8c718ae0aea0ce3e5",
+      "actual": "d831d88954e8e4d2fc967d53c8e8c037db2c7b9cdea73eb8c718ae0aea0ce3e5"
+    },
+    {
+      "file": "art/photos/book-08854401.jpg",
+      "ok": true,
+      "expected": "15ca8b9740c23a2dbd4502202bf1b1a7e8106b9e27b2c9c60d474bc29b3e8676",
+      "actual": "15ca8b9740c23a2dbd4502202bf1b1a7e8106b9e27b2c9c60d474bc29b3e8676"
+    },
+    {
+      "file": "art/photos/book-08878601.jpg",
+      "ok": true,
+      "expected": "a21b69f7a14d3d58a89bd97c388b16f16c7dcf8b5064294db6736d3b10d72383",
+      "actual": "a21b69f7a14d3d58a89bd97c388b16f16c7dcf8b5064294db6736d3b10d72383"
+    },
+    {
+      "file": "art/photos/book-08916601.jpg",
+      "ok": true,
+      "expected": "63bcad8786c50a4afcb1517e1fc4a69dd241ff5b76bf14f7dd13bb09cf15468b",
+      "actual": "63bcad8786c50a4afcb1517e1fc4a69dd241ff5b76bf14f7dd13bb09cf15468b"
+    },
+    {
+      "file": "art/photos/book-08917601.jpg",
+      "ok": true,
+      "expected": "a14b9c7ee484ab4dab5bc974141be33aec279e093be7dc726ef669afc0021acb",
+      "actual": "a14b9c7ee484ab4dab5bc974141be33aec279e093be7dc726ef669afc0021acb"
+    },
+    {
+      "file": "art/photos/book-08942401.jpg",
+      "ok": true,
+      "expected": "db82567e9af43e0995c2071a7d2d6c0a41c245ff9fabf8ce6f7cfa7141a5fb43",
+      "actual": "db82567e9af43e0995c2071a7d2d6c0a41c245ff9fabf8ce6f7cfa7141a5fb43"
+    },
+    {
+      "file": "art/photos/book-08961601.jpg",
+      "ok": true,
+      "expected": "662729fc30ea63bc8927afa029f4d175a90271f69e2d5c38a6da9759ac58cf71",
+      "actual": "662729fc30ea63bc8927afa029f4d175a90271f69e2d5c38a6da9759ac58cf71"
+    },
+    {
+      "file": "art/photos/book-09136601.jpg",
+      "ok": true,
+      "expected": "f8b3ca96323bffe954e972fcdc81c9278d8d30982b0f6dd259f15e8fb09aa965",
+      "actual": "f8b3ca96323bffe954e972fcdc81c9278d8d30982b0f6dd259f15e8fb09aa965"
+    },
+    {
+      "file": "art/photos/book-09149801.jpg",
+      "ok": true,
+      "expected": "330c6ed5e6fe6d1c6fd8ad37b75207636d7319cf1b8e026bc2f5a3d66946d645",
+      "actual": "330c6ed5e6fe6d1c6fd8ad37b75207636d7319cf1b8e026bc2f5a3d66946d645"
+    },
+    {
+      "file": "art/photos/book-09150901.jpg",
+      "ok": true,
+      "expected": "b0a1bd63e1aa84512b53851f24830ca0fa6eac5340b49d688924e9f2a87a402a",
+      "actual": "b0a1bd63e1aa84512b53851f24830ca0fa6eac5340b49d688924e9f2a87a402a"
+    },
+    {
+      "file": "art/photos/book-09162901.jpg",
+      "ok": true,
+      "expected": "8586d3e9d5d3c83db0e9184d5a19dac46281973129a2a0d7ececf9299b807599",
+      "actual": "8586d3e9d5d3c83db0e9184d5a19dac46281973129a2a0d7ececf9299b807599"
+    },
+    {
+      "file": "art/photos/book-09180901.jpg",
+      "ok": true,
+      "expected": "59b4b5fd2637a639bd215ffee0f31cbcc44da85e1e47e85b6c69828dfad5f5c6",
+      "actual": "59b4b5fd2637a639bd215ffee0f31cbcc44da85e1e47e85b6c69828dfad5f5c6"
+    },
+    {
+      "file": "art/photos/book-09213801.jpg",
+      "ok": true,
+      "expected": "6887da9f0abebaf01e27286cc7f529d073dcfddb43cc331942dae835d2c983bb",
+      "actual": "6887da9f0abebaf01e27286cc7f529d073dcfddb43cc331942dae835d2c983bb"
+    },
+    {
+      "file": "art/photos/book-09294101.jpg",
+      "ok": true,
+      "expected": "acd6c98ef2267c37ca687937a53ea3fc3bda81234748cac67a0102e4894873fe",
+      "actual": "acd6c98ef2267c37ca687937a53ea3fc3bda81234748cac67a0102e4894873fe"
+    },
+    {
+      "file": "art/photos/book-09344501.jpg",
+      "ok": true,
+      "expected": "670d86119c9764b1a9e7fa01c37786a13fbcc31691a91762675c190af2c98398",
+      "actual": "670d86119c9764b1a9e7fa01c37786a13fbcc31691a91762675c190af2c98398"
+    },
+    {
+      "file": "art/photos/book-09421401.jpg",
+      "ok": true,
+      "expected": "e12b4f0c054d4e2abe972d9a15b4d84db3724e041dbf8e20705a4ab69dfe3f5f",
+      "actual": "e12b4f0c054d4e2abe972d9a15b4d84db3724e041dbf8e20705a4ab69dfe3f5f"
+    },
+    {
+      "file": "art/photos/book-09468701.jpg",
+      "ok": true,
+      "expected": "70cc592d5c5393cfd49874084bd11891120c2155561e0b6d242c7d0c9c7acfad",
+      "actual": "70cc592d5c5393cfd49874084bd11891120c2155561e0b6d242c7d0c9c7acfad"
+    },
+    {
+      "file": "art/photos/book-09530901.jpg",
+      "ok": true,
+      "expected": "f58be0f1f9573ff67c3c8aebfcb14230a0d010dd739051e9b0fb84e5a4779366",
+      "actual": "f58be0f1f9573ff67c3c8aebfcb14230a0d010dd739051e9b0fb84e5a4779366"
+    },
+    {
+      "file": "art/photos/book-09541501.jpg",
+      "ok": true,
+      "expected": "067a2f31417de618c02203ca67a15d5b511976c681a04855e86c381d9dc346bc",
+      "actual": "067a2f31417de618c02203ca67a15d5b511976c681a04855e86c381d9dc346bc"
+    },
+    {
+      "file": "art/photos/book-09541801.jpg",
+      "ok": true,
+      "expected": "c11525cb9aa8b144e7e1b87c0c7223eb565d3c55867b0288ee5a59648dedcee7",
+      "actual": "c11525cb9aa8b144e7e1b87c0c7223eb565d3c55867b0288ee5a59648dedcee7"
+    },
+    {
+      "file": "art/photos/book-09583201.jpg",
+      "ok": true,
+      "expected": "fa3f904a6306f91cf7d2f395c01fb3cd06df29dedc837b7249b5090568cedc60",
+      "actual": "fa3f904a6306f91cf7d2f395c01fb3cd06df29dedc837b7249b5090568cedc60"
+    },
+    {
+      "file": "art/photos/book-09637201.jpg",
+      "ok": true,
+      "expected": "e2f5aeb8460a2783e4af66edb426ec401088451925bde0e27ca06ad7f2a380fa",
+      "actual": "e2f5aeb8460a2783e4af66edb426ec401088451925bde0e27ca06ad7f2a380fa"
+    },
+    {
+      "file": "art/photos/book-09647401.jpg",
+      "ok": true,
+      "expected": "4b0dab936cf3335620fce35bf7dc956ffafd15b11f3a18bd41d35caa86e3b620",
+      "actual": "4b0dab936cf3335620fce35bf7dc956ffafd15b11f3a18bd41d35caa86e3b620"
+    },
+    {
+      "file": "art/photos/book-09761303.jpg",
+      "ok": true,
+      "expected": "40f3e3ad561186e53ef031288ff118d63132c97905d4166ac5c45c73a01bcc3d",
+      "actual": "40f3e3ad561186e53ef031288ff118d63132c97905d4166ac5c45c73a01bcc3d"
+    },
+    {
+      "file": "art/photos/book-09801901.jpg",
+      "ok": true,
+      "expected": "f24520e3db1eb4b00666a25f4e3f022bccf09b2887eac7ec372184076aeef61c",
+      "actual": "f24520e3db1eb4b00666a25f4e3f022bccf09b2887eac7ec372184076aeef61c"
+    },
+    {
+      "file": "art/photos/book-09884401.jpg",
+      "ok": true,
+      "expected": "faed2ad75359a9cc97fe8b5fc1c8e4728ee86e670cb7dd52dc70f69dc292acec",
+      "actual": "faed2ad75359a9cc97fe8b5fc1c8e4728ee86e670cb7dd52dc70f69dc292acec"
+    },
+    {
+      "file": "art/photos/book-09886701.jpg",
+      "ok": true,
+      "expected": "8e37b1d8ef8653bc85b59065f662d54eebef37952a7f5fe797a646900cc90a8a",
+      "actual": "8e37b1d8ef8653bc85b59065f662d54eebef37952a7f5fe797a646900cc90a8a"
+    },
+    {
+      "file": "art/photos/book-09896401.jpg",
+      "ok": true,
+      "expected": "c5e8801157e2c54250c95c47f932fc12ac39a7f90ce1df2b6703125efaab932b",
+      "actual": "c5e8801157e2c54250c95c47f932fc12ac39a7f90ce1df2b6703125efaab932b"
+    },
+    {
+      "file": "art/photos/book-09912801.jpg",
+      "ok": true,
+      "expected": "7baf748902da1736cb7df89203467bdf61702476de93d2b59927bddac073f456",
+      "actual": "7baf748902da1736cb7df89203467bdf61702476de93d2b59927bddac073f456"
+    },
+    {
+      "file": "art/photos/book-09943601.jpg",
+      "ok": true,
+      "expected": "ffc1df6aff2dc4b14dad8f7ed64c3deb980f9b36f911e118dead82ec4f50a2c7",
+      "actual": "ffc1df6aff2dc4b14dad8f7ed64c3deb980f9b36f911e118dead82ec4f50a2c7"
+    },
+    {
+      "file": "art/photos/book-09946901.jpg",
+      "ok": true,
+      "expected": "bc1be89d8ea5c422c2212860c8e9e9c38b183fd65bac2dee084754826ab5de28",
+      "actual": "bc1be89d8ea5c422c2212860c8e9e9c38b183fd65bac2dee084754826ab5de28"
+    },
+    {
+      "file": "art/photos/book-09957801.jpg",
+      "ok": true,
+      "expected": "2a82db590306dd67ee8b19d12cd6c4006aee4e1942c16f4a737686c1347e3413",
+      "actual": "2a82db590306dd67ee8b19d12cd6c4006aee4e1942c16f4a737686c1347e3413"
+    },
+    {
+      "file": "art/photos/book-09961901.jpg",
+      "ok": true,
+      "expected": "c83021fd23ddfe08bb63a840e741fa7f3adb14737f5cf1261d556c7b460e83e2",
+      "actual": "c83021fd23ddfe08bb63a840e741fa7f3adb14737f5cf1261d556c7b460e83e2"
+    },
+    {
+      "file": "art/photos/book-10038301.jpg",
+      "ok": true,
+      "expected": "c0f7e8dff0095cf163412130124daacc2c345e5f911aaf93f7285dbd4548b24c",
+      "actual": "c0f7e8dff0095cf163412130124daacc2c345e5f911aaf93f7285dbd4548b24c"
+    },
+    {
+      "file": "art/photos/book-10046001.jpg",
+      "ok": true,
+      "expected": "ca6f2186b6ef66810f1a9044316fda818654971bd324a1a6e07d9cf5a092034d",
+      "actual": "ca6f2186b6ef66810f1a9044316fda818654971bd324a1a6e07d9cf5a092034d"
+    },
+    {
+      "file": "art/photos/book-10057401.jpg",
+      "ok": true,
+      "expected": "79fd0976302897802c5e284c48f53dbd3fd230ba426f2dc0eaebd628d87ccb49",
+      "actual": "79fd0976302897802c5e284c48f53dbd3fd230ba426f2dc0eaebd628d87ccb49"
+    },
+    {
+      "file": "art/photos/book-10065701.jpg",
+      "ok": true,
+      "expected": "2ff7878d187305b789579efc175e4f9bae59a4b0a3d15dbeecbeae58682a5786",
+      "actual": "2ff7878d187305b789579efc175e4f9bae59a4b0a3d15dbeecbeae58682a5786"
+    },
+    {
+      "file": "art/photos/book-10204301.jpg",
+      "ok": true,
+      "expected": "5fdad394b93abd708d1e4077aac745fb85b7cc1946a29772cb2d621de5b4f3b8",
+      "actual": "5fdad394b93abd708d1e4077aac745fb85b7cc1946a29772cb2d621de5b4f3b8"
+    },
+    {
+      "file": "art/photos/book-10230901.jpg",
+      "ok": true,
+      "expected": "dc56935c6702bfdb5636ea58715106ffde8b21f1e24dac88f8bd1360e5b1e833",
+      "actual": "dc56935c6702bfdb5636ea58715106ffde8b21f1e24dac88f8bd1360e5b1e833"
+    },
+    {
+      "file": "art/photos/book-10233101.jpg",
+      "ok": true,
+      "expected": "e64154cff2518779df8342956dfe5e3e8114911c96179c7cc452d47c011ed871",
+      "actual": "e64154cff2518779df8342956dfe5e3e8114911c96179c7cc452d47c011ed871"
+    },
+    {
+      "file": "art/photos/book-10243001.jpg",
+      "ok": true,
+      "expected": "fd810074cf64139264bf433795e653ad4697d98895e62f7fa482962792371710",
+      "actual": "fd810074cf64139264bf433795e653ad4697d98895e62f7fa482962792371710"
+    },
+    {
+      "file": "art/photos/book-10251101.jpg",
+      "ok": true,
+      "expected": "4f8b25eea521095119dff8bc04505ffaf56d6fc997afb7be59605bdb39c5bdf4",
+      "actual": "4f8b25eea521095119dff8bc04505ffaf56d6fc997afb7be59605bdb39c5bdf4"
+    },
+    {
+      "file": "art/photos/book-10287501.jpg",
+      "ok": true,
+      "expected": "74f478b0de4fe304f71cfa1a7a8fd826ebd6c433064f16a52d373afbd7660109",
+      "actual": "74f478b0de4fe304f71cfa1a7a8fd826ebd6c433064f16a52d373afbd7660109"
+    },
+    {
+      "file": "art/photos/book-10292101.jpg",
+      "ok": true,
+      "expected": "6ffa0e037d6fab5bf0211ca4c0639abbf0a918ebe391c1c7dc30d81730721c0d",
+      "actual": "6ffa0e037d6fab5bf0211ca4c0639abbf0a918ebe391c1c7dc30d81730721c0d"
+    },
+    {
+      "file": "art/photos/book-10292201.jpg",
+      "ok": true,
+      "expected": "26e4e9d36a4bc46ac8594673e27b774cdf283e9e5bf88944ff3a29520259683f",
+      "actual": "26e4e9d36a4bc46ac8594673e27b774cdf283e9e5bf88944ff3a29520259683f"
+    },
+    {
+      "file": "art/photos/book-10300301.jpg",
+      "ok": true,
+      "expected": "a68c46f128fe93c5cb7592f9492496ecf72d7060b21fa7ee91456807f3ba6f9e",
+      "actual": "a68c46f128fe93c5cb7592f9492496ecf72d7060b21fa7ee91456807f3ba6f9e"
+    },
+    {
+      "file": "art/photos/book-10310601.jpg",
+      "ok": true,
+      "expected": "c4e887f410e0bef757117934124de3753391c5d8b0229d7d5d06a7140be3d287",
+      "actual": "c4e887f410e0bef757117934124de3753391c5d8b0229d7d5d06a7140be3d287"
+    },
+    {
+      "file": "art/photos/book-10338501.jpg",
+      "ok": true,
+      "expected": "40d867eb47037039b1c672061eebc56b8358e0137d4c5df2f706a7ca3eb15887",
+      "actual": "40d867eb47037039b1c672061eebc56b8358e0137d4c5df2f706a7ca3eb15887"
+    },
+    {
+      "file": "art/photos/book-10348001.jpg",
+      "ok": true,
+      "expected": "6f5744943ee8c68ffff81aabf04c91fc90472d2e9ffced46b5682257bf7da4f5",
+      "actual": "6f5744943ee8c68ffff81aabf04c91fc90472d2e9ffced46b5682257bf7da4f5"
+    },
+    {
+      "file": "art/photos/book-10397201.jpg",
+      "ok": true,
+      "expected": "4a8020ce5aa8e2f07a402e7fa4734d7769af025aa4c6e0bc529f6c6f4e69d417",
+      "actual": "4a8020ce5aa8e2f07a402e7fa4734d7769af025aa4c6e0bc529f6c6f4e69d417"
+    },
+    {
+      "file": "art/photos/book-10402801.jpg",
+      "ok": true,
+      "expected": "51a378fc8dec101138bc36b345f2dfc8cb0e227154862b828c8616cd0b47828b",
+      "actual": "51a378fc8dec101138bc36b345f2dfc8cb0e227154862b828c8616cd0b47828b"
+    },
+    {
+      "file": "art/photos/book-10403401.jpg",
+      "ok": true,
+      "expected": "a207e83ac0b20c9bb4b2e5485769c441f4722f70f51c0af34186991a6aaa0596",
+      "actual": "a207e83ac0b20c9bb4b2e5485769c441f4722f70f51c0af34186991a6aaa0596"
+    },
+    {
+      "file": "art/photos/book-10403701.jpg",
+      "ok": true,
+      "expected": "380b9e5f349136c0befdb4b247a5ede2f03bcf19485dacf8b46c67424f0548dc",
+      "actual": "380b9e5f349136c0befdb4b247a5ede2f03bcf19485dacf8b46c67424f0548dc"
+    },
+    {
+      "file": "art/photos/book-10431901.jpg",
+      "ok": true,
+      "expected": "575adbd9bdca62a135b0df5aebc386ab39d4129e6114722d94f298973f98f372",
+      "actual": "575adbd9bdca62a135b0df5aebc386ab39d4129e6114722d94f298973f98f372"
+    },
+    {
+      "file": "art/photos/book-10437001.jpg",
+      "ok": true,
+      "expected": "1fe008ee85a89c05233a928da462d4a8c2662f9fedaaf69f8d7aab9d2cb0ebac",
+      "actual": "1fe008ee85a89c05233a928da462d4a8c2662f9fedaaf69f8d7aab9d2cb0ebac"
+    },
+    {
+      "file": "art/photos/book-10470101.jpg",
+      "ok": true,
+      "expected": "fde5588fc1aa0164f5a0b53b16f2961d5cedb156d0f2bc98303bd1442e27a77f",
+      "actual": "fde5588fc1aa0164f5a0b53b16f2961d5cedb156d0f2bc98303bd1442e27a77f"
+    },
+    {
+      "file": "art/photos/book-10506001.jpg",
+      "ok": true,
+      "expected": "36b4acc46ad0d070660f69d9566c409db7cc2865fc4a47a93321012cd2d4be73",
+      "actual": "36b4acc46ad0d070660f69d9566c409db7cc2865fc4a47a93321012cd2d4be73"
+    },
+    {
+      "file": "art/photos/book-10514301.jpg",
+      "ok": true,
+      "expected": "686cecd5d0d34297c90bb53a3de68b183030baf3d837c6dd842aa0e66d60474c",
+      "actual": "686cecd5d0d34297c90bb53a3de68b183030baf3d837c6dd842aa0e66d60474c"
+    },
+    {
+      "file": "art/photos/book-10562201.jpg",
+      "ok": true,
+      "expected": "d4f1a971ffa56141ad52340243d61df79a2767d38bc2d561c6ae8727f280ff16",
+      "actual": "d4f1a971ffa56141ad52340243d61df79a2767d38bc2d561c6ae8727f280ff16"
+    },
+    {
+      "file": "art/photos/book-10587001.jpg",
+      "ok": true,
+      "expected": "9357476d5fd8302e1114752e439dfb7a1ad5a261506b6d66daf8d4b7e0388f19",
+      "actual": "9357476d5fd8302e1114752e439dfb7a1ad5a261506b6d66daf8d4b7e0388f19"
+    },
+    {
+      "file": "art/photos/book-10590301.jpg",
+      "ok": true,
+      "expected": "5fc89d81faac3c830b609d4746849c953aa7b5811725bcc5f7c7c5b2ef838127",
+      "actual": "5fc89d81faac3c830b609d4746849c953aa7b5811725bcc5f7c7c5b2ef838127"
+    },
+    {
+      "file": "art/photos/book-10652001.jpg",
+      "ok": true,
+      "expected": "ca183f977c7a5688e36d9670ab2e79617c6bf3fae9841215f4644bb48ee855a7",
+      "actual": "ca183f977c7a5688e36d9670ab2e79617c6bf3fae9841215f4644bb48ee855a7"
+    },
+    {
+      "file": "art/photos/book-10730501.jpg",
+      "ok": true,
+      "expected": "44160499a967360767dc7b66858c94753b46dd52a0f9db5ad320e08a5765509b",
+      "actual": "44160499a967360767dc7b66858c94753b46dd52a0f9db5ad320e08a5765509b"
+    },
+    {
+      "file": "art/photos/book-10756901.jpg",
+      "ok": true,
+      "expected": "f8069857b5ad00abc0fe8a3a0a7996c002d23941bf6601da3a9a441ca5831f78",
+      "actual": "f8069857b5ad00abc0fe8a3a0a7996c002d23941bf6601da3a9a441ca5831f78"
+    },
+    {
+      "file": "art/photos/book-10833301.jpg",
+      "ok": true,
+      "expected": "5562edd98f4e1acf11f0666d61ab56a7a8117b3e53966e7ace952703f971dc69",
+      "actual": "5562edd98f4e1acf11f0666d61ab56a7a8117b3e53966e7ace952703f971dc69"
+    },
+    {
+      "file": "art/photos/book-10844701.jpg",
+      "ok": true,
+      "expected": "b82986f4494478dba6ea4098b6b93e0ab2fbbad3f627016ef51c0386968cd921",
+      "actual": "b82986f4494478dba6ea4098b6b93e0ab2fbbad3f627016ef51c0386968cd921"
+    },
+    {
+      "file": "art/photos/book-10925001.jpg",
+      "ok": true,
+      "expected": "5675fc6887bf66a6afb8b245067bc0adc2094f89f77e8350eee496386a3b9d69",
+      "actual": "5675fc6887bf66a6afb8b245067bc0adc2094f89f77e8350eee496386a3b9d69"
+    },
+    {
+      "file": "art/photos/book-11006301.jpg",
+      "ok": true,
+      "expected": "bb43ecff6fdb4845f2cba88e986174424f0d055582a3ba5bb894f38965975d38",
+      "actual": "bb43ecff6fdb4845f2cba88e986174424f0d055582a3ba5bb894f38965975d38"
+    },
+    {
+      "file": "art/photos/book-11025801.jpg",
+      "ok": true,
+      "expected": "2e1f8d4878e6ce230c9dc5e006b8db0ce319ac6bc102bede00b0cd878c336fd0",
+      "actual": "2e1f8d4878e6ce230c9dc5e006b8db0ce319ac6bc102bede00b0cd878c336fd0"
+    },
+    {
+      "file": "art/photos/book-11045201.jpg",
+      "ok": true,
+      "expected": "6c3946d6f2ee5b5f540c66689b15458aab4f319d4eec488f504d86c036f5ed23",
+      "actual": "6c3946d6f2ee5b5f540c66689b15458aab4f319d4eec488f504d86c036f5ed23"
+    },
+    {
+      "file": "art/photos/book-11046201.jpg",
+      "ok": true,
+      "expected": "d59c8154d6e143c9e62d809b00a241e64b8e3a77c2d4ca38a5b0e88c64fe1222",
+      "actual": "d59c8154d6e143c9e62d809b00a241e64b8e3a77c2d4ca38a5b0e88c64fe1222"
+    },
+    {
+      "file": "art/photos/book-11063501.jpg",
+      "ok": true,
+      "expected": "19564d31491d292acaf7644cbe447173a622a9aacd3e912985e8048e5044f9a5",
+      "actual": "19564d31491d292acaf7644cbe447173a622a9aacd3e912985e8048e5044f9a5"
+    },
+    {
+      "file": "art/photos/book-11119201.jpg",
+      "ok": true,
+      "expected": "ac321a8ea7c0753eae8079980544bb207572369335f4e0b0e44647e336418423",
+      "actual": "ac321a8ea7c0753eae8079980544bb207572369335f4e0b0e44647e336418423"
+    },
+    {
+      "file": "art/photos/book-11175401.jpg",
+      "ok": true,
+      "expected": "04feb66e31ca840f4807334473e8b946e42f56184ab7d007c9dc115b74f3029c",
+      "actual": "04feb66e31ca840f4807334473e8b946e42f56184ab7d007c9dc115b74f3029c"
+    },
+    {
+      "file": "art/photos/book-11181701.jpg",
+      "ok": true,
+      "expected": "64acff3ef371763ea67c4a83ee1a052dea9e1bcf7866bcbae3f5db11b38d64c3",
+      "actual": "64acff3ef371763ea67c4a83ee1a052dea9e1bcf7866bcbae3f5db11b38d64c3"
+    },
+    {
+      "file": "art/photos/book-11230301.jpg",
+      "ok": true,
+      "expected": "7020ec38d8c07f20dc5d49cd0a5b62b1839fedb1fa210c6cf4e36c918d8a04ef",
+      "actual": "7020ec38d8c07f20dc5d49cd0a5b62b1839fedb1fa210c6cf4e36c918d8a04ef"
+    },
+    {
+      "file": "art/photos/book-11234601.jpg",
+      "ok": true,
+      "expected": "7bcce0d3930f5730eb811efe9dfa14e8b864ebb4478d89dda3ef0473015dc5f5",
+      "actual": "7bcce0d3930f5730eb811efe9dfa14e8b864ebb4478d89dda3ef0473015dc5f5"
+    },
+    {
+      "file": "art/photos/book-11258101.jpg",
+      "ok": true,
+      "expected": "0614a4892c03064a2420d99ada1a0ddd10f8d9f9f1788428d3028c7c68d18d43",
+      "actual": "0614a4892c03064a2420d99ada1a0ddd10f8d9f9f1788428d3028c7c68d18d43"
+    },
+    {
+      "file": "art/photos/book-11275801.jpg",
+      "ok": true,
+      "expected": "537cd59b4b2cd8192320c61a5c71a83e16cb6f3bc6da4bf420a9ff5a61ee5581",
+      "actual": "537cd59b4b2cd8192320c61a5c71a83e16cb6f3bc6da4bf420a9ff5a61ee5581"
+    },
+    {
+      "file": "art/photos/book-11418801.jpg",
+      "ok": true,
+      "expected": "6e8c0ec5dd99e7883177c2267c15cfc5df1dfaf08c7770efed560cd84538c19f",
+      "actual": "6e8c0ec5dd99e7883177c2267c15cfc5df1dfaf08c7770efed560cd84538c19f"
+    },
+    {
+      "file": "art/photos/book-11434601.jpg",
+      "ok": true,
+      "expected": "ee007dea5857fe390d511e4923cffea2bd8ed647e62e72481d692b7df5840c56",
+      "actual": "ee007dea5857fe390d511e4923cffea2bd8ed647e62e72481d692b7df5840c56"
+    },
+    {
+      "file": "art/photos/book-11464201.jpg",
+      "ok": true,
+      "expected": "fc06731a927263874e666c4e922cdaa38485379eb57ca8f988200fa6f7b434d5",
+      "actual": "fc06731a927263874e666c4e922cdaa38485379eb57ca8f988200fa6f7b434d5"
+    },
+    {
+      "file": "art/photos/book-11482301.jpg",
+      "ok": true,
+      "expected": "7e628243fdf7b21d96b880c4d5c65ebee6c86fbc4b81ecbf623d9e9b51dc54e9",
+      "actual": "7e628243fdf7b21d96b880c4d5c65ebee6c86fbc4b81ecbf623d9e9b51dc54e9"
+    },
+    {
+      "file": "art/photos/book-11636101.jpg",
+      "ok": true,
+      "expected": "289a818e86c270d410383466aee5affebbe9ced0f146fc3135033f959a5316fb",
+      "actual": "289a818e86c270d410383466aee5affebbe9ced0f146fc3135033f959a5316fb"
+    },
+    {
+      "file": "art/photos/boss-goosequeue.jpg",
+      "ok": true,
+      "expected": "f6c674d7987ee00ed7b166547d0d53245a1e35afc89f8b882c069fdaff556cb8",
+      "actual": "f6c674d7987ee00ed7b166547d0d53245a1e35afc89f8b882c069fdaff556cb8"
+    },
+    {
+      "file": "art/photos/boss-hotsearch.jpg",
+      "ok": true,
+      "expected": "83dc77520af5ebd8571f45dd1bd6db28a409dc6b61405ca0eb84d0b499fe8b5d",
+      "actual": "83dc77520af5ebd8571f45dd1bd6db28a409dc6b61405ca0eb84d0b499fe8b5d"
+    },
+    {
+      "file": "art/photos/boss-snake.jpg",
+      "ok": true,
+      "expected": "ba7742a19a5539f53b8dc3b05ccce23bd7036fbee7e705f0b45c020c4786100b",
+      "actual": "ba7742a19a5539f53b8dc3b05ccce23bd7036fbee7e705f0b45c020c4786100b"
+    },
+    {
+      "file": "art/photos/boss-swim.jpg",
+      "ok": true,
+      "expected": "1f3285206a08caa517d02dff1ff2735758837a288f9db239392d31af9d21fddf",
+      "actual": "1f3285206a08caa517d02dff1ff2735758837a288f9db239392d31af9d21fddf"
+    },
+    {
+      "file": "art/photos/boss-weishen.jpg",
+      "ok": true,
+      "expected": "c996dab5374f25d3381c2d682731d36d307e089b1883387458d3bbd95a6ffac5",
+      "actual": "c996dab5374f25d3381c2d682731d36d307e089b1883387458d3bbd95a6ffac5"
+    },
+    {
+      "file": "art/sprite-atlas.png",
+      "ok": true,
+      "expected": "d8449278472e341dc7f68b526563949d4d4c725bd66af8c32e70e9c884e54600",
+      "actual": "d8449278472e341dc7f68b526563949d4d4c725bd66af8c32e70e9c884e54600"
+    },
+    {
+      "file": "art/textbook-arch.jpg",
+      "ok": true,
+      "expected": "92a15565ca9d873cc36f0d5f3346b08379b44124a1cdf910bc627012589d24a4",
+      "actual": "92a15565ca9d873cc36f0d5f3346b08379b44124a1cdf910bc627012589d24a4"
+    },
+    {
+      "file": "art/textbook-c.jpg",
+      "ok": true,
+      "expected": "966e7a03af30f2f1f0ab4b73ab18065c042cbbeac92e88c0c733e54fbbac13a6",
+      "actual": "966e7a03af30f2f1f0ab4b73ab18065c042cbbeac92e88c0c733e54fbbac13a6"
+    },
+    {
+      "file": "art/textbook-cad.jpg",
+      "ok": true,
+      "expected": "0fe63d5ba1a41d249314a60b9aade35d51baac83032033c4fb4227febce3efd9",
+      "actual": "0fe63d5ba1a41d249314a60b9aade35d51baac83032033c4fb4227febce3efd9"
+    },
+    {
+      "file": "art/textbook-compiler.jpg",
+      "ok": true,
+      "expected": "eafdb5521175bdd774302be8727c8a5f875c14548d7a82b5622e213581202090",
+      "actual": "eafdb5521175bdd774302be8727c8a5f875c14548d7a82b5622e213581202090"
+    },
+    {
+      "file": "art/textbook-complex.jpg",
+      "ok": true,
+      "expected": "f8f2601ba274170666b0258814c1f6fd30d5a49c2146123054b006bb76cb07e2",
+      "actual": "f8f2601ba274170666b0258814c1f6fd30d5a49c2146123054b006bb76cb07e2"
+    },
+    {
+      "file": "art/textbook-computer.jpg",
+      "ok": true,
+      "expected": "4955f526f608acfb9f1d229aa0a0a5d79282ff0a3bc54892a653558fd67e01f4",
+      "actual": "4955f526f608acfb9f1d229aa0a0a5d79282ff0a3bc54892a653558fd67e01f4"
+    },
+    {
+      "file": "art/textbook-cs.jpg",
+      "ok": true,
+      "expected": "e5cc706e08c1dc0a38632cf9e5f540ea39dfef251b9762a9ca2314dbd766aecd",
+      "actual": "e5cc706e08c1dc0a38632cf9e5f540ea39dfef251b9762a9ca2314dbd766aecd"
+    },
+    {
+      "file": "art/textbook-design.jpg",
+      "ok": true,
+      "expected": "526ba688f2b0f994eee0a6141c930f4bd370b7415333b42a20593b108b937029",
+      "actual": "526ba688f2b0f994eee0a6141c930f4bd370b7415333b42a20593b108b937029"
+    },
+    {
+      "file": "art/textbook-discrete.jpg",
+      "ok": true,
+      "expected": "634c55bc1ecf96aa94e2677384ba9b298e68c862450bc29d7c75706872746191",
+      "actual": "634c55bc1ecf96aa94e2677384ba9b298e68c862450bc29d7c75706872746191"
+    },
+    {
+      "file": "art/textbook-functional.jpg",
+      "ok": true,
+      "expected": "d8e431c230ea4f08657a9ddeac147e80606aa3e449db94980d188c66e1e952ab",
+      "actual": "d8e431c230ea4f08657a9ddeac147e80606aa3e449db94980d188c66e1e952ab"
+    },
+    {
+      "file": "art/textbook-green.jpg",
+      "ok": true,
+      "expected": "17510f5276515f53850e47efecf7ae1458ff392ecca6a42244d746af4fec5a01",
+      "actual": "17510f5276515f53850e47efecf7ae1458ff392ecca6a42244d746af4fec5a01"
+    },
+    {
+      "file": "art/textbook-history.jpg",
+      "ok": true,
+      "expected": "67d62a6a49133c3c21702704b38f4c3a597d8dcb4be3c5bda6d1a67b6d4d671c",
+      "actual": "67d62a6a49133c3c21702704b38f4c3a597d8dcb4be3c5bda6d1a67b6d4d671c"
+    },
+    {
+      "file": "art/textbook-linear.jpg",
+      "ok": true,
+      "expected": "50ba1b8ce5dae17cd67ef1978f6f45d338b8e03590b9bcd2b1f1dfc7a3cb1040",
+      "actual": "50ba1b8ce5dae17cd67ef1978f6f45d338b8e03590b9bcd2b1f1dfc7a3cb1040"
+    },
+    {
+      "file": "art/textbook-math.jpg",
+      "ok": true,
+      "expected": "9ac7d052104be990bd799ee75a81ecf461d98de6c5872aff65e9ef9938d06827",
+      "actual": "9ac7d052104be990bd799ee75a81ecf461d98de6c5872aff65e9ef9938d06827"
+    },
+    {
+      "file": "art/textbook-ml.jpg",
+      "ok": true,
+      "expected": "35d0f209d7672a0a5b14808b1020935613905eb7e6711e0e85d1e2250f562915",
+      "actual": "35d0f209d7672a0a5b14808b1020935613905eb7e6711e0e85d1e2250f562915"
+    },
+    {
+      "file": "art/textbook-network.jpg",
+      "ok": true,
+      "expected": "d4dac74113bb17e871bc815a1575dddce683efed2cfdcdc7c9fdc481d24f1432",
+      "actual": "d4dac74113bb17e871bc815a1575dddce683efed2cfdcdc7c9fdc481d24f1432"
+    },
+    {
+      "file": "art/textbook-numerical.jpg",
+      "ok": true,
+      "expected": "143e66ac919d23d7cc5f89d674f403fd52633522735618b94b3d207b01aba20c",
+      "actual": "143e66ac919d23d7cc5f89d674f403fd52633522735618b94b3d207b01aba20c"
+    },
+    {
+      "file": "art/textbook-ode.jpg",
+      "ok": true,
+      "expected": "68f4a5aa4a68c0c3f1477af1932ec9ee0988510a126dbb0136cd7d90da460b4d",
+      "actual": "68f4a5aa4a68c0c3f1477af1932ec9ee0988510a126dbb0136cd7d90da460b4d"
+    },
+    {
+      "file": "art/textbook-os.jpg",
+      "ok": true,
+      "expected": "68efd7edf9887b327a9133206b46e2fa82e77dd2e9938560e770214e4b6a85d7",
+      "actual": "68efd7edf9887b327a9133206b46e2fa82e77dd2e9938560e770214e4b6a85d7"
+    },
+    {
+      "file": "art/textbook-probability.jpg",
+      "ok": true,
+      "expected": "98a6b2432c24b8b0d4dd297db94cd94aa4806c04d0f700e0618fad4272bd6e54",
+      "actual": "98a6b2432c24b8b0d4dd297db94cd94aa4806c04d0f700e0618fad4272bd6e54"
+    },
+    {
+      "file": "art/textbook-real.jpg",
+      "ok": true,
+      "expected": "dedd0b21ee7fbc965e8ab4076d5a6c466e94608f2fe12e2c0cff9d615ee79357",
+      "actual": "dedd0b21ee7fbc965e8ab4076d5a6c466e94608f2fe12e2c0cff9d615ee79357"
+    },
+    {
+      "file": "art/textbook-structure.jpg",
+      "ok": true,
+      "expected": "0c12e50e8edd5f8bbedf70978510fef8a7433eaeb25886433f595f1290b3284f",
+      "actual": "0c12e50e8edd5f8bbedf70978510fef8a7433eaeb25886433f595f1290b3284f"
+    },
+    {
+      "file": "art/textbook-thermal.jpg",
+      "ok": true,
+      "expected": "bf0ab461d67abf32fa3a921c8c1999b82b72e3cc9b4f69851431e3895f022e4b",
+      "actual": "bf0ab461d67abf32fa3a921c8c1999b82b72e3cc9b4f69851431e3895f022e4b"
+    },
+    {
+      "file": "art/textbook-urban.jpg",
+      "ok": true,
+      "expected": "52354dd465d07327a69e87779c4721bd765f6335633358c887b3bf1e64ff0648",
+      "actual": "52354dd465d07327a69e87779c4721bd765f6335633358c887b3bf1e64ff0648"
+    },
+    {
+      "file": "art/tsinghua-gate-1280.jpg",
+      "ok": true,
+      "expected": "91b0c7a39485231f98fe6c6de25eaa596fd91bdbfcf303070aef3d6eba45ba90",
+      "actual": "91b0c7a39485231f98fe6c6de25eaa596fd91bdbfcf303070aef3d6eba45ba90"
+    },
+    {
+      "file": "art/tsinghua-gate-3840.jpg",
+      "ok": true,
+      "expected": "4de4f859a63471bda70f3a4f37aa1a9ed09c2e49aaf59b46769c998a3b8b98b7",
+      "actual": "4de4f859a63471bda70f3a4f37aa1a9ed09c2e49aaf59b46769c998a3b8b98b7"
+    },
+    {
+      "file": "art/xuetang-road.jpg",
+      "ok": true,
+      "expected": "e089b0c7321b009055bf4878f522ad1fa032154f641f49c4189962860ff85862",
+      "actual": "e089b0c7321b009055bf4878f522ad1fa032154f641f49c4189962860ff85862"
+    },
+    {
+      "file": "assets/index-DMhzXcfZ.js",
+      "ok": true,
+      "expected": "b2d426552d26579095c7f50a1ae68a1325493b618af1dc3fa3526271a1768d11",
+      "actual": "b2d426552d26579095c7f50a1ae68a1325493b618af1dc3fa3526271a1768d11"
+    },
+    {
+      "file": "assets/index-Dh1P1tWp.css",
+      "ok": true,
+      "expected": "0d9051e417f6fd9d3aa811a0da4bcb2f8d0670177a44fb4cd17e65790aead733",
+      "actual": "0d9051e417f6fd9d3aa811a0da4bcb2f8d0670177a44fb4cd17e65790aead733"
+    },
+    {
+      "file": "badges/chayuan.png",
+      "ok": true,
+      "expected": "fef8466d8313a6ab3a30a8916274d39b6d2ace33119c4a2bb2f076e4a4b372b6",
+      "actual": "fef8466d8313a6ab3a30a8916274d39b6d2ace33119c4a2bb2f076e4a4b372b6"
+    },
+    {
+      "file": "badges/dushi.png",
+      "ok": true,
+      "expected": "c2e0218eccf0978c910aaa14bf67325237b8606ad865c27a8c06c0cfe78d8965",
+      "actual": "c2e0218eccf0978c910aaa14bf67325237b8606ad865c27a8c06c0cfe78d8965"
+    },
+    {
+      "file": "badges/faxue.png",
+      "ok": true,
+      "expected": "320358fffc4c575d5f3412b6eef628a4119d12115f02d2ff321be58740b13331",
+      "actual": "320358fffc4c575d5f3412b6eef628a4119d12115f02d2ff321be58740b13331"
+    },
+    {
+      "file": "badges/gongwu.png",
+      "ok": true,
+      "expected": "7a48d8f4a5d7bb258350c263c11af801c045c3fd308c9ae13ec223972f37370d",
+      "actual": "7a48d8f4a5d7bb258350c263c11af801c045c3fd308c9ae13ec223972f37370d"
+    },
+    {
+      "file": "badges/guixi.png",
+      "ok": true,
+      "expected": "6559c808a12cf5c81e09063d54a7a8f46223946b7c9cfcdf66da4fcf8f64db2a",
+      "actual": "6559c808a12cf5c81e09063d54a7a8f46223946b7c9cfcdf66da4fcf8f64db2a"
+    },
+    {
+      "file": "badges/jianyuan.png",
+      "ok": true,
+      "expected": "556cbee99c66d06bd94f2102a69f62baa2e169dd466b1f3f84695dfb899bffd2",
+      "actual": "556cbee99c66d06bd94f2102a69f62baa2e169dd466b1f3f84695dfb899bffd2"
+    },
+    {
+      "file": "badges/jingguan.png",
+      "ok": true,
+      "expected": "9bcb37fa02b535070e7a9dcf4562f88e2e8df908bda5753f18116b844ee3a885",
+      "actual": "9bcb37fa02b535070e7a9dcf4562f88e2e8df908bda5753f18116b844ee3a885"
+    },
+    {
+      "file": "badges/jixie.png",
+      "ok": true,
+      "expected": "b3dfd6ef06eb82853f917c4f26f1c5058f954c1e2d84083490883bc7505b50d5",
+      "actual": "b3dfd6ef06eb82853f917c4f26f1c5058f954c1e2d84083490883bc7505b50d5"
+    },
+    {
+      "file": "badges/leixi.png",
+      "ok": true,
+      "expected": "f123fa77e216ab27be286f5200f945c6ebcfdaa0801ec3e00ebcf2a63d4b5324",
+      "actual": "f123fa77e216ab27be286f5200f945c6ebcfdaa0801ec3e00ebcf2a63d4b5324"
+    },
+    {
+      "file": "badges/meiyuan.png",
+      "ok": true,
+      "expected": "87919059ae6ccf699b0b7854e18d59d4a953620be068ad2d99548d23ba9379a7",
+      "actual": "87919059ae6ccf699b0b7854e18d59d4a953620be068ad2d99548d23ba9379a7"
+    },
+    {
+      "file": "badges/qinghua.png",
+      "ok": true,
+      "expected": "cf810572f1d633ea8a2d63d9a9cf5dbbc4c7f96ede9d41ff4a334541c17013bf",
+      "actual": "cf810572f1d633ea8a2d63d9a9cf5dbbc4c7f96ede9d41ff4a334541c17013bf"
+    },
+    {
+      "file": "badges/qiuzhen.png",
+      "ok": true,
+      "expected": "35b58b6e63d024717e455eed5beaeba09e2968f035c80fe9a584f277a01d53fa",
+      "actual": "35b58b6e63d024717e455eed5beaeba09e2968f035c80fe9a584f277a01d53fa"
+    },
+    {
+      "file": "badges/rixin.png",
+      "ok": true,
+      "expected": "b1dba938904d0f31b01e63bd5e7660815b71e45bfb983c23536976953df0aa3e",
+      "actual": "b1dba938904d0f31b01e63bd5e7660815b71e45bfb983c23536976953df0aa3e"
+    },
+    {
+      "file": "badges/shengke.png",
+      "ok": true,
+      "expected": "f87514f7a94695696821ea3ab77a559d62b5ad18a766b376e763f01855c9c75b",
+      "actual": "f87514f7a94695696821ea3ab77a559d62b5ad18a766b376e763f01855c9c75b"
+    },
+    {
+      "file": "badges/shuimu.png",
+      "ok": true,
+      "expected": "b6d5140e26d765b8427fe485acfdfb0f18810396e172b1c617f6e74216c4f3e3",
+      "actual": "b6d5140e26d765b8427fe485acfdfb0f18810396e172b1c617f6e74216c4f3e3"
+    },
+    {
+      "file": "badges/shuxue.png",
+      "ok": true,
+      "expected": "9546ec041906206658b75ad832d8245a7d84619fe4d11d2f7ad44e55cbedf1a0",
+      "actual": "9546ec041906206658b75ad832d8245a7d84619fe4d11d2f7ad44e55cbedf1a0"
+    },
+    {
+      "file": "badges/tanwei.png",
+      "ok": true,
+      "expected": "a9c20706e27cbab6182314b2e3c60b84522eea9fbfeb7ebbb7842a1574723398",
+      "actual": "a9c20706e27cbab6182314b2e3c60b84522eea9fbfeb7ebbb7842a1574723398"
+    },
+    {
+      "file": "badges/tongji.png",
+      "ok": true,
+      "expected": "d57743b0871aa7e51fc43c84951d59bddce62c354982e9e10ecbcb06cdda505b",
+      "actual": "d57743b0871aa7e51fc43c84951d59bddce62c354982e9e10ecbcb06cdda505b"
+    },
+    {
+      "file": "badges/weixian.png",
+      "ok": true,
+      "expected": "5227127d400a160211d80b20b56c665c7b486f746da62892d022d1bf1c8f4301",
+      "actual": "5227127d400a160211d80b20b56c665c7b486f746da62892d022d1bf1c8f4301"
+    },
+    {
+      "file": "badges/weiyang.png",
+      "ok": true,
+      "expected": "ccf1d3250bd5793d3985056c9c3debba0f870fc8f39cac18706e5623c2a52d8a",
+      "actual": "ccf1d3250bd5793d3985056c9c3debba0f870fc8f39cac18706e5623c2a52d8a"
+    },
+    {
+      "file": "badges/wuqiong.png",
+      "ok": true,
+      "expected": "1076fdcda3d34d1477368f6a2594aea0be82022b573020bd7a0776103c0be53a",
+      "actual": "1076fdcda3d34d1477368f6a2594aea0be82022b573020bd7a0776103c0be53a"
+    },
+    {
+      "file": "badges/wuxi.png",
+      "ok": true,
+      "expected": "789011c0340d7ccdc4a6bfd735e7ad48748693eb14bd7346b70c74fc7a4306df",
+      "actual": "789011c0340d7ccdc4a6bfd735e7ad48748693eb14bd7346b70c74fc7a4306df"
+    },
+    {
+      "file": "badges/xingjian.png",
+      "ok": true,
+      "expected": "e5c3b40286128eb88f80f471b638bc634a5531a20e0bf957e92d0cd4910f722d",
+      "actual": "e5c3b40286128eb88f80f471b638bc634a5531a20e0bf957e92d0cd4910f722d"
+    },
+    {
+      "file": "badges/xinya.png",
+      "ok": true,
+      "expected": "6b3ef09ef8e32979b75b0716f88f135cd156e190a051b05f31a7635d42c2872d",
+      "actual": "6b3ef09ef8e32979b75b0716f88f135cd156e190a051b05f31a7635d42c2872d"
+    },
+    {
+      "file": "badges/xiuzhong.png",
+      "ok": true,
+      "expected": "5e197c1ecf43c5cb79120888d880e9c9f93485007b2683b1798e9cd4b7ec2d3f",
+      "actual": "5e197c1ecf43c5cb79120888d880e9c9f93485007b2683b1798e9cd4b7ec2d3f"
+    },
+    {
+      "file": "badges/yixue.png",
+      "ok": true,
+      "expected": "38aaa1469a5eed1685ba2a289ca4a4a04d027f2aee4081dfafa227219a13e1b5",
+      "actual": "38aaa1469a5eed1685ba2a289ca4a4a04d027f2aee4081dfafa227219a13e1b5"
+    },
+    {
+      "file": "badges/zhili.png",
+      "ok": true,
+      "expected": "bc2730455219bc3e1081953ccecf2e57874542244ff9b57e1bad0f261a510c4f",
+      "actual": "bc2730455219bc3e1081953ccecf2e57874542244ff9b57e1bad0f261a510c4f"
+    },
+    {
+      "file": "badges/zhishan.png",
+      "ok": true,
+      "expected": "aa157f198b829055e753f9dcf1ae3da0858bd5f0c5856f0a63e49fce3b6bc9c4",
+      "actual": "aa157f198b829055e753f9dcf1ae3da0858bd5f0c5856f0a63e49fce3b6bc9c4"
+    },
+    {
+      "file": "badges/zijin.png",
+      "ok": true,
+      "expected": "8c61051058c06431b21619861113def3308ba3ed5f886d2efc24de7488e829e8",
+      "actual": "8c61051058c06431b21619861113def3308ba3ed5f886d2efc24de7488e829e8"
+    },
+    {
+      "file": "badges/ziqiang.png",
+      "ok": true,
+      "expected": "f961eb7b19b152d9966fc61fc53577f899053b1055828c7371e7f1ae2f75be6c",
+      "actual": "f961eb7b19b152d9966fc61fc53577f899053b1055828c7371e7f1ae2f75be6c"
+    },
+    {
+      "file": "index.html",
+      "ok": true,
+      "expected": "90380f3b34a836b1869fc7db6c7edf83ff976c719f9c8c90b7ea9b784e49d84b",
+      "actual": "90380f3b34a836b1869fc7db6c7edf83ff976c719f9c8c90b7ea9b784e49d84b"
+    },
+    {
+      "file": "version.json",
+      "ok": true,
+      "expected": "402ac36c54eaabaf349497808f99e52aea79f157fed076b9da50e9f70dbd5a94",
+      "actual": "402ac36c54eaabaf349497808f99e52aea79f157fed076b9da50e9f70dbd5a94"
+    }
+  ]
+}

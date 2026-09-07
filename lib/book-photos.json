@@ -1,0 +1,1650 @@
+{
+  "photos": [
+    {
+      "id": "book-10300301",
+      "title": "工程制图（第2版）",
+      "file": "photos/book-10300301.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10300301.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/103003-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09957801",
+      "title": "理论力学",
+      "file": "photos/book-09957801.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09957801.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/099578-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09468701",
+      "title": "混凝土结构设计",
+      "file": "photos/book-09468701.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09468701.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/094687-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10562201",
+      "title": "工程项目管理（第2版）",
+      "file": "photos/book-10562201.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10562201.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/105622-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08610702",
+      "title": "水力学（第3版）",
+      "file": "photos/book-08610702.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08610702.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/086107-02.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09180901",
+      "title": "工程流体力学",
+      "file": "photos/book-09180901.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09180901.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/091809-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-01479503",
+      "title": "水资源系统分析方法及应用",
+      "file": "photos/book-01479503.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_01479503.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/014795-03.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-07069001",
+      "title": "水利工程专业英语",
+      "file": "photos/book-07069001.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_07069001.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/070690-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-07222101",
+      "title": "船舶与海洋工程概论",
+      "file": "photos/book-07222101.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_07222101.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/072221-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-04991801",
+      "title": "海洋工程装备",
+      "file": "photos/book-04991801.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_04991801.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/049918-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10046001",
+      "title": "交通工程概论（英文版）",
+      "file": "photos/book-10046001.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10046001.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/100460-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-01586801",
+      "title": "交通规划理论研究前沿",
+      "file": "photos/book-01586801.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_01586801.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/015868-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08878601",
+      "title": "道路工程",
+      "file": "photos/book-08878601.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08878601.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/088786-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10925001",
+      "title": "节奏式交通控制——概念原理、性能分析与设计方法",
+      "file": "photos/book-10925001.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10925001.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/109250-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09583201",
+      "title": "环境学概论",
+      "file": "photos/book-09583201.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09583201.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/095832-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10292201",
+      "title": "环境化学实验",
+      "file": "photos/book-10292201.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10292201.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/102922-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09896401",
+      "title": "水污染控制工程实验",
+      "file": "photos/book-09896401.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09896401.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/098964-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10470101",
+      "title": "环境影响评价及其案例分析",
+      "file": "photos/book-10470101.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10470101.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/104701-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08647601",
+      "title": "机械原理",
+      "file": "photos/book-08647601.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08647601.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/086476-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10652001",
+      "title": "机械设计基础——理论、方法与标准（第3版）",
+      "file": "photos/book-10652001.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10652001.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/106520-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10230901",
+      "title": "机械制造技术基础（第2版）",
+      "file": "photos/book-10230901.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10230901.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/102309-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-07221101",
+      "title": "工程热力学",
+      "file": "photos/book-07221101.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_07221101.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/072211-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08743001",
+      "title": "热工基础",
+      "file": "photos/book-08743001.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08743001.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/087430-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10587001",
+      "title": "新能源与可持续发展概论",
+      "file": "photos/book-10587001.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10587001.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/105870-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-05980901",
+      "title": "可再生能源系统",
+      "file": "photos/book-05980901.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_05980901.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/059809-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-07650702",
+      "title": "汽车构造",
+      "file": "photos/book-07650702.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_07650702.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/076507-02.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-05052301",
+      "title": "汽车理论",
+      "file": "photos/book-05052301.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_05052301.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/050523-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-05063201",
+      "title": "汽车设计",
+      "file": "photos/book-05063201.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_05063201.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/050632-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10348001",
+      "title": "新能源汽车维护",
+      "file": "photos/book-10348001.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10348001.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/103480-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10065701",
+      "title": "智能制造工程导论",
+      "file": "photos/book-10065701.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10065701.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/100657-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-11464201",
+      "title": "运筹学及其应用（第4版）",
+      "file": "photos/book-11464201.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_11464201.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/114642-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09344501",
+      "title": "生产计划与控制",
+      "file": "photos/book-09344501.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09344501.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/093445-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10038301",
+      "title": "质量管理工程",
+      "file": "photos/book-10038301.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10038301.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/100383-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-04643503",
+      "title": "飞机空气动力学",
+      "file": "photos/book-04643503.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_04643503.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/046435-03.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-06302801",
+      "title": "四旋翼飞行器设计与实现",
+      "file": "photos/book-06302801.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_06302801.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/063028-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-05418301",
+      "title": "现代飞行器推进原理与进展",
+      "file": "photos/book-05418301.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_05418301.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/054183-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10402801",
+      "title": "电路原理（第2版）",
+      "file": "photos/book-10402801.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10402801.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/104028-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10833301",
+      "title": "模拟电子技术",
+      "file": "photos/book-10833301.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10833301.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/108333-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-11258101",
+      "title": "信号与系统——第2版",
+      "file": "photos/book-11258101.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_11258101.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/112581-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-11006301",
+      "title": "通信原理（第3版）",
+      "file": "photos/book-11006301.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_11006301.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/110063-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-11434601",
+      "title": "自动控制原理（第4版）",
+      "file": "photos/book-11434601.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_11434601.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/114346-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10233101",
+      "title": "现代控制理论基础教程",
+      "file": "photos/book-10233101.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10233101.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/102331-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08917601",
+      "title": "机器人学基础",
+      "file": "photos/book-08917601.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08917601.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/089176-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-07072801",
+      "title": "半导体物理基础教程",
+      "file": "photos/book-07072801.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_07072801.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/070728-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08916601",
+      "title": "数字电子技术基础",
+      "file": "photos/book-08916601.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08916601.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/089166-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-06028201",
+      "title": "CMOS模拟集成电路",
+      "file": "photos/book-06028201.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_06028201.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/060282-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-07350601",
+      "title": "集成电路芯片设计",
+      "file": "photos/book-07350601.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_07350601.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/073506-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09884401",
+      "title": "电子材料科学基础（上册）",
+      "file": "photos/book-09884401.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09884401.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/098844-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08508502",
+      "title": "材料力学",
+      "file": "photos/book-08508502.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08508502.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/085085-02.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10292101",
+      "title": "材料物理化学",
+      "file": "photos/book-10292101.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10292101.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/102921-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-11119201",
+      "title": "复合材料原理（第4版）",
+      "file": "photos/book-11119201.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_11119201.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/111192-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-07296801",
+      "title": "电工学",
+      "file": "photos/book-07296801.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_07296801.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/072968-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-02573001",
+      "title": "电机学",
+      "file": "photos/book-02573001.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_02573001.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/025730-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08854401",
+      "title": "电力电子技术",
+      "file": "photos/book-08854401.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08854401.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/088544-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08346102",
+      "title": "电力系统分析（第2版）",
+      "file": "photos/book-08346102.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08346102.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/083461-02.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-11418801",
+      "title": "大学物理（上册）——第2版",
+      "file": "photos/book-11418801.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_11418801.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/114188-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10506001",
+      "title": "电动力学",
+      "file": "photos/book-10506001.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10506001.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/105060-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10310601",
+      "title": "量子力学基础教程",
+      "file": "photos/book-10310601.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10310601.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/103106-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-02758201",
+      "title": "热力学与统计物理简明教程",
+      "file": "photos/book-02758201.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_02758201.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/027582-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09294101",
+      "title": "恒星中的核物理（第2版）",
+      "file": "photos/book-09294101.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09294101.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/092941-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-06903501",
+      "title": "核能利用与核材料",
+      "file": "photos/book-06903501.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_06903501.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/069035-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-04468904",
+      "title": "无机化学",
+      "file": "photos/book-04468904.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_04468904.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/044689-04.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-04641202",
+      "title": "有机化学",
+      "file": "photos/book-04641202.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_04641202.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/046412-02.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-11275801",
+      "title": "化工原理",
+      "file": "photos/book-11275801.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_11275801.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/112758-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09541801",
+      "title": "自然地理综合实习教程——青藏高原北缘及河西走廊地区",
+      "file": "photos/book-09541801.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09541801.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/095418-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-02849501",
+      "title": "地理信息系统导论",
+      "file": "photos/book-02849501.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_02849501.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/028495-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09647401",
+      "title": "超越对立：中国气候变化政策的学习理论研究",
+      "file": "photos/book-09647401.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09647401.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/096474-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-02097701",
+      "title": "天文知识基础——你想知道的天文学",
+      "file": "photos/book-02097701.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_02097701.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/020977-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10338501",
+      "title": "宇宙学概论",
+      "file": "photos/book-10338501.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10338501.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/103385-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-04281901",
+      "title": "普通心理学",
+      "file": "photos/book-04281901.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_04281901.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/042819-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09541501",
+      "title": "发展心理学",
+      "file": "photos/book-09541501.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09541501.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/095415-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-07662001",
+      "title": "认知心理学",
+      "file": "photos/book-07662001.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_07662001.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/076620-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-06562301",
+      "title": "心理测量",
+      "file": "photos/book-06562301.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_06562301.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/065623-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-05266601",
+      "title": "普通生物学探究性实验指导",
+      "file": "photos/book-05266601.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_05266601.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/052666-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-01674101",
+      "title": "分子细胞生物学",
+      "file": "photos/book-01674101.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_01674101.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/016741-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09213801",
+      "title": "生物化学（第5版）",
+      "file": "photos/book-09213801.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09213801.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/092138-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-05105604",
+      "title": "分子生物学与基因工程实验教程",
+      "file": "photos/book-05105604.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_05105604.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/051056-04.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09886701",
+      "title": "人体解剖学实验教程",
+      "file": "photos/book-09886701.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09886701.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/098867-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09637201",
+      "title": "生理学",
+      "file": "photos/book-09637201.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09637201.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/096372-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-01911501",
+      "title": "病理学",
+      "file": "photos/book-01911501.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_01911501.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/019115-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-01912701",
+      "title": "诊断学",
+      "file": "photos/book-01912701.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_01912701.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/019127-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08479701",
+      "title": "药理学实验指导",
+      "file": "photos/book-08479701.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08479701.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/084797-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-04620301",
+      "title": "药物化学",
+      "file": "photos/book-04620301.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_04620301.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/046203-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09801901",
+      "title": "公共卫生安全导论",
+      "file": "photos/book-09801901.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09801901.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/098019-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-05754801",
+      "title": "流行病学(留学生与双语教学用)（英文版）",
+      "file": "photos/book-05754801.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_05754801.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/057548-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08321001",
+      "title": "医疗卫生统计分析",
+      "file": "photos/book-08321001.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08321001.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/083210-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-11234601",
+      "title": "医院管理与实践分析",
+      "file": "photos/book-11234601.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_11234601.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/112346-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08069901",
+      "title": "管理学原理",
+      "file": "photos/book-08069901.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08069901.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/080699-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09149801",
+      "title": "组织行为学",
+      "file": "photos/book-09149801.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09149801.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/091498-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09761303",
+      "title": "市场营销学（第6版）",
+      "file": "photos/book-09761303.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09761303.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/097613-03.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10251101",
+      "title": "战略管理理论与应用",
+      "file": "photos/book-10251101.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10251101.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/102511-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09421401",
+      "title": "基础会计",
+      "file": "photos/book-09421401.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09421401.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/094214-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10844701",
+      "title": "财务会计（英文版·第14版）",
+      "file": "photos/book-10844701.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10844701.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/108447-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-11230301",
+      "title": "管理会计",
+      "file": "photos/book-11230301.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_11230301.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/112303-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-11636101",
+      "title": "审计学",
+      "file": "photos/book-11636101.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_11636101.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/116361-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08227601",
+      "title": "微观经济学",
+      "file": "photos/book-08227601.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08227601.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/082276-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08961601",
+      "title": "宏观经济学（第8版）",
+      "file": "photos/book-08961601.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08961601.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/089616-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09150901",
+      "title": "计量经济学",
+      "file": "photos/book-09150901.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09150901.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/091509-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-07112802",
+      "title": "国际经济学",
+      "file": "photos/book-07112802.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_07112802.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/071128-02.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-11181701",
+      "title": "金融学基础",
+      "file": "photos/book-11181701.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_11181701.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/111817-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10514301",
+      "title": "证券投资学",
+      "file": "photos/book-10514301.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10514301.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/105143-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10756901",
+      "title": "公司金融",
+      "file": "photos/book-10756901.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10756901.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/107569-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10403701",
+      "title": "金融风险管理",
+      "file": "photos/book-10403701.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10403701.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/104037-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-01310601",
+      "title": "政治学概论",
+      "file": "photos/book-01310601.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_01310601.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/013106-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-05183202",
+      "title": "公共管理学",
+      "file": "photos/book-05183202.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_05183202.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/051832-02.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-00846301",
+      "title": "国际关系基本理论",
+      "file": "photos/book-00846301.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_00846301.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/008463-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-07061601",
+      "title": "公共政策学",
+      "file": "photos/book-07061601.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_07061601.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/070616-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-07918901",
+      "title": "马克思主义基本原理概论教学指导书",
+      "file": "photos/book-07918901.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_07918901.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/079189-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-07294102",
+      "title": "政治经济学原理",
+      "file": "photos/book-07294102.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_07294102.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/072941-02.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-07904002",
+      "title": "毛泽东思想和中国特色社会主义理论体系概论教学指导书",
+      "file": "photos/book-07904002.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_07904002.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/079040-02.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08364601",
+      "title": "思想政治教育热点问题研究新进展",
+      "file": "photos/book-08364601.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08364601.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/083646-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08639601",
+      "title": "现代汉语",
+      "file": "photos/book-08639601.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08639601.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/086396-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-03173401",
+      "title": "中国文学名著导读",
+      "file": "photos/book-03173401.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_03173401.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/031734-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-06117201",
+      "title": "古代汉语读本(上、下)",
+      "file": "photos/book-06117201.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_06117201.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/061172-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-11045201",
+      "title": "首届古文字与中华文明国际学术论坛论文集",
+      "file": "photos/book-11045201.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_11045201.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/110452-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-02461901",
+      "title": "历史学专业基础综合辅导",
+      "file": "photos/book-02461901.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_02461901.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/024619-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09162901",
+      "title": "科学技术史手册",
+      "file": "photos/book-09162901.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09162901.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/091629-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-07709601",
+      "title": "大问题：简明哲学导论（第10版）",
+      "file": "photos/book-07709601.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_07709601.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/077096-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09136601",
+      "title": "逻辑学",
+      "file": "photos/book-09136601.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09136601.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/091366-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09530901",
+      "title": "工程伦理学",
+      "file": "photos/book-09530901.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09530901.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/095309-01.jpeg",
+      "crop": 0
+    },
+    {
+      "id": "book-02736401",
+      "title": "西方哲学名著导读",
+      "file": "photos/book-02736401.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_02736401.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/027364-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08849901",
+      "title": "普通语言学新发展研究",
+      "file": "photos/book-08849901.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08849901.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/088499-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-06074904",
+      "title": "实用大学英语语法新编",
+      "file": "photos/book-06074904.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_06074904.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/060749-04.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-06286204",
+      "title": "英汉翻译  译·注·评",
+      "file": "photos/book-06286204.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_06286204.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/062862-04.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10397201",
+      "title": "学术英语写作",
+      "file": "photos/book-10397201.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10397201.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/103972-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-04691402",
+      "title": "社会学概论",
+      "file": "photos/book-04691402.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_04691402.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/046914-02.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-05242702",
+      "title": "社会调查研究方法",
+      "file": "photos/book-05242702.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_05242702.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/052427-02.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-05915602",
+      "title": "社会研究方法",
+      "file": "photos/book-05915602.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_05915602.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/059156-02.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-06797401",
+      "title": "社会心理学",
+      "file": "photos/book-06797401.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_06797401.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/067974-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-05180401",
+      "title": "法理学",
+      "file": "photos/book-05180401.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_05180401.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/051804-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-04387701",
+      "title": "民法学",
+      "file": "photos/book-04387701.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_04387701.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/nocoverb.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-07351701",
+      "title": "刑法学（第二版）",
+      "file": "photos/book-07351701.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_07351701.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/073517-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-03726301",
+      "title": "行政法讲义",
+      "file": "photos/book-03726301.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_03726301.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/037263-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09946901",
+      "title": "融合新闻学",
+      "file": "photos/book-09946901.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09946901.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/099469-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09961901",
+      "title": "传播学引论（第四版）",
+      "file": "photos/book-09961901.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09961901.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/099619-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-07779302",
+      "title": "新闻采访与写作",
+      "file": "photos/book-07779302.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_07779302.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/077793-02.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08116902",
+      "title": "智能时代新媒体概论",
+      "file": "photos/book-08116902.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08116902.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/081169-02.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10730501",
+      "title": "素描(第2版)",
+      "file": "photos/book-10730501.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10730501.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/107305-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10431901",
+      "title": "艺术概论",
+      "file": "photos/book-10431901.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10431901.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/104319-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-04290001",
+      "title": "设计史",
+      "file": "photos/book-04290001.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_04290001.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/nocoverb.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10243001",
+      "title": "交互设计创新方法与实践",
+      "file": "photos/book-10243001.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10243001.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/102430-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10287501",
+      "title": "教育学基础",
+      "file": "photos/book-10287501.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10287501.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/102875-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10437001",
+      "title": "教育心理学",
+      "file": "photos/book-10437001.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10437001.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/104370-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-11482301",
+      "title": "现代课程与教学论",
+      "file": "photos/book-11482301.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_11482301.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/114823-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-07664002",
+      "title": "教育科学研究方法",
+      "file": "photos/book-07664002.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_07664002.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/076640-02.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-07601901",
+      "title": "大学体育教程",
+      "file": "photos/book-07601901.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_07601901.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/076019-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-00619501",
+      "title": "运动心理学——概念与应用（第5版）",
+      "file": "photos/book-00619501.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_00619501.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/006195-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-06227001",
+      "title": "运动训练动作设计原理与实践",
+      "file": "photos/book-06227001.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_06227001.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/062270-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10403401",
+      "title": "体育与健康",
+      "file": "photos/book-10403401.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10403401.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/104034-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-11175401",
+      "title": "安全与应急管理",
+      "file": "photos/book-11175401.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_11175401.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/111754-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-11025801",
+      "title": "公共安全管理学（微课版）",
+      "file": "photos/book-11025801.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_11025801.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/110258-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-11046201",
+      "title": "风险管理概论",
+      "file": "photos/book-11046201.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_11046201.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/110462-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-11063501",
+      "title": "灾害应急管理与护理",
+      "file": "photos/book-11063501.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_11063501.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/110635-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-08942401",
+      "title": "传感器原理与应用",
+      "file": "photos/book-08942401.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_08942401.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/089424-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10590301",
+      "title": "现代测控技术与系统（第2版）",
+      "file": "photos/book-10590301.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10590301.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/105903-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09943601",
+      "title": "电子测量技术",
+      "file": "photos/book-09943601.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09943601.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/099436-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-01913201",
+      "title": "医学细胞生物学",
+      "file": "photos/book-01913201.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_01913201.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/019132-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-02959101",
+      "title": "生物医学工程检测和基础实验",
+      "file": "photos/book-02959101.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_02959101.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/029591-01.png",
+      "crop": 0
+    },
+    {
+      "id": "book-01308001",
+      "title": "医学成像系统",
+      "file": "photos/book-01308001.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_01308001.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/013080-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-03719901",
+      "title": "雕塑概论",
+      "file": "photos/book-03719901.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_03719901.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/037199-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10057401",
+      "title": "陶瓷艺术论",
+      "file": "photos/book-10057401.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10057401.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/100574-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-06691801",
+      "title": "服装设计与实战",
+      "file": "photos/book-06691801.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_06691801.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/066918-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-02516301",
+      "title": "中国传统工艺美术的保护与发展",
+      "file": "photos/book-02516301.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_02516301.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/nocoverb.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-09912801",
+      "title": "设计素描",
+      "file": "photos/book-09912801.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_09912801.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/099128-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-10204301",
+      "title": "工业设计概论（第三版）",
+      "file": "photos/book-10204301.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_10204301.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/102043-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-06853301",
+      "title": "产品设计思维",
+      "file": "photos/book-06853301.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_06853301.html",
+      "imageUrl": "https://www.tup.com.cn/upload/smallbookimg/068533-01.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-04285502",
+      "title": "视觉传达设计",
+      "file": "photos/book-04285502.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_04285502.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/042855-02.jpg",
+      "crop": 0
+    },
+    {
+      "id": "book-03794801",
+      "title": "图形对话——什么是信息设计",
+      "file": "photos/book-03794801.jpg",
+      "source": "https://www.tup.com.cn/booksCenter/book_03794801.html",
+      "imageUrl": "https://www.tup.com.cn/upload/bigbookimg/037948-01.jpg",
+      "crop": 0
+    }
+  ],
+  "families": {
+    "civil": [
+      "book-10300301",
+      "book-09957801",
+      "book-09468701",
+      "book-10562201"
+    ],
+    "water": [
+      "book-08610702",
+      "book-09180901",
+      "book-01479503",
+      "book-07069001"
+    ],
+    "ocean": [
+      "book-07222101",
+      "book-09180901",
+      "book-04991801",
+      "book-01479503"
+    ],
+    "traffic": [
+      "book-10046001",
+      "book-01586801",
+      "book-08878601",
+      "book-10925001"
+    ],
+    "environment": [
+      "book-09583201",
+      "book-10292201",
+      "book-09896401",
+      "book-10470101"
+    ],
+    "mechanical": [
+      "book-10300301",
+      "book-08647601",
+      "book-10652001",
+      "book-10230901"
+    ],
+    "energy": [
+      "book-07221101",
+      "book-08743001",
+      "book-10587001",
+      "book-05980901"
+    ],
+    "vehicle": [
+      "book-07650702",
+      "book-05052301",
+      "book-05063201",
+      "book-10348001"
+    ],
+    "industrial": [
+      "book-10065701",
+      "book-11464201",
+      "book-09344501",
+      "book-10038301"
+    ],
+    "aerospace": [
+      "book-09957801",
+      "book-04643503",
+      "book-06302801",
+      "book-05418301"
+    ],
+    "electronic": [
+      "book-10402801",
+      "book-10833301",
+      "book-11258101",
+      "book-11006301"
+    ],
+    "control": [
+      "book-10402801",
+      "book-11434601",
+      "book-10233101",
+      "book-08917601"
+    ],
+    "chip": [
+      "book-07072801",
+      "book-08916601",
+      "book-06028201",
+      "book-07350601"
+    ],
+    "materials": [
+      "book-09884401",
+      "book-08508502",
+      "book-10292101",
+      "book-11119201"
+    ],
+    "electric": [
+      "book-07296801",
+      "book-02573001",
+      "book-08854401",
+      "book-08346102"
+    ],
+    "physics": [
+      "book-11418801",
+      "book-10506001",
+      "book-10310601",
+      "book-02758201"
+    ],
+    "nuclear": [
+      "book-11418801",
+      "book-10310601",
+      "book-09294101",
+      "book-06903501"
+    ],
+    "chemistry": [
+      "book-04468904",
+      "book-04641202",
+      "book-10292101",
+      "book-11275801"
+    ],
+    "earth": [
+      "book-09541801",
+      "book-09583201",
+      "book-02849501",
+      "book-09647401"
+    ],
+    "astronomy": [
+      "book-11418801",
+      "book-02097701",
+      "book-09294101",
+      "book-10338501"
+    ],
+    "psychology": [
+      "book-04281901",
+      "book-09541501",
+      "book-07662001",
+      "book-06562301"
+    ],
+    "biology": [
+      "book-05266601",
+      "book-01674101",
+      "book-09213801",
+      "book-05105604"
+    ],
+    "medicine": [
+      "book-09886701",
+      "book-09637201",
+      "book-01911501",
+      "book-01912701"
+    ],
+    "pharmacy": [
+      "book-04641202",
+      "book-09213801",
+      "book-08479701",
+      "book-04620301"
+    ],
+    "health": [
+      "book-09801901",
+      "book-05754801",
+      "book-08321001",
+      "book-11234601"
+    ],
+    "management": [
+      "book-08069901",
+      "book-09149801",
+      "book-09761303",
+      "book-10251101"
+    ],
+    "accounting": [
+      "book-09421401",
+      "book-10844701",
+      "book-11230301",
+      "book-11636101"
+    ],
+    "economics": [
+      "book-08227601",
+      "book-08961601",
+      "book-09150901",
+      "book-07112802"
+    ],
+    "finance": [
+      "book-11181701",
+      "book-10514301",
+      "book-10756901",
+      "book-10403701"
+    ],
+    "politics": [
+      "book-01310601",
+      "book-05183202",
+      "book-00846301",
+      "book-07061601"
+    ],
+    "marx": [
+      "book-07918901",
+      "book-07294102",
+      "book-07904002",
+      "book-08364601"
+    ],
+    "chinese": [
+      "book-08639601",
+      "book-03173401",
+      "book-06117201",
+      "book-11045201"
+    ],
+    "history": [
+      "book-02461901",
+      "book-09162901",
+      "book-09162901",
+      "book-02461901"
+    ],
+    "philosophy": [
+      "book-07709601",
+      "book-09136601",
+      "book-09530901",
+      "book-02736401"
+    ],
+    "language": [
+      "book-08849901",
+      "book-06074904",
+      "book-06286204",
+      "book-10397201"
+    ],
+    "sociology": [
+      "book-04691402",
+      "book-05242702",
+      "book-05915602",
+      "book-06797401"
+    ],
+    "law": [
+      "book-05180401",
+      "book-04387701",
+      "book-07351701",
+      "book-03726301"
+    ],
+    "journalism": [
+      "book-09946901",
+      "book-09961901",
+      "book-07779302",
+      "book-08116902"
+    ],
+    "art": [
+      "book-10730501",
+      "book-10431901",
+      "book-04290001",
+      "book-10243001"
+    ],
+    "education": [
+      "book-10287501",
+      "book-10437001",
+      "book-11482301",
+      "book-07664002"
+    ],
+    "sport": [
+      "book-07601901",
+      "book-00619501",
+      "book-06227001",
+      "book-10403401"
+    ],
+    "safety": [
+      "book-11175401",
+      "book-11025801",
+      "book-11046201",
+      "book-11063501"
+    ],
+    "instrument": [
+      "book-10300301",
+      "book-08942401",
+      "book-10590301",
+      "book-09943601"
+    ],
+    "biomedical": [
+      "book-01913201",
+      "book-02959101",
+      "book-01308001",
+      "book-11258101"
+    ],
+    "fineart": [
+      "book-10730501",
+      "book-09912801",
+      "book-03719901",
+      "book-10431901"
+    ],
+    "craft": [
+      "book-10730501",
+      "book-10057401",
+      "book-06691801",
+      "book-02516301"
+    ],
+    "design": [
+      "book-09912801",
+      "book-10204301",
+      "book-06853301",
+      "book-04290001"
+    ],
+    "visual": [
+      "book-10431901",
+      "book-04285502",
+      "book-03794801",
+      "book-10243001"
+    ],
+    "ceramics": [
+      "book-10730501",
+      "book-10057401",
+      "book-10431901",
+      "book-02516301"
+    ],
+    "clothing": [
+      "book-09912801",
+      "book-06691801",
+      "book-04285502",
+      "book-04290001"
+    ]
+  }
+}

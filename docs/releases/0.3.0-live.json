@@ -1,0 +1,409 @@
+{
+  "deploymentCommit": "b14814634eea53990df3c0d52aef6bcf7fff60e9",
+  "checked": 67,
+  "passed": 67,
+  "files": [
+    {
+      "file": "ASSET-CREDITS.txt",
+      "ok": true,
+      "expected": "2f94c4e2a81c7ee7b502e0e30b0c18dcadc3921123fe0ec13ea0ef793713aedb",
+      "actual": "2f94c4e2a81c7ee7b502e0e30b0c18dcadc3921123fe0ec13ea0ef793713aedb"
+    },
+    {
+      "file": "art/bike-photo.jpg",
+      "ok": true,
+      "expected": "43dd8a50e5ccce0e08eaa4f57d91d69714bc213bf987df9ca40698b891bc6447",
+      "actual": "43dd8a50e5ccce0e08eaa4f57d91d69714bc213bf987df9ca40698b891bc6447"
+    },
+    {
+      "file": "art/campus-arena.png",
+      "ok": true,
+      "expected": "d861759bc629f4d187707434dd7419ca864e6bae1d6db5d42c0113f1fa49f835",
+      "actual": "d861759bc629f4d187707434dd7419ca864e6bae1d6db5d42c0113f1fa49f835"
+    },
+    {
+      "file": "art/coder-pity.png",
+      "ok": true,
+      "expected": "abbba1585fc8f175593c83beb75c600892ab1cab7562c8d15ab3756ae76718e7",
+      "actual": "abbba1585fc8f175593c83beb75c600892ab1cab7562c8d15ab3756ae76718e7"
+    },
+    {
+      "file": "art/meme-atlas.png",
+      "ok": true,
+      "expected": "8028d7db107407a0f67e8e79929c3d380c601680b183e3ec0f58a5740fdc0024",
+      "actual": "8028d7db107407a0f67e8e79929c3d380c601680b183e3ec0f58a5740fdc0024"
+    },
+    {
+      "file": "art/sprite-atlas.png",
+      "ok": true,
+      "expected": "d8449278472e341dc7f68b526563949d4d4c725bd66af8c32e70e9c884e54600",
+      "actual": "d8449278472e341dc7f68b526563949d4d4c725bd66af8c32e70e9c884e54600"
+    },
+    {
+      "file": "art/textbook-arch.jpg",
+      "ok": true,
+      "expected": "92a15565ca9d873cc36f0d5f3346b08379b44124a1cdf910bc627012589d24a4",
+      "actual": "92a15565ca9d873cc36f0d5f3346b08379b44124a1cdf910bc627012589d24a4"
+    },
+    {
+      "file": "art/textbook-c.jpg",
+      "ok": true,
+      "expected": "966e7a03af30f2f1f0ab4b73ab18065c042cbbeac92e88c0c733e54fbbac13a6",
+      "actual": "966e7a03af30f2f1f0ab4b73ab18065c042cbbeac92e88c0c733e54fbbac13a6"
+    },
+    {
+      "file": "art/textbook-cad.jpg",
+      "ok": true,
+      "expected": "0fe63d5ba1a41d249314a60b9aade35d51baac83032033c4fb4227febce3efd9",
+      "actual": "0fe63d5ba1a41d249314a60b9aade35d51baac83032033c4fb4227febce3efd9"
+    },
+    {
+      "file": "art/textbook-compiler.jpg",
+      "ok": true,
+      "expected": "eafdb5521175bdd774302be8727c8a5f875c14548d7a82b5622e213581202090",
+      "actual": "eafdb5521175bdd774302be8727c8a5f875c14548d7a82b5622e213581202090"
+    },
+    {
+      "file": "art/textbook-complex.jpg",
+      "ok": true,
+      "expected": "f8f2601ba274170666b0258814c1f6fd30d5a49c2146123054b006bb76cb07e2",
+      "actual": "f8f2601ba274170666b0258814c1f6fd30d5a49c2146123054b006bb76cb07e2"
+    },
+    {
+      "file": "art/textbook-computer.jpg",
+      "ok": true,
+      "expected": "4955f526f608acfb9f1d229aa0a0a5d79282ff0a3bc54892a653558fd67e01f4",
+      "actual": "4955f526f608acfb9f1d229aa0a0a5d79282ff0a3bc54892a653558fd67e01f4"
+    },
+    {
+      "file": "art/textbook-cs.jpg",
+      "ok": true,
+      "expected": "e5cc706e08c1dc0a38632cf9e5f540ea39dfef251b9762a9ca2314dbd766aecd",
+      "actual": "e5cc706e08c1dc0a38632cf9e5f540ea39dfef251b9762a9ca2314dbd766aecd"
+    },
+    {
+      "file": "art/textbook-design.jpg",
+      "ok": true,
+      "expected": "526ba688f2b0f994eee0a6141c930f4bd370b7415333b42a20593b108b937029",
+      "actual": "526ba688f2b0f994eee0a6141c930f4bd370b7415333b42a20593b108b937029"
+    },
+    {
+      "file": "art/textbook-discrete.jpg",
+      "ok": true,
+      "expected": "634c55bc1ecf96aa94e2677384ba9b298e68c862450bc29d7c75706872746191",
+      "actual": "634c55bc1ecf96aa94e2677384ba9b298e68c862450bc29d7c75706872746191"
+    },
+    {
+      "file": "art/textbook-functional.jpg",
+      "ok": true,
+      "expected": "d8e431c230ea4f08657a9ddeac147e80606aa3e449db94980d188c66e1e952ab",
+      "actual": "d8e431c230ea4f08657a9ddeac147e80606aa3e449db94980d188c66e1e952ab"
+    },
+    {
+      "file": "art/textbook-green.jpg",
+      "ok": true,
+      "expected": "17510f5276515f53850e47efecf7ae1458ff392ecca6a42244d746af4fec5a01",
+      "actual": "17510f5276515f53850e47efecf7ae1458ff392ecca6a42244d746af4fec5a01"
+    },
+    {
+      "file": "art/textbook-history.jpg",
+      "ok": true,
+      "expected": "67d62a6a49133c3c21702704b38f4c3a597d8dcb4be3c5bda6d1a67b6d4d671c",
+      "actual": "67d62a6a49133c3c21702704b38f4c3a597d8dcb4be3c5bda6d1a67b6d4d671c"
+    },
+    {
+      "file": "art/textbook-linear.jpg",
+      "ok": true,
+      "expected": "50ba1b8ce5dae17cd67ef1978f6f45d338b8e03590b9bcd2b1f1dfc7a3cb1040",
+      "actual": "50ba1b8ce5dae17cd67ef1978f6f45d338b8e03590b9bcd2b1f1dfc7a3cb1040"
+    },
+    {
+      "file": "art/textbook-math.jpg",
+      "ok": true,
+      "expected": "9ac7d052104be990bd799ee75a81ecf461d98de6c5872aff65e9ef9938d06827",
+      "actual": "9ac7d052104be990bd799ee75a81ecf461d98de6c5872aff65e9ef9938d06827"
+    },
+    {
+      "file": "art/textbook-ml.jpg",
+      "ok": true,
+      "expected": "35d0f209d7672a0a5b14808b1020935613905eb7e6711e0e85d1e2250f562915",
+      "actual": "35d0f209d7672a0a5b14808b1020935613905eb7e6711e0e85d1e2250f562915"
+    },
+    {
+      "file": "art/textbook-network.jpg",
+      "ok": true,
+      "expected": "d4dac74113bb17e871bc815a1575dddce683efed2cfdcdc7c9fdc481d24f1432",
+      "actual": "d4dac74113bb17e871bc815a1575dddce683efed2cfdcdc7c9fdc481d24f1432"
+    },
+    {
+      "file": "art/textbook-numerical.jpg",
+      "ok": true,
+      "expected": "143e66ac919d23d7cc5f89d674f403fd52633522735618b94b3d207b01aba20c",
+      "actual": "143e66ac919d23d7cc5f89d674f403fd52633522735618b94b3d207b01aba20c"
+    },
+    {
+      "file": "art/textbook-ode.jpg",
+      "ok": true,
+      "expected": "68f4a5aa4a68c0c3f1477af1932ec9ee0988510a126dbb0136cd7d90da460b4d",
+      "actual": "68f4a5aa4a68c0c3f1477af1932ec9ee0988510a126dbb0136cd7d90da460b4d"
+    },
+    {
+      "file": "art/textbook-os.jpg",
+      "ok": true,
+      "expected": "68efd7edf9887b327a9133206b46e2fa82e77dd2e9938560e770214e4b6a85d7",
+      "actual": "68efd7edf9887b327a9133206b46e2fa82e77dd2e9938560e770214e4b6a85d7"
+    },
+    {
+      "file": "art/textbook-probability.jpg",
+      "ok": true,
+      "expected": "98a6b2432c24b8b0d4dd297db94cd94aa4806c04d0f700e0618fad4272bd6e54",
+      "actual": "98a6b2432c24b8b0d4dd297db94cd94aa4806c04d0f700e0618fad4272bd6e54"
+    },
+    {
+      "file": "art/textbook-real.jpg",
+      "ok": true,
+      "expected": "dedd0b21ee7fbc965e8ab4076d5a6c466e94608f2fe12e2c0cff9d615ee79357",
+      "actual": "dedd0b21ee7fbc965e8ab4076d5a6c466e94608f2fe12e2c0cff9d615ee79357"
+    },
+    {
+      "file": "art/textbook-structure.jpg",
+      "ok": true,
+      "expected": "0c12e50e8edd5f8bbedf70978510fef8a7433eaeb25886433f595f1290b3284f",
+      "actual": "0c12e50e8edd5f8bbedf70978510fef8a7433eaeb25886433f595f1290b3284f"
+    },
+    {
+      "file": "art/textbook-thermal.jpg",
+      "ok": true,
+      "expected": "bf0ab461d67abf32fa3a921c8c1999b82b72e3cc9b4f69851431e3895f022e4b",
+      "actual": "bf0ab461d67abf32fa3a921c8c1999b82b72e3cc9b4f69851431e3895f022e4b"
+    },
+    {
+      "file": "art/textbook-urban.jpg",
+      "ok": true,
+      "expected": "52354dd465d07327a69e87779c4721bd765f6335633358c887b3bf1e64ff0648",
+      "actual": "52354dd465d07327a69e87779c4721bd765f6335633358c887b3bf1e64ff0648"
+    },
+    {
+      "file": "art/tsinghua-gate-1280.jpg",
+      "ok": true,
+      "expected": "91b0c7a39485231f98fe6c6de25eaa596fd91bdbfcf303070aef3d6eba45ba90",
+      "actual": "91b0c7a39485231f98fe6c6de25eaa596fd91bdbfcf303070aef3d6eba45ba90"
+    },
+    {
+      "file": "art/tsinghua-gate-3840.jpg",
+      "ok": true,
+      "expected": "4de4f859a63471bda70f3a4f37aa1a9ed09c2e49aaf59b46769c998a3b8b98b7",
+      "actual": "4de4f859a63471bda70f3a4f37aa1a9ed09c2e49aaf59b46769c998a3b8b98b7"
+    },
+    {
+      "file": "art/xuetang-road.jpg",
+      "ok": true,
+      "expected": "e089b0c7321b009055bf4878f522ad1fa032154f641f49c4189962860ff85862",
+      "actual": "e089b0c7321b009055bf4878f522ad1fa032154f641f49c4189962860ff85862"
+    },
+    {
+      "file": "assets/index-Bb27AGqO.js",
+      "ok": true,
+      "expected": "f4137be5999eccb73b0537a3226ab204d02f05ef5d226114b4542522a01c062f",
+      "actual": "f4137be5999eccb73b0537a3226ab204d02f05ef5d226114b4542522a01c062f"
+    },
+    {
+      "file": "assets/index-DqMLYIXH.css",
+      "ok": true,
+      "expected": "4370ed7ac7a51305fae498d46cb578874cbaad0f54299c666a1918efbc0a0a33",
+      "actual": "4370ed7ac7a51305fae498d46cb578874cbaad0f54299c666a1918efbc0a0a33"
+    },
+    {
+      "file": "badges/chayuan.png",
+      "ok": true,
+      "expected": "fef8466d8313a6ab3a30a8916274d39b6d2ace33119c4a2bb2f076e4a4b372b6",
+      "actual": "fef8466d8313a6ab3a30a8916274d39b6d2ace33119c4a2bb2f076e4a4b372b6"
+    },
+    {
+      "file": "badges/dushi.png",
+      "ok": true,
+      "expected": "c2e0218eccf0978c910aaa14bf67325237b8606ad865c27a8c06c0cfe78d8965",
+      "actual": "c2e0218eccf0978c910aaa14bf67325237b8606ad865c27a8c06c0cfe78d8965"
+    },
+    {
+      "file": "badges/faxue.png",
+      "ok": true,
+      "expected": "320358fffc4c575d5f3412b6eef628a4119d12115f02d2ff321be58740b13331",
+      "actual": "320358fffc4c575d5f3412b6eef628a4119d12115f02d2ff321be58740b13331"
+    },
+    {
+      "file": "badges/gongwu.png",
+      "ok": true,
+      "expected": "7a48d8f4a5d7bb258350c263c11af801c045c3fd308c9ae13ec223972f37370d",
+      "actual": "7a48d8f4a5d7bb258350c263c11af801c045c3fd308c9ae13ec223972f37370d"
+    },
+    {
+      "file": "badges/guixi.png",
+      "ok": true,
+      "expected": "6559c808a12cf5c81e09063d54a7a8f46223946b7c9cfcdf66da4fcf8f64db2a",
+      "actual": "6559c808a12cf5c81e09063d54a7a8f46223946b7c9cfcdf66da4fcf8f64db2a"
+    },
+    {
+      "file": "badges/jianyuan.png",
+      "ok": true,
+      "expected": "556cbee99c66d06bd94f2102a69f62baa2e169dd466b1f3f84695dfb899bffd2",
+      "actual": "556cbee99c66d06bd94f2102a69f62baa2e169dd466b1f3f84695dfb899bffd2"
+    },
+    {
+      "file": "badges/jingguan.png",
+      "ok": true,
+      "expected": "9bcb37fa02b535070e7a9dcf4562f88e2e8df908bda5753f18116b844ee3a885",
+      "actual": "9bcb37fa02b535070e7a9dcf4562f88e2e8df908bda5753f18116b844ee3a885"
+    },
+    {
+      "file": "badges/jixie.png",
+      "ok": true,
+      "expected": "b3dfd6ef06eb82853f917c4f26f1c5058f954c1e2d84083490883bc7505b50d5",
+      "actual": "b3dfd6ef06eb82853f917c4f26f1c5058f954c1e2d84083490883bc7505b50d5"
+    },
+    {
+      "file": "badges/leixi.png",
+      "ok": true,
+      "expected": "f123fa77e216ab27be286f5200f945c6ebcfdaa0801ec3e00ebcf2a63d4b5324",
+      "actual": "f123fa77e216ab27be286f5200f945c6ebcfdaa0801ec3e00ebcf2a63d4b5324"
+    },
+    {
+      "file": "badges/meiyuan.png",
+      "ok": true,
+      "expected": "87919059ae6ccf699b0b7854e18d59d4a953620be068ad2d99548d23ba9379a7",
+      "actual": "87919059ae6ccf699b0b7854e18d59d4a953620be068ad2d99548d23ba9379a7"
+    },
+    {
+      "file": "badges/qinghua.png",
+      "ok": true,
+      "expected": "cf810572f1d633ea8a2d63d9a9cf5dbbc4c7f96ede9d41ff4a334541c17013bf",
+      "actual": "cf810572f1d633ea8a2d63d9a9cf5dbbc4c7f96ede9d41ff4a334541c17013bf"
+    },
+    {
+      "file": "badges/qiuzhen.png",
+      "ok": true,
+      "expected": "35b58b6e63d024717e455eed5beaeba09e2968f035c80fe9a584f277a01d53fa",
+      "actual": "35b58b6e63d024717e455eed5beaeba09e2968f035c80fe9a584f277a01d53fa"
+    },
+    {
+      "file": "badges/rixin.png",
+      "ok": true,
+      "expected": "b1dba938904d0f31b01e63bd5e7660815b71e45bfb983c23536976953df0aa3e",
+      "actual": "b1dba938904d0f31b01e63bd5e7660815b71e45bfb983c23536976953df0aa3e"
+    },
+    {
+      "file": "badges/shengke.png",
+      "ok": true,
+      "expected": "f87514f7a94695696821ea3ab77a559d62b5ad18a766b376e763f01855c9c75b",
+      "actual": "f87514f7a94695696821ea3ab77a559d62b5ad18a766b376e763f01855c9c75b"
+    },
+    {
+      "file": "badges/shuimu.png",
+      "ok": true,
+      "expected": "b6d5140e26d765b8427fe485acfdfb0f18810396e172b1c617f6e74216c4f3e3",
+      "actual": "b6d5140e26d765b8427fe485acfdfb0f18810396e172b1c617f6e74216c4f3e3"
+    },
+    {
+      "file": "badges/shuxue.png",
+      "ok": true,
+      "expected": "9546ec041906206658b75ad832d8245a7d84619fe4d11d2f7ad44e55cbedf1a0",
+      "actual": "9546ec041906206658b75ad832d8245a7d84619fe4d11d2f7ad44e55cbedf1a0"
+    },
+    {
+      "file": "badges/tanwei.png",
+      "ok": true,
+      "expected": "a9c20706e27cbab6182314b2e3c60b84522eea9fbfeb7ebbb7842a1574723398",
+      "actual": "a9c20706e27cbab6182314b2e3c60b84522eea9fbfeb7ebbb7842a1574723398"
+    },
+    {
+      "file": "badges/tongji.png",
+      "ok": true,
+      "expected": "d57743b0871aa7e51fc43c84951d59bddce62c354982e9e10ecbcb06cdda505b",
+      "actual": "d57743b0871aa7e51fc43c84951d59bddce62c354982e9e10ecbcb06cdda505b"
+    },
+    {
+      "file": "badges/weixian.png",
+      "ok": true,
+      "expected": "5227127d400a160211d80b20b56c665c7b486f746da62892d022d1bf1c8f4301",
+      "actual": "5227127d400a160211d80b20b56c665c7b486f746da62892d022d1bf1c8f4301"
+    },
+    {
+      "file": "badges/weiyang.png",
+      "ok": true,
+      "expected": "ccf1d3250bd5793d3985056c9c3debba0f870fc8f39cac18706e5623c2a52d8a",
+      "actual": "ccf1d3250bd5793d3985056c9c3debba0f870fc8f39cac18706e5623c2a52d8a"
+    },
+    {
+      "file": "badges/wuqiong.png",
+      "ok": true,
+      "expected": "1076fdcda3d34d1477368f6a2594aea0be82022b573020bd7a0776103c0be53a",
+      "actual": "1076fdcda3d34d1477368f6a2594aea0be82022b573020bd7a0776103c0be53a"
+    },
+    {
+      "file": "badges/wuxi.png",
+      "ok": true,
+      "expected": "789011c0340d7ccdc4a6bfd735e7ad48748693eb14bd7346b70c74fc7a4306df",
+      "actual": "789011c0340d7ccdc4a6bfd735e7ad48748693eb14bd7346b70c74fc7a4306df"
+    },
+    {
+      "file": "badges/xingjian.png",
+      "ok": true,
+      "expected": "e5c3b40286128eb88f80f471b638bc634a5531a20e0bf957e92d0cd4910f722d",
+      "actual": "e5c3b40286128eb88f80f471b638bc634a5531a20e0bf957e92d0cd4910f722d"
+    },
+    {
+      "file": "badges/xinya.png",
+      "ok": true,
+      "expected": "6b3ef09ef8e32979b75b0716f88f135cd156e190a051b05f31a7635d42c2872d",
+      "actual": "6b3ef09ef8e32979b75b0716f88f135cd156e190a051b05f31a7635d42c2872d"
+    },
+    {
+      "file": "badges/xiuzhong.png",
+      "ok": true,
+      "expected": "5e197c1ecf43c5cb79120888d880e9c9f93485007b2683b1798e9cd4b7ec2d3f",
+      "actual": "5e197c1ecf43c5cb79120888d880e9c9f93485007b2683b1798e9cd4b7ec2d3f"
+    },
+    {
+      "file": "badges/yixue.png",
+      "ok": true,
+      "expected": "38aaa1469a5eed1685ba2a289ca4a4a04d027f2aee4081dfafa227219a13e1b5",
+      "actual": "38aaa1469a5eed1685ba2a289ca4a4a04d027f2aee4081dfafa227219a13e1b5"
+    },
+    {
+      "file": "badges/zhili.png",
+      "ok": true,
+      "expected": "bc2730455219bc3e1081953ccecf2e57874542244ff9b57e1bad0f261a510c4f",
+      "actual": "bc2730455219bc3e1081953ccecf2e57874542244ff9b57e1bad0f261a510c4f"
+    },
+    {
+      "file": "badges/zhishan.png",
+      "ok": true,
+      "expected": "aa157f198b829055e753f9dcf1ae3da0858bd5f0c5856f0a63e49fce3b6bc9c4",
+      "actual": "aa157f198b829055e753f9dcf1ae3da0858bd5f0c5856f0a63e49fce3b6bc9c4"
+    },
+    {
+      "file": "badges/zijin.png",
+      "ok": true,
+      "expected": "8c61051058c06431b21619861113def3308ba3ed5f886d2efc24de7488e829e8",
+      "actual": "8c61051058c06431b21619861113def3308ba3ed5f886d2efc24de7488e829e8"
+    },
+    {
+      "file": "badges/ziqiang.png",
+      "ok": true,
+      "expected": "f961eb7b19b152d9966fc61fc53577f899053b1055828c7371e7f1ae2f75be6c",
+      "actual": "f961eb7b19b152d9966fc61fc53577f899053b1055828c7371e7f1ae2f75be6c"
+    },
+    {
+      "file": "index.html",
+      "ok": true,
+      "expected": "a54acb8a2397c3d91d6515a08c95dcc68b8649667cecf86787d24a47dd807f56",
+      "actual": "a54acb8a2397c3d91d6515a08c95dcc68b8649667cecf86787d24a47dd807f56"
+    },
+    {
+      "file": "version.json",
+      "ok": true,
+      "expected": "f40b71aa1b70ca46ffc2a068204df890696b99d6216520efae86817a6ddfc5ea",
+      "actual": "f40b71aa1b70ca46ffc2a068204df890696b99d6216520efae86817a6ddfc5ea"
+    }
+  ]
+}
