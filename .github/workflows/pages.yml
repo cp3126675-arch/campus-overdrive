@@ -6,6 +6,15 @@ on:
       - campus-game.zip
       - .github/workflows/pages.yml
   workflow_dispatch:
+    inputs:
+      restore_commit:
+        description: '回滚目标的完整 40 位部署提交；留空发布 main 最新包'
+        required: false
+        type: string
+      expected_sha256:
+        description: '可选：目标 ZIP 的 SHA256，填写后必须匹配'
+        required: false
+        type: string
 permissions:
   contents: read
   pages: write
@@ -21,12 +30,44 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Select and validate release
+        env:
+          RESTORE_COMMIT: ${{ inputs.restore_commit }}
+          EXPECTED_SHA256: ${{ inputs.expected_sha256 }}
+        run: |
+          set -euo pipefail
+          if [ -n "$RESTORE_COMMIT" ]; then
+            [[ "$RESTORE_COMMIT" =~ ^[0-9a-fA-F]{40}$ ]] || { echo 'A full commit SHA is required'; exit 1; }
+            git merge-base --is-ancestor "$RESTORE_COMMIT" HEAD
+            git show "$RESTORE_COMMIT:campus-game.zip" > /tmp/selected-campus-game.zip
+            cp /tmp/selected-campus-game.zip campus-game.zip
+          fi
+          ACTUAL_SHA256=$(sha256sum campus-game.zip | cut -d ' ' -f 1)
+          if [ -n "$EXPECTED_SHA256" ]; then
+            [[ "$EXPECTED_SHA256" =~ ^[0-9a-fA-F]{64}$ ]] || exit 1
+            test "$ACTUAL_SHA256" = "${EXPECTED_SHA256,,}"
+          fi
+          echo "Package SHA256: $ACTUAL_SHA256" >> "$GITHUB_STEP_SUMMARY"
+          echo "Package source commit: ${RESTORE_COMMIT:-$GITHUB_SHA}" >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/configure-pages@v5
       - name: Unpack game
         run: |
-          mkdir -p _site
-          unzip -q campus-game.zip -d _site
-          test -f _site/index.html
+          python3 - <<'PY'
+          import pathlib, zipfile
+          with zipfile.ZipFile('campus-game.zip') as z:
+              assert z.testzip() is None
+              names = set()
+              for i in z.infolist():
+                  p = pathlib.PurePosixPath(i.filename)
+                  assert not p.is_absolute() and '..' not in p.parts and '\\' not in i.filename
+                  assert ((i.external_attr >> 16) & 0o170000) != 0o120000
+                  assert i.filename not in names
+                  names.add(i.filename)
+              assert 'index.html' in names
+              z.extractall('_site')
+          PY
       - uses: actions/upload-pages-artifact@v4
         with:
           path: _site
