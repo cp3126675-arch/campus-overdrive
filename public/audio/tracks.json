@@ -1,4 +1,49 @@
 {
   "schemaVersion": 1,
-  "tracks": []
+  "tracks": [
+    {
+      "id": "pr1-battle",
+      "file": "pr1-battle.mp3",
+      "title": "正常战斗",
+      "author": "原作者未注明；由 FreneticWind60 提交",
+      "license": "NOASSERTION",
+      "source": "https://github.com/cp3126675-arch/campus-overdrive/pull/1",
+      "usage": "battle",
+      "loop": true,
+      "sha256": "5c69f21ce481cbc9fc3adb9bb2269de1e3915ed7d26fb19890675d60e1f1fd14"
+    },
+    {
+      "id": "pr1-urgent",
+      "file": "pr1-urgent.mp3",
+      "title": "低血量战斗",
+      "author": "原作者未注明；由 FreneticWind60 提交",
+      "license": "NOASSERTION",
+      "source": "https://github.com/cp3126675-arch/campus-overdrive/pull/1",
+      "usage": "urgent",
+      "loop": true,
+      "sha256": "1055dd8c82247a687c1890e5f90eaf71372a245fe87c8a7d8241d2c9eb7e3250"
+    },
+    {
+      "id": "pr1-victory",
+      "file": "pr1-victory.mp3",
+      "title": "胜利",
+      "author": "原作者未注明；由 FreneticWind60 提交",
+      "license": "NOASSERTION",
+      "source": "https://github.com/cp3126675-arch/campus-overdrive/pull/1",
+      "usage": "victory",
+      "loop": false,
+      "sha256": "9ba8fc3e44e6ee476e534928b4aa47463e1f4a3115720dfc030c3d888ded07a3"
+    },
+    {
+      "id": "pr1-defeat",
+      "file": "pr1-defeat.mp3",
+      "title": "失败",
+      "author": "原作者未注明；由 FreneticWind60 提交",
+      "license": "NOASSERTION",
+      "source": "https://github.com/cp3126675-arch/campus-overdrive/pull/1",
+      "usage": "defeat",
+      "loop": false,
+      "sha256": "6ccf8fce29e6000915b8cb42eb5c97a22b7c384280f347f9dcba92f33a22fe41"
+    }
+  ]
 }

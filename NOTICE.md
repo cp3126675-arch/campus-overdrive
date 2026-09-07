@@ -7,3 +7,7 @@ MIT **不授予第三方图片、校徽、教材封面、新闻照片、人物�
 这是非官方校园游戏，不代表学校、出版机构或图中人物背书。源码允许按 MIT 使用；将现有素材用于其他项目或发行时，须分别核对相关权利。权利人可通过仓库 Issue 联系维护者处理素材问题。
 
 新配乐必须在 `public/audio/tracks.json` 记录自己的许可和作者。审核、合并配乐不改变该许可。音乐提交建议使用 CC0-1.0 或 CC-BY-4.0；其他许可先在 Issue 讨论。不得把他人商业歌曲标为自己的原创。
+
+## PR #1 历史配乐
+
+v0.6.0 候选版的 `public/audio/pr1-*.mp3` 来自 [FreneticWind60 的 PR #1](https://github.com/cp3126675-arch/campus-overdrive/pull/1)，原作者、曲名及授权未注明，许可记录为 `NOASSERTION`。这四个文件不适用本项目的 MIT 许可；来源记录也不构成对外部音乐权利的授权。详细字节校验与接入差异见 `docs/contributions/PR-1-配乐接入.md`。

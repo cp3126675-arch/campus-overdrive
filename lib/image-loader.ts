@@ -8,19 +8,34 @@ export interface LoadableImage {
 export class ImageLoader<T extends LoadableImage> {
   private cache = new Map<string, T>();
   private pending = new Map<string, Promise<T>>();
+  private active = 0;
+  private waiting: Array<() => void> = [];
   constructor(
     private create: () => T,
     private timeoutMs = 4500,
     private attempts = 2,
+    private concurrency = 3,
   ) {}
   load(src: string): Promise<T> {
     const cached = this.cache.get(src);
     if (cached) return Promise.resolve(cached);
     const pending = this.pending.get(src);
     if (pending) return pending;
-    const work = this.retry(src).finally(() => this.pending.delete(src));
+    const work = this.scheduled(src).finally(() => this.pending.delete(src));
     this.pending.set(src, work);
     return work;
+  }
+  private async scheduled(src: string) {
+    if (this.active >= this.concurrency)
+      await new Promise<void>((resolve) => this.waiting.push(resolve));
+    else this.active++;
+    try {
+      return await this.retry(src);
+    } finally {
+      const next = this.waiting.shift();
+      if (next) next();
+      else this.active--;
+    }
   }
   private async retry(src: string) {
     for (let i = 0; i < this.attempts; i++) {

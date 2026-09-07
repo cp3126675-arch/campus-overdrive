@@ -1,3 +1,16 @@
+# v0.6.0 · 配乐与轻量战斗
+
+四场景音乐；图片 20.38 MB → 3.17 MB；首批 4 张 467 KB；分批加载、教材缓存、背景 30 Hz、重复音效合并。
+
+Source: 3535570f9a59402e341c8190f78fa2cabfc47489
+ZIP SHA256: 4d1062623a7ad3f97bf343f120cc4157b7191ab497cc9f33d79a924bd924076f
+Rollback v0.5.2: 124b78d62e02e2d5631264be15477cb4137a8752 / 9801518cecd3c1760b6addf8624d36508de740f7cc79c54a7b290584a8c2757c
+
+Clean install, checks, tests, both builds and 245 local HTTP hashes passed. OPPO WeChat QA pending.
+PR #1 was closed by its contributor. Maintainer confirmed retaining its four tracks and original commit. Audio authorship/license not asserted; see NOTICE.
+
+---
+
 # 合成清华小游戏 · 版本记录
 
 ## v0.5.2 · 打开即横屏 · 2026-09-07
