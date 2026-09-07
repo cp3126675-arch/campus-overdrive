@@ -1,12 +1,12 @@
 # PR #1 配乐接入记录
 
-状态：v0.6.0 本地候选；原 PR 尚未在 GitHub 合并，线上仍为 v0.5.2。
+状态：四首音乐随 v0.6.0 已公开。原 PR #1 由作者关闭、分支删除，GitHub 状态仍为 closed / merged=false；维护者随后明确确认采用四首音乐，接入经 [PR #3](https://github.com/cp3126675-arch/campus-overdrive/pull/3) 合并。
 
 原 PR：[基于5.0.1版本增加了音乐](https://github.com/cp3126675-arch/campus-overdrive/pull/1)，提交者 FreneticWind60，head `16abc67c738146ae8d9bad4e78e5e1856a47d38a`。虽然标题写 5.0.1，逐文件比较表明包以项目 v0.5.1 为底。
 
 原 ZIP SHA256：`f479956cdb264ce93a866e55eac1401679a36515286fd1bc142a0bb932d01e19`，26,852,806 字节；本地只读留存 `outputs/research/pr1-original.zip`。校验 ZIP CRC、路径与文件差异后读取，未执行贡献者的编译脚本。
 
-与 v0.5.1 相比只新增四个 MP3、`assets/music.js`，修改主脚本与 index.html。当前 v0.5.2 已有横屏修复，因此不能以 PR 里的旧 ZIP 覆盖线上。
+与 v0.5.1 相比只新增四个 MP3、`assets/music.js`，修改主脚本与 index.html。接入时的 v0.5.2 已有横屏修复，因此不能以 PR 里的旧 ZIP 覆盖线上。
 
 ## 接入内容与调整
 
@@ -25,6 +25,6 @@
 
 ## GitHub 合并方式
 
-源码开放分支先经 PR 检查合入 main。配乐接入分支从最新 main 创建，以 PR #1 的精确 head 进行普通合并；仅有 `campus-game.zip` 的二进制冲突时用已核验的 v0.6.0 新包解决，并纳入当前源码和以上原音频。用真正的 merge commit 保留贡献者祖先关系，不强制推送、不把旧包替换新包、不只关闭原 PR 冒充合并。合并前确认当前 PR head 未变化。新分支 PR 通过检查后合入，核验 Pages 和每个线上文件，再建 v0.6.0 Release。
+工程 PR #2 先通过 CI 合入 main。集成提交 `7cab6c5ccdc638b55323dc3b301bfd21d4a466da` 的第二父提交为原音乐提交 `16abc67c738146ae8d9bad4e78e5e1856a47d38a`，保留原作者与祖先关系。旧 `campus-game.zip` 冲突由已验证的 v0.6.0 封存包解决。
 
-该流程尚待 GitHub 已登录浏览器恢复操作；没有把本地接入写成远端已合并。
+PR #3 通过 CI 34145551323 后普通合并，公开提交 `7040e4a765aa1414a8a9d813d131037d9d6f0b8e`。Pages 34145675044 成功，线上 244/244 文件哈希通过，已创建 [v0.6.0 Release](https://github.com/cp3126675-arch/campus-overdrive/releases/tag/v0.6.0)。没有重新打开原 PR，也没有将它的 closed 状态描述为 merged。
