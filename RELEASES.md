@@ -6,7 +6,7 @@ Source: 3535570f9a59402e341c8190f78fa2cabfc47489
 ZIP SHA256: 4d1062623a7ad3f97bf343f120cc4157b7191ab497cc9f33d79a924bd924076f
 Rollback v0.5.2: 124b78d62e02e2d5631264be15477cb4137a8752 / 9801518cecd3c1760b6addf8624d36508de740f7cc79c54a7b290584a8c2757c
 
-Clean install, checks, tests, both builds and 245 local HTTP hashes passed. OPPO WeChat QA pending.
+已公开并核验：PR #3 合并提交 `7040e4a765aa1414a8a9d813d131037d9d6f0b8e`；PR checks 34145551323、Pages 34145675044 成功；线上 244/244 文件哈希一致。[Release v0.6.0](https://github.com/cp3126675-arch/campus-overdrive/releases/tag/v0.6.0)（ID 384227259）。本地干净安装、检查、回归、两种构建和 245 文件 HTTP 验证通过；OPPO 微信真机待复验。
 PR #1 was closed by its contributor. Maintainer confirmed retaining its four tracks and original commit. Audio authorship/license not asserted; see NOTICE.
 
 ---

@@ -2,7 +2,7 @@
 
 非官方清北校园题材的 2D 徽章合成动作竞速游戏。操控中央徽章，击败教材怪、躲避 Boss、抢鹅腿，合成清华并击败最终 Boss。
 
-[在线试玩 v0.5.2](https://cp3126675-arch.github.io/campus-overdrive/?v=0.5.2) · [贡献指南](CONTRIBUTING.md) · [配乐投稿](public/audio/README.md) · [游戏总纲](docs/游戏设计与长期开发文档.md) · [版本记录](RELEASES.md)
+[在线试玩 v0.6.0](https://cp3126675-arch.github.io/campus-overdrive/?v=0.6.0) · [贡献指南](CONTRIBUTING.md) · [配乐投稿](public/audio/README.md) · [游戏总纲](docs/游戏设计与长期开发文档.md) · [版本记录](RELEASES.md)
 
 ## 下载与运行
 
@@ -63,12 +63,12 @@ npm run build
 
 ## 发布与回滚
 
-当前可玩版本仍为 **v0.5.2**；本次工程开放不修改战斗玩法，也不替换线上原包。源码 PR 合并后只运行检查，维护者准备新版本时才执行发布流程。现有 `campus-game.zip` 和 GitHub Release 历史继续保留。[版本与回滚说明](docs/版本管理与回滚.md)
+当前可玩版本为 **v0.6.0**，四场景配乐与图片、渲染优化已发布并核验。完整源码已通过 PR #2 公开，更新通过 PR #3 合并；普通 PR 只运行检查。v0.5.2 原始包和 GitHub Release 历史继续保留，可作为回滚目标。[版本与回滚说明](docs/版本管理与回滚.md)
 
 ## 许可证
 
 原创程序代码采用 [MIT](LICENSE)。第三方图片、校徽、教材封面和新闻照片 **不在 MIT 授权范围内**，音乐按清单中的独立许可处理。[许可范围](NOTICE.md) · [素材台账](public/ASSET-CREDITS.txt)
 
-## v0.6.0 候选开发说明
+## v0.6.0 资源与配乐维护
 
-当前源码包含四场景配乐和资源/渲染优化，公开站点仍以已核验 Release 为准。图片原件在 `public/art`、`public/badges`；`npm run assets:optimize` 生成带内容哈希的 WebP 与清单，`npm run check:assets` 校验原图/压缩图一致和体积预算。静态导出只交付压缩图，源码不删除原图。配乐接入与署名边界见 [PR #1 记录](docs/contributions/PR-1-配乐接入.md)。
+[v0.6.0 Release](https://github.com/cp3126675-arch/campus-overdrive/releases/tag/v0.6.0) 已公开，线上 244 个文件与封存包哈希一致；OPPO 微信真机待复验。图片原件在 `public/art`、`public/badges`；`npm run assets:optimize` 生成带内容哈希的 WebP 与清单，`npm run check:assets` 校验原图/压缩图一致和体积预算。静态导出只交付压缩图，源码不删除原图。配乐接入与署名边界见 [PR #1 记录](docs/contributions/PR-1-配乐接入.md)。
