@@ -1,0 +1,44 @@
+name: Import reviewed community source
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - name: Verify and extract reviewed source only
+        env:
+          EXPECTED_SOURCE_SHA256: bed4a63bf6c39dce95a9947e2d56e89c8dcb7c67cff7a133abd1f37db4639895
+        run: |
+          python3 - <<'PYIMPORT'
+          import hashlib, os, pathlib, zipfile
+          p = pathlib.Path('source-bootstrap.zip')
+          assert hashlib.sha256(p.read_bytes()).hexdigest() == os.environ['EXPECTED_SOURCE_SHA256']
+          allowed = {'app','components','hooks','lib','public','docs','scripts','.github'}
+          with zipfile.ZipFile(p) as z:
+              assert z.testzip() is None
+              names = set()
+              for info in z.infolist():
+                  q = pathlib.PurePosixPath(info.filename)
+                  assert not q.is_absolute() and '..' not in q.parts and chr(92) not in info.filename
+                  assert info.filename not in names
+                  assert not info.filename.startswith('.github/workflows/')
+                  assert ((info.external_attr >> 16) & 0o170000) != 0o120000
+                  assert q.parts[0] not in {'.git','.openai','node_modules','outputs','dist'}
+                  assert len(q.parts) == 1 or q.parts[0] in allowed
+                  assert info.filename != 'campus-game.zip'
+                  names.add(info.filename)
+              assert {'package.json','package-lock.json','CONTRIBUTING.md','LICENSE','lib/game.ts'} <= names
+              z.extractall('.')
+          PYIMPORT
+      - name: Create source review branch
+        run: |
+          git switch -c codex/open-source-project
+          git rm source-bootstrap.zip
+          git add --all
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Import reviewed complete source and community contribution workflow'
+          git push origin HEAD:refs/heads/codex/open-source-project
+          echo 'Source branch ready for a pull request: codex/open-source-project' >> "$GITHUB_STEP_SUMMARY"
