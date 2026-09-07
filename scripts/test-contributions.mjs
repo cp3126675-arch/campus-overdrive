@@ -33,12 +33,12 @@ function fixture(run) {
     rmSync(root, { recursive: true, force: true });
   }
 }
-test('audio-only contribution is accepted with attribution and signature', () =>
+await test('audio-only contribution is accepted with attribution and signature', () =>
   fixture(({ root, track, save }) => {
     save([track]);
     assert.equal(validateAudio(root), 1);
   }));
-test('reject missing attribution, path traversal and unsupported license', () =>
+await test('reject missing attribution, path traversal and unsupported license', () =>
   fixture(({ root, track, save }) => {
     for (const patch of [
       { author: '' },
@@ -50,7 +50,7 @@ test('reject missing attribution, path traversal and unsupported license', () =>
       assert.throws(() => validateAudio(root));
     }
   }));
-test('reject fake media, duplicate IDs and unlisted files', () =>
+await test('reject fake media, duplicate IDs and unlisted files', () =>
   fixture(({ root, dir, track, save }) => {
     save([track, track]);
     assert.throws(() => validateAudio(root), /duplicate/);

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { requestLandscape, TOUCH_QUERY } from '@/lib/mobile-display';
 import release from '@/public/version.json';
+import { assetUrl } from '@/lib/asset-url';
 import { DEPARTMENTS, department, SKILL_RULES } from '@/lib/departments';
 import { YEAR_NAMES } from '@/lib/textbooks';
 import { badgeWeapon } from '@/lib/badge-weapons';
@@ -156,8 +157,7 @@ export default function Home() {
         >
           <img
             className="title-background"
-            src="/art/tsinghua-gate-1280.jpg"
-            srcSet="/art/tsinghua-gate-1280.jpg 1280w, /art/tsinghua-gate-3840.jpg 3840w"
+            src={assetUrl('/art/tsinghua-gate-1280.jpg')}
             sizes="(max-width: 1000px) 40vw, 100vw"
             alt="晨光下的清华大学二校门"
             fetchPriority="high"
@@ -263,7 +263,10 @@ export default function Home() {
                 aria-live="polite"
                 style={{ borderColor: selected.color }}
               >
-                <img src={`/badges/${selected.badge}.png`} alt="初始徽章" />
+                <img
+                  src={assetUrl(`/badges/${selected.badge}.png`)}
+                  alt="初始徽章"
+                />
                 <div>
                   <b>{selected.name}</b>
                   <p>普攻 · {selected.attack}</p>
@@ -466,7 +469,7 @@ export default function Home() {
                   className={lv === centralLevel ? 'largest' : ''}
                 >
                   <img
-                    src={`/badges/${snap.chain[lv].key}.png`}
+                    src={assetUrl(`/badges/${snap.chain[lv].key}.png`)}
                     alt={snap.chain[lv].name}
                   />
                   <small>{lv + 1}</small>
@@ -572,7 +575,9 @@ export default function Home() {
         >
           <div className="ending-emblem">
             <img
-              src={`/badges/${snap.mode === 'won' ? 'qinghua' : central?.key}.png`}
+              src={assetUrl(
+                `/badges/${snap.mode === 'won' ? 'qinghua' : central?.key}.png`,
+              )}
               alt=""
             />
           </div>
@@ -588,7 +593,7 @@ export default function Home() {
             {snap.mode === 'won' ? (
               <img
                 className="victory-badge"
-                src="/badges/qinghua.png"
+                src={assetUrl('/badges/qinghua.png')}
                 alt="清华大学校徽"
               />
             ) : (

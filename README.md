@@ -68,3 +68,7 @@ npm run build
 ## 许可证
 
 原创程序代码采用 [MIT](LICENSE)。第三方图片、校徽、教材封面和新闻照片 **不在 MIT 授权范围内**，音乐按清单中的独立许可处理。[许可范围](NOTICE.md) · [素材台账](public/ASSET-CREDITS.txt)
+
+## v0.6.0 候选开发说明
+
+当前源码包含四场景配乐和资源/渲染优化，公开站点仍以已核验 Release 为准。图片原件在 `public/art`、`public/badges`；`npm run assets:optimize` 生成带内容哈希的 WebP 与清单，`npm run check:assets` 校验原图/压缩图一致和体积预算。静态导出只交付压缩图，源码不删除原图。配乐接入与署名边界见 [PR #1 记录](docs/contributions/PR-1-配乐接入.md)。

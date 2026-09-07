@@ -7,21 +7,19 @@
   },
   "scripts": {
     "test": "node scripts/test-model.mjs && python3 scripts/test-release.py && node --test scripts/test-contributions.mjs",
-    "check": "tsc --noEmit && oxlint app/page.tsx app/layout.tsx lib/game.ts lib/game-model.ts lib/bosses.ts lib/departments.ts lib/battle-rules.ts lib/mobile-display.ts lib/combat-photos.ts components/game-joystick.tsx scripts/test-game.ts lib/image-loader.ts lib/canvas-compat.ts lib/enemy-grid.ts components/ui/dialog.tsx app/community-entry.tsx vite.community.config.ts vite.config.ts scripts/check-contributions.mjs scripts/test-contributions.mjs && npm run check:contributions",
+    "check": "tsc --noEmit && oxlint app/page.tsx app/layout.tsx lib/game.ts lib/game-model.ts lib/bosses.ts lib/departments.ts lib/battle-rules.ts lib/mobile-display.ts lib/combat-photos.ts components/game-joystick.tsx scripts/test-game.ts lib/image-loader.ts lib/canvas-compat.ts lib/enemy-grid.ts components/ui/dialog.tsx app/community-entry.tsx vite.community.config.ts vite.config.ts scripts/check-contributions.mjs scripts/test-contributions.mjs lib/music.ts lib/asset-url.ts scripts/optimize-assets.mjs && npm run check:contributions && npm run check:assets",
     "dev": "vite --config vite.community.config.ts --host 127.0.0.1 --port 3000",
     "build": "vinext build",
     "start": "wrangler dev --config dist/server/wrangler.json",
     "lint": "oxlint",
     "format": "oxfmt",
     "dev:site": "vinext dev",
-    "build:pages": "node scripts/export-static.mjs --github-pages",
-    "check:contributions": "node scripts/check-contributions.mjs"
+    "build:pages": "node scripts/export-static.mjs --github-pages && node scripts/check-assets.mjs --export",
+    "check:contributions": "node scripts/check-contributions.mjs",
+    "assets:optimize": "node scripts/optimize-assets.mjs",
+    "check:assets": "node scripts/check-assets.mjs"
   },
   "dependencies": {
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
-    "react-server-dom-webpack": "19.2.6",
-    "vinext": "1.0.0-beta.5",
     "@base-ui/react": "1.7.0",
     "@shadcn/react": "0.3.0",
     "class-variance-authority": "0.7.1",
@@ -31,12 +29,16 @@
     "embla-carousel-react": "8.5.2",
     "input-otp": "1.4.2",
     "lucide-react": "1.31.0",
+    "react": "19.2.6",
     "react-day-picker": "9.8.1",
+    "react-dom": "19.2.6",
     "react-resizable-panels": "4.5.8",
+    "react-server-dom-webpack": "19.2.6",
     "recharts": "3.8.0",
     "shadcn": "4.18.0",
     "tailwind-merge": "3.6.0",
-    "tw-animate-css": "1.4.0"
+    "tw-animate-css": "1.4.0",
+    "vinext": "1.0.0-beta.5"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.37.1",
@@ -51,6 +53,7 @@
     "oxfmt": "0.61.0",
     "oxlint": "1.76.0",
     "oxlint-tsgolint": "7.0.2001",
+    "sharp": "0.34.5",
     "tailwindcss": "4.2.1",
     "typescript": "5.9.3",
     "vite": "8.0.13",

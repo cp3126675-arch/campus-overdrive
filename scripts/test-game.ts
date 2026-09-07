@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { GameMusic, musicScene, type MusicMedia } from '../lib/music';
 import {
   BOSS_LEVELS,
   mergePercent,
@@ -985,19 +986,34 @@ for (const [id, p] of Object.entries(photoModule.BOSS_PHOTOS)) {
     naturalHeight: 850,
   });
 }
+const photoDocument = Object.getOwnPropertyDescriptor(globalThis, 'document');
+const thumbnailCalls: unknown[][] = [];
+Object.defineProperty(globalThis, 'document', {
+  configurable: true,
+  value: {
+    createElement: () => ({
+      getContext: () => ({
+        drawImage: (...args: unknown[]) => thumbnailCalls.push(args),
+      }),
+    }),
+  },
+});
 const renderer = Object.assign(Object.create(CampusGame.prototype), {
   model: drawModel,
+  bookCache: new Map(),
   ctx: paint,
   assets,
   touch: true,
 }) as {
   textbookEnemy(e: ReturnType<GameModel['makeEnemy']>): void;
   bossEnemy(e: ReturnType<GameModel['makeEnemy']>): void;
+  bookCache: Map<string, HTMLCanvasElement>;
 };
 for (const d of DEPARTMENTS) {
   drawModel.start(d.profile, d.badge, d.id);
   const enemy = drawModel.makeEnemy('paper', 500, 470);
   imageCalls.length = 0;
+  thumbnailCalls.length = 0;
   renderer.textbookEnemy(enemy);
   assert.equal(
     imageCalls.length,
@@ -1006,9 +1022,26 @@ for (const d of DEPARTMENTS) {
   );
   assert.equal(
     imageCalls[0][0],
-    assets.get(photoModule.enemyBookPhoto(d.id, enemy.book).id),
+    renderer.bookCache.get(photoModule.enemyBookPhoto(d.id, enemy.book).id),
   );
+  if (thumbnailCalls.length)
+    assert.equal(
+      thumbnailCalls[0][0],
+      assets.get(photoModule.enemyBookPhoto(d.id, enemy.book).id),
+    );
+  assert(renderer.bookCache.size <= 12);
 }
+const repeated = drawModel.makeEnemy('paper', 500, 470);
+renderer.textbookEnemy(repeated);
+thumbnailCalls.length = 0;
+for (let i = 0; i < 1000; i++) renderer.textbookEnemy(repeated);
+assert.equal(
+  thumbnailCalls.length,
+  0,
+  'Repeated textbook draws reuse the resized real cover',
+);
+if (photoDocument) Object.defineProperty(globalThis, 'document', photoDocument);
+else Reflect.deleteProperty(globalThis, 'document');
 for (const spec of BOSSES) {
   imageCalls.length = 0;
   const enemy = drawModel.makeEnemy('boss', 500, 470);
@@ -1416,4 +1449,161 @@ try {
 }
 console.log(
   'v0.5.2: four portrait-phone dimensions, clockwise coordinate inverse, all joystick directions, logical breakpoints, landscape pause guard and real resize integration passed. Physical phone UX still requires verification.',
+);
+
+// v0.6.0: music state, media lifetime and request concurrency stay bounded.
+assert.equal(musicScene(49, 'playing'), 'urgent');
+assert.equal(musicScene(50, 'playing'), 'battle');
+assert.equal(musicScene(0, 'lost'), 'defeat');
+assert.equal(musicScene(100, 'won'), 'victory');
+assert.equal(musicScene(20, 'paused'), null);
+class TestMedia implements MusicMedia {
+  src = '';
+  preload = '';
+  loop = false;
+  volume = 0;
+  paused = true;
+  released = false;
+  play() {
+    this.paused = false;
+    return Promise.resolve();
+  }
+  pause() {
+    this.paused = true;
+  }
+  load() {}
+  removeAttribute() {
+    this.released = true;
+    this.src = '';
+  }
+}
+const media: TestMedia[] = [];
+const music = new GameMusic(() => {
+  const m = new TestMedia();
+  media.push(m);
+  return m;
+});
+music.update(100, 'playing', 0.1);
+assert.equal(media.length, 0, 'No audio download before user interaction');
+music.unlock();
+await Promise.resolve();
+for (let i = 0; i < 60; i++) music.update(100, 'playing', 1 / 60);
+assert.equal(media.length, 1);
+assert(media[0].volume > 0 && media[0].volume <= 0.3);
+music.update(49, 'playing', 0.1);
+assert.equal(media.length, 2);
+for (let i = 0; i < 120; i++) music.update(49, 'playing', 1 / 60);
+assert(media[0].released);
+assert(media[1].loop);
+music.setMuted(true);
+assert(media.every((m) => m.paused && m.volume === 0));
+music.setMuted(false);
+await Promise.resolve();
+music.update(49, 'paused', 0.1);
+assert(media[1].paused);
+music.update(49, 'playing', 0.1);
+await Promise.resolve();
+assert(!media[1].paused);
+music.update(100, 'won', 0.1);
+assert(!media[2].loop);
+music.update(0, 'lost', 0.1);
+assert(media.filter((m) => !m.released).length <= 2);
+music.update(0, 'lost', 0.1, true);
+assert(media.every((m) => m.paused));
+music.destroy();
+await Promise.resolve();
+assert(media.every((m) => m.released && m.paused));
+
+let concurrent = 0,
+  peakConcurrent = 0;
+const limited = new ImageLoader(
+  () => ({
+    onload: null as GlobalEventHandlers['onload'],
+    onerror: null as GlobalEventHandlers['onerror'],
+    decoding: '',
+    get src() {
+      return '';
+    },
+    set src(value: string) {
+      if (!value) return;
+      concurrent++;
+      peakConcurrent = Math.max(peakConcurrent, concurrent);
+      setTimeout(() => {
+        concurrent--;
+        this.onload?.call({} as GlobalEventHandlers, {} as Event);
+      }, 2);
+    },
+  }),
+  100,
+  1,
+  3,
+);
+await Promise.all(
+  Array.from({ length: 20 }, (_, i) => limited.load(`asset-${i}`)),
+);
+assert.equal(
+  peakConcurrent,
+  3,
+  'Overlapping critical/background loads share one concurrency limit',
+);
+console.log(
+  'v0.6.0: two-voice streamed music, fade/pause/mute/end/cleanup, cached real covers and global image request bound passed.',
+);
+
+const sceneDocument = Object.getOwnPropertyDescriptor(globalThis, 'document');
+const sceneCanvas = { width: 0, height: 0, getContext: () => ({}) };
+Object.defineProperty(globalThis, 'document', {
+  configurable: true,
+  value: { createElement: () => sceneCanvas },
+});
+try {
+  let paints = 0,
+    blits = 0;
+  const scenery = Object.assign(Object.create(CampusGame.prototype), {
+    canvas: { width: 8000, height: 4000 },
+    ctx: {
+      drawImage() {
+        blits++;
+      },
+    },
+    assets: new Map(),
+    model: { bossSpawned: false },
+    visualClock: 0,
+    sceneryAt: -Infinity,
+    sceneryKey: '',
+    sceneryBuffer: null,
+    drawScenery(_motion: boolean, w: number, h: number) {
+      paints++;
+      assert(w * h <= 2_000_000);
+    },
+  });
+  for (let i = 0; i < 120; i++) {
+    scenery.visualClock = i / 120;
+    scenery.cachedScenery(false);
+  }
+  assert(
+    paints <= 30 && paints >= 20,
+    'Background paint is capped independently from battle frames',
+  );
+  assert.equal(blits, 120);
+  assert(sceneCanvas.width * sceneCanvas.height <= 2_000_000);
+  const before = paints;
+  scenery.assets.set('campus', {});
+  scenery.cachedScenery(false);
+  assert.equal(
+    paints,
+    before + 1,
+    'A newly loaded photo replaces fallback immediately',
+  );
+  scenery.canvas = { width: 800, height: 400 };
+  scenery.cachedScenery(false);
+  assert.equal(sceneCanvas.width, 800);
+  assert.equal(sceneCanvas.height, 400);
+} finally {
+  if (sceneDocument)
+    Object.defineProperty(globalThis, 'document', sceneDocument);
+  else Reflect.deleteProperty(globalThis, 'document');
+}
+console.log(
+  'v0.6.0: background redraw bound, loaded-photo invalidation, resize and 2-megapixel buffer cap passed.',
 );

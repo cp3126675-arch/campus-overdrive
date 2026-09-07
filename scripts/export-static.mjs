@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/postcss';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import manifest from '../lib/asset-manifest.json' with { type: 'json' };
 const project = process.cwd();
 const temp = resolve(project, 'outputs/static-entry');
 const github = process.argv.includes('--github-pages');
@@ -24,36 +25,25 @@ await build({
   root: temp,
   base: github ? './' : '/',
   publicDir: resolve(project, 'public'),
-  plugins: [
-    ...(github
-      ? [
-          {
-            name: 'relative-game-assets',
-            enforce: 'pre',
-            transform(code, id) {
-              if (id.endsWith('/app/page.tsx') || id.endsWith('/lib/game.ts'))
-                return code
-                  .replaceAll('/badges/', './badges/')
-                  .replaceAll('/art/', './art/')
-                  .replaceAll('href="/"', 'href="./"');
-            },
-          },
-        ]
-      : []),
-    react(),
-  ],
+  plugins: [react()],
   resolve: { alias: { '@': project } },
   css: { postcss: { plugins: [tailwindcss()] } },
   build: { outDir: output, emptyOutDir: true, target: 'es2020' },
 });
 if (github) {
   const htmlPath = resolve(output, 'index.html');
-  const { readFile } = await import('node:fs/promises');
+  const { readFile, rm } = await import('node:fs/promises');
   const html = await readFile(htmlPath, 'utf8');
   await writeFile(
     htmlPath,
-    html.replaceAll('href="/badges/', 'href="./badges/'),
+    html.replaceAll(
+      'href="/badges/shuxue.png"',
+      `href=".${manifest['/badges/shuxue.png'].file}"`,
+    ),
   );
   await writeFile(resolve(output, '.nojekyll'), '');
+  // Source originals remain in Git; the playable export serves only their hashed encodings.
+  for (const original of Object.keys(manifest))
+    await rm(resolve(output, '.' + original));
 }
 console.log('Static deployment folder:', output);

@@ -1,4 +1,6 @@
 import colleges from './colleges.json';
+import { assetUrl } from './asset-url';
+import { GameMusic } from './music';
 import { needsLandscape } from './battle-rules';
 import { ImageLoader, loadImageBatch } from './image-loader';
 import { roundRect } from './canvas-compat';
@@ -15,6 +17,7 @@ import {
   clamp,
   cameraView,
   BADGE_LIFETIME,
+  ENDING_SECONDS,
   supplyStation,
   type Enemy,
   type Shot,
@@ -56,6 +59,7 @@ export class CampusGame {
   private destroyed = false;
   private muted = false;
   private audio: AudioContext | null = null;
+  private music = new GameMusic();
   private abort = new AbortController();
   private width = 900;
   private height = 540;
@@ -78,20 +82,16 @@ export class CampusGame {
   }
   private imageLoader = new ImageLoader(() => new Image());
   async load(progress?: (done: number, total: number) => void) {
-    const defs = [
-      ['campus', '/art/xuetang-road.jpg'],
-      ['bike-photo', '/art/bike-photo.jpg'],
-      ['coder-pity', '/art/coder-pity.png'],
-      ...Object.entries(BOSS_PHOTOS).map(([id, p]) => [
-        `boss-photo-${id}`,
-        `/art/${p.file}`,
-      ]),
-      ['atlas', '/art/sprite-atlas.png'],
-      ['memes', '/art/meme-atlas.png'],
-      ...colleges.map((c) => [c.key, `/badges/${c.key}.png`]),
-      ['qinghua', '/badges/qinghua.png'],
-    ];
-    return this.loadImages(defs, progress);
+    // Only four essentials block entry; late-game portraits are fetched near their encounter.
+    return this.loadImages(
+      [
+        ['campus', '/art/xuetang-road.jpg'],
+        ['memes', '/art/meme-atlas.png'],
+        ['qinghua', '/badges/qinghua.png'],
+        ['shuxue', '/badges/shuxue.png'],
+      ],
+      progress,
+    );
   }
   async prepareDepartment(id: string) {
     this.unlockAudio();
@@ -105,12 +105,57 @@ export class CampusGame {
   ) {
     return loadImageBatch(
       defs.filter(([key]) => !this.assets.has(key)),
-      (src) => this.imageLoader.load(src),
+      (src) => this.imageLoader.load(assetUrl(src)),
       (key, img) => {
         if (!this.destroyed) this.assets.set(key, img);
       },
       progress,
     );
+  }
+  private resourceClock = 0;
+  private resourceRetry = new Map<string, number>();
+  private resourcePending = new Set<string>();
+  private streamAssets() {
+    const m = this.model;
+    if (m.mode === 'menu') return;
+    const ids = new Set([
+      ...m.inventory,
+      m.centralLevel + 1,
+      m.centralLevel + 2,
+    ]);
+    const defs: string[][] = [...ids].flatMap((i) =>
+      m.chain[i] ? [[m.chain[i].key, `/badges/${m.chain[i].key}.png`]] : [],
+    );
+    defs.push(['bike-photo', '/art/bike-photo.jpg']);
+    const next = m.bossOrder[m.bossesDefeated];
+    if (next) {
+      const photo = BOSS_PHOTOS[next];
+      defs.push([`boss-photo-${next}`, `/art/${photo.file}`]);
+    }
+    // Retry failed critical assets and this department's covers without blocking play.
+    defs.push(
+      ['campus', '/art/xuetang-road.jpg'],
+      ['memes', '/art/meme-atlas.png'],
+    );
+    defs.push(
+      ...departmentBooks(m.department.id).map((p) => [p.id, `/art/${p.file}`]),
+    );
+    for (const [key, src] of defs) {
+      if (
+        this.assets.has(key) ||
+        this.resourcePending.has(key) ||
+        (this.resourceRetry.get(key) || 0) > this.visualClock
+      )
+        continue;
+      this.resourcePending.add(key);
+      void this.imageLoader
+        .load(assetUrl(src))
+        .then((img) => {
+          if (!this.destroyed) this.assets.set(key, img);
+        })
+        .catch(() => this.resourceRetry.set(key, this.visualClock + 20))
+        .finally(() => this.resourcePending.delete(key));
+    }
   }
   private viewportResize = () => this.resize();
   private resize() {
@@ -160,7 +205,9 @@ export class CampusGame {
     this.keys.clear();
     this.move = { x: 0, y: 0 };
     this.projectileCache.clear();
+    this.bookCache.clear();
     this.model.start(major, target, departmentId);
+    this.streamAssets();
     this.syncOrientation();
     this.sceneryClock = 0;
     this.scenerySpeed = 1;
@@ -172,11 +219,13 @@ export class CampusGame {
     this.keys.clear();
     this.move = { x: 0, y: 0 };
     this.model.toMenu();
+    this.music.update(this.model.hp, this.model.mode, 0);
     this.emit(this.model.snapshot());
   }
   togglePause() {
     if (this.model.orientationBlocked) return;
     this.model.togglePause();
+    this.music.update(this.model.hp, this.model.mode, 0);
     this.last = performance.now();
     this.keys.clear();
     this.move = { x: 0, y: 0 };
@@ -205,9 +254,11 @@ export class CampusGame {
   }
   setMuted(v: boolean) {
     this.muted = v;
+    this.music.setMuted(v);
     if (!v) this.unlockAudio();
   }
   private unlockAudio() {
+    this.music.unlock();
     try {
       if (!this.audio) this.audio = new AudioContext();
       if (this.audio.state === 'suspended')
@@ -255,6 +306,7 @@ export class CampusGame {
     this.move = { x: 0, y: 0 };
     if (this.model.mode === 'playing') {
       this.model.togglePause();
+      this.music.update(this.model.hp, this.model.mode, 0);
       this.emit(this.model.snapshot());
     }
   };
@@ -285,8 +337,23 @@ export class CampusGame {
         (pace - this.scenerySpeed) * (1 - Math.exp(-step * 5));
       this.sceneryClock += step * this.scenerySpeed;
     }
-    for (const event of this.model.events.splice(0)) this.sound(event);
-    this.draw();
+    // A burst may emit dozens of identical sounds; one per type/frame is enough.
+    for (const event of new Set(this.model.events.splice(0))) this.sound(event);
+    this.resourceClock += dt;
+    if (this.resourceClock >= 1) {
+      this.resourceClock = 0;
+      this.streamAssets();
+    }
+    this.music.update(this.model.hp, this.model.mode, dt, document.hidden);
+    this.drawClock += dt;
+    if (
+      this.model.mode === 'playing' ||
+      (this.model.endingTime > 0 && this.model.endingTime < ENDING_SECONDS) ||
+      this.drawClock >= 0.1
+    ) {
+      this.drawClock = 0;
+      this.draw();
+    }
     this.emitClock += dt;
     if (this.emitClock > 0.1) {
       this.emitClock = 0;
@@ -294,6 +361,7 @@ export class CampusGame {
     }
     this.raf = requestAnimationFrame(this.frame);
   };
+  private drawClock = 0;
   private sound(kind: string) {
     if (this.muted || !this.audio || this.audio.state !== 'running') return;
     const ac = this.audio;
@@ -967,6 +1035,33 @@ export class CampusGame {
       labels.add(h.label);
     }
   }
+  private bookCache = new Map<string, HTMLCanvasElement>();
+  private coverBitmap(id: string, img: HTMLImageElement, crop: number) {
+    let bitmap = this.bookCache.get(id);
+    if (!bitmap) {
+      bitmap = document.createElement('canvas');
+      bitmap.width = 144;
+      bitmap.height = 200;
+      const ctx = bitmap.getContext('2d');
+      if (!ctx) return img;
+      const sx = img.naturalWidth * crop;
+      ctx.drawImage(
+        img,
+        sx,
+        0,
+        img.naturalWidth - sx,
+        img.naturalHeight,
+        0,
+        0,
+        144,
+        200,
+      );
+      if (this.bookCache.size >= 12)
+        this.bookCache.delete(this.bookCache.keys().next().value!);
+      this.bookCache.set(id, bitmap);
+    }
+    return bitmap;
+  }
   private textbookEnemy(e: Enemy) {
     const c = this.ctx,
       m = this.model;
@@ -994,15 +1089,10 @@ export class CampusGame {
     }
     c.fillStyle = '#f1e6cf';
     c.fillRect(-w / 2 + 4, -h / 2 + 4, w, h);
-    // The author-hosted CS image is a full jacket: use its right-hand front cover.
-    const sx = (img?.naturalWidth || 0) * cover.crop;
+    // The crop is applied once to the reusable bitmap, preserving the real front cover.
     if (img)
       c.drawImage(
-        img,
-        sx,
-        0,
-        img.naturalWidth - sx,
-        img.naturalHeight,
+        this.coverBitmap(cover.id, img, cover.crop),
         -w / 2,
         -h / 2,
         w,
@@ -1249,10 +1339,48 @@ export class CampusGame {
     }
     c.restore();
   }
-  private drawScenery(reducedMotion: boolean) {
-    const c = this.ctx;
+  private sceneryBuffer: HTMLCanvasElement | null = null;
+  private sceneryAt = -Infinity;
+  private sceneryKey = '';
+  private cachedScenery(reducedMotion: boolean) {
     const w = this.canvas.width,
       h = this.canvas.height;
+    const factor = Math.min(1, Math.sqrt(2_000_000 / Math.max(1, w * h)));
+    const bw = Math.max(1, Math.floor(w * factor));
+    const bh = Math.max(1, Math.floor(h * factor));
+    const key = `${w}:${h}:${this.model.bossSpawned}:${this.assets.has('campus')}:${reducedMotion}`;
+    const needsPaint =
+      key !== this.sceneryKey || this.visualClock - this.sceneryAt >= 1 / 30;
+    if (!this.sceneryBuffer)
+      this.sceneryBuffer = document.createElement('canvas');
+    if (needsPaint) {
+      if (this.sceneryBuffer.width !== bw || this.sceneryBuffer.height !== bh) {
+        this.sceneryBuffer.width = bw;
+        this.sceneryBuffer.height = bh;
+      }
+      const ctx = this.sceneryBuffer.getContext('2d');
+      if (!ctx) {
+        this.drawScenery(reducedMotion);
+        return;
+      }
+      const destination = this.ctx;
+      this.ctx = ctx;
+      try {
+        this.drawScenery(reducedMotion, bw, bh);
+      } finally {
+        this.ctx = destination;
+      }
+      this.sceneryAt = this.visualClock;
+      this.sceneryKey = key;
+    }
+    this.ctx.drawImage(this.sceneryBuffer, 0, 0, w, h);
+  }
+  private drawScenery(
+    reducedMotion: boolean,
+    w = this.canvas.width,
+    h = this.canvas.height,
+  ) {
+    const c = this.ctx;
     const bg = this.assets.get('campus');
     c.save();
     c.fillStyle = '#172632';
@@ -1312,8 +1440,7 @@ export class CampusGame {
     const view = m.view;
     const scale = this.canvas.width / view.width;
     c.setTransform(1, 0, 0, 1, 0, 0);
-    c.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.drawScenery(reducedMotion);
+    this.cachedScenery(reducedMotion);
     c.setTransform(scale, 0, 0, scale, -view.x * scale, -view.y * scale);
     c.save();
     if (m.shake > 0 && !reducedMotion) {
@@ -1901,8 +2028,11 @@ export class CampusGame {
   }
   destroy() {
     this.destroyed = true;
+    this.music.destroy();
     this.projectileCache.clear();
     this.assets.clear();
+    this.bookCache.clear();
+    this.sceneryBuffer = null;
     cancelAnimationFrame(this.raf);
     this.observer.disconnect();
     this.abort.abort();
