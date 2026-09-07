@@ -1,0 +1,234 @@
+[
+  {
+    "key": "xinya",
+    "name": "新雅书院",
+    "short": "新雅",
+    "title": "新雅",
+    "color": "#7c2c52",
+    "image": "img/round/xinya.png"
+  },
+  {
+    "key": "zhili",
+    "name": "致理书院",
+    "short": "致理",
+    "title": "致理",
+    "color": "#14506b",
+    "image": "img/round/zhili.png"
+  },
+  {
+    "key": "rixin",
+    "name": "日新书院",
+    "short": "日新",
+    "title": "日新",
+    "color": "#d9720f",
+    "image": "img/round/rixin.png"
+  },
+  {
+    "key": "tanwei",
+    "name": "探微书院",
+    "short": "探微",
+    "title": "探微",
+    "color": "#7b4fc0",
+    "image": "img/round/tanwei.png"
+  },
+  {
+    "key": "xingjian",
+    "name": "行健书院",
+    "short": "行健",
+    "title": "行健",
+    "color": "#1e3a8a",
+    "image": "img/round/xingjian.png"
+  },
+  {
+    "key": "weiyang",
+    "name": "未央书院",
+    "short": "未央",
+    "title": "未央",
+    "color": "#3f9ad5",
+    "image": "img/round/weiyang.png"
+  },
+  {
+    "key": "qiuzhen",
+    "name": "求真书院",
+    "short": "求真",
+    "title": "求真",
+    "color": "#a02c2c",
+    "image": "img/round/qiuzhen.png"
+  },
+  {
+    "key": "weixian",
+    "name": "为先书院",
+    "short": "为先",
+    "title": "为先",
+    "color": "#5d2f92",
+    "image": "img/round/weixian.png"
+  },
+  {
+    "key": "xiuzhong",
+    "name": "秀钟书院",
+    "short": "秀钟",
+    "title": "秀钟",
+    "color": "#14366b",
+    "image": "img/round/xiuzhong.png"
+  },
+  {
+    "key": "dushi",
+    "name": "笃实书院",
+    "short": "笃实",
+    "title": "笃实",
+    "color": "#3f9ad6",
+    "image": "img/round/dushi.png"
+  },
+  {
+    "key": "zhishan",
+    "name": "至善书院",
+    "short": "至善",
+    "title": "至善",
+    "color": "#c2402a",
+    "image": "img/round/zhishan.png"
+  },
+  {
+    "key": "wuqiong",
+    "name": "无穹书院",
+    "short": "无穹",
+    "title": "无穹",
+    "color": "#1a2470",
+    "image": "img/round/wuqiong.png"
+  },
+  {
+    "key": "zijin",
+    "name": "紫荆书院",
+    "short": "紫荆",
+    "title": "紫荆",
+    "color": "#5f1a4a",
+    "image": "img/round/zijin.png"
+  },
+  {
+    "key": "ziqiang",
+    "name": "自强书院",
+    "short": "自强",
+    "title": "自强",
+    "color": "#8a2fa0",
+    "image": "img/round/ziqiang.png"
+  },
+  {
+    "key": "shuimu",
+    "name": "水木书院",
+    "short": "水木",
+    "title": "水木",
+    "color": "#14405f",
+    "image": "img/round/shuimu.png"
+  },
+  {
+    "key": "jianyuan",
+    "name": "建筑学院",
+    "short": "建院",
+    "title": "建院",
+    "color": "#8c4a1f",
+    "image": "img/round/jianyuan.png"
+  },
+  {
+    "key": "jixie",
+    "name": "机械系",
+    "short": "机械",
+    "title": "机械系",
+    "color": "#6d28d9",
+    "image": "img/round/jixie.png"
+  },
+  {
+    "key": "wuxi",
+    "name": "电子系",
+    "short": "电子系",
+    "title": "无系",
+    "color": "#7c3aed",
+    "image": "img/round/wuxi.png"
+  },
+  {
+    "key": "guixi",
+    "name": "计算机系",
+    "short": "计算机系",
+    "title": "贵系",
+    "color": "#581c87",
+    "image": "img/round/guixi.png"
+  },
+  {
+    "key": "shuxue",
+    "name": "数学系",
+    "short": "数学",
+    "title": "数学系",
+    "color": "#6b21a8",
+    "image": "img/round/shuxue.png"
+  },
+  {
+    "key": "shengke",
+    "name": "生命科学学院",
+    "short": "生科",
+    "title": "生科",
+    "color": "#412f54",
+    "image": "img/round/shengke.png"
+  },
+  {
+    "key": "gongwu",
+    "name": "工物系",
+    "short": "工物",
+    "title": "工物系",
+    "color": "#7e22ce",
+    "image": "img/round/gongwu.png"
+  },
+  {
+    "key": "leixi",
+    "name": "自动化系",
+    "short": "自动化系",
+    "title": "雷系",
+    "color": "#9333ea",
+    "image": "img/round/leixi.png"
+  },
+  {
+    "key": "tongji",
+    "name": "统计系",
+    "short": "统计",
+    "title": "统计系",
+    "color": "#8b5cf6",
+    "image": "img/round/tongji.png"
+  },
+  {
+    "key": "chayuan",
+    "name": "交叉信息院",
+    "short": "交叉信息院",
+    "title": "茶园",
+    "color": "#172554",
+    "image": "img/round/chayuan.png"
+  },
+  {
+    "key": "yixue",
+    "name": "医学院",
+    "short": "医学",
+    "title": "医学院",
+    "color": "#86198f",
+    "image": "img/round/yixue.png"
+  },
+  {
+    "key": "jingguan",
+    "name": "经管学院",
+    "short": "经管",
+    "title": "经管",
+    "color": "#2450a4",
+    "image": "img/round/jingguan.png"
+  },
+  {
+    "key": "faxue",
+    "name": "法学院",
+    "short": "法学",
+    "title": "法学院",
+    "color": "#5b21b6",
+    "image": "img/round/faxue.png"
+  },
+  {
+    "key": "meiyuan",
+    "name": "美术学院",
+    "short": "美术",
+    "title": "美院",
+    "color": "#1e40af",
+    "image": "img/round/meiyuan.png"
+  }
+]

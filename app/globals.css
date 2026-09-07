@@ -1,0 +1,1771 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@custom-variant dark (&:is(.dark *));
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--foreground);
+  --color-border: var(--border);
+  --color-input: var(--border);
+  --color-ring: var(--primary);
+  --color-destructive: #ff7a89;
+  --radius-lg: 12px;
+  --radius-md: 9px;
+  --radius-sm: 6px;
+}
+:root,
+.dark {
+  --background: #10111c;
+  --foreground: #f1f1fa;
+  --primary: #c5f277;
+  --primary-foreground: #17221a;
+  --secondary: #252638;
+  --muted: #222334;
+  --muted-foreground: #9b9cae;
+  --accent: #343149;
+  --popover: #232436;
+  --border: #363748;
+  --radius: 12px;
+  color-scheme: dark;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: #10111c;
+  color: #f1f1fa;
+  font-family: Inter, 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  font-size: 16px;
+}
+button,
+a {
+  touch-action: manipulation;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: default;
+}
+button:focus-visible,
+a:focus-visible,
+canvas:focus-visible {
+  outline: 2px solid #c5f277;
+  outline-offset: 4px;
+}
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.challenge {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: calc(var(--game-vh) * 100);
+  height: calc(var(--game-vh) * 100);
+  overflow: hidden;
+  background: #111827;
+  isolation: isolate;
+}
+.challenge canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+  outline: none;
+}
+
+.game-modal {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #090d20bb;
+  backdrop-filter: blur(7px);
+  overflow: auto;
+}
+.title-screen {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+  background: #16222c;
+  isolation: isolate;
+}
+.title-background {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% center;
+  z-index: -3;
+}
+.title-shade {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(
+      270deg,
+      #0c152bf2 0%,
+      #101a30d4 26%,
+      #0d172a40 66%,
+      #09132622
+    ),
+    linear-gradient(
+      0deg,
+      #0b152bd9,
+      transparent 25%,
+      transparent 80%,
+      #0c173b30
+    );
+}
+.title-tools {
+  position: absolute;
+  right: max(26px, var(--game-safe-right));
+  top: max(24px, var(--game-safe-top));
+  color: #f4f1e8;
+}
+.title-tools button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid #f6efde40;
+  border-radius: 50%;
+  background: #12203266;
+}
+.title-menu {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  width: 44%;
+  min-width: 380px;
+  margin-left: auto;
+  padding: 90px clamp(32px, calc(var(--game-vw) * 7), 140px) 110px 20px;
+}
+.title-mode {
+  font-size: 14px;
+  letter-spacing: 0.22em;
+  color: #e6d9b8;
+  white-space: nowrap;
+}
+.title-menu h1 {
+  margin: 22px 0 28px;
+  font-family: 'Songti SC', 'STSong', 'SimSun', serif;
+  font-size: clamp(60px, calc(var(--game-vw) * 7.8), 116px);
+  font-weight: 900;
+  line-height: 1.17;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  text-shadow: 0 5px 28px #03091788;
+  color: #fffaf0;
+}
+.title-menu h1 span {
+  display: block;
+}
+.title-rule {
+  height: 2px;
+  width: 62px;
+  background: #ddcb9a;
+  margin: 0 0 38px;
+}
+.title-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 280px;
+  max-width: 100%;
+}
+.title-start {
+  width: 100%;
+  height: 56px;
+  justify-content: start;
+  padding: 0 22px;
+  gap: 13px;
+  border-radius: 4px;
+  background: #eddfba;
+  color: #1f2832;
+  font-size: 19px;
+  font-weight: 700;
+  box-shadow: 0 6px 26px #0003;
+}
+.title-start:hover {
+  background: #fff0cb;
+}
+.menu-arrow {
+  margin-left: auto;
+}
+.title-help {
+  width: 100%;
+  height: 46px;
+  justify-content: start;
+  gap: 14px;
+  padding: 0 22px;
+  color: #eae5d9;
+  font-size: 16px;
+  border-radius: 4px;
+}
+.title-help:hover {
+  background: #ffffff15;
+  color: #fff;
+}
+.title-footer {
+  position: absolute;
+  bottom: max(22px, var(--game-safe-bottom));
+  left: clamp(32px, calc(var(--game-vw) * 7), 140px);
+  right: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 20px;
+  color: #c6cbd3;
+  font-size: 12px;
+}
+.photo-credit {
+  font-size: 12px;
+  text-align: right;
+}
+.photo-credit a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.choosing-major .title-shade {
+  background: #0b162bbb;
+  backdrop-filter: blur(4px);
+}
+.major-select-screen {
+  position: relative;
+  max-width: 680px;
+  width: calc(100% - 48px);
+  margin: clamp(70px, calc(var(--game-vh) * 12), 140px) auto 100px;
+  padding: 30px;
+  background: #152139e8;
+  border: 1px solid #d9d4c540;
+  border-radius: 16px;
+  box-shadow: 0 24px 80px #0005;
+}
+.back-to-title {
+  margin: -6px 0 18px -10px;
+  color: #c7cfdb;
+  font-size: 14px;
+}
+.major-select-screen h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: #f5efe3;
+  outline: none;
+}
+.selection-subtitle {
+  font-size: 14px;
+  color: #aebcce;
+  margin: 0 0 26px;
+}
+.major-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.major-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 28px 8px 20px;
+  gap: 12px;
+  border: 1px solid #7b869d55;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #19273a;
+}
+.major-card.selected {
+  border-color: #ebd6a4;
+  background: #dfc89116;
+  box-shadow: inset 0 0 25px #dfc89108;
+}
+.major-card img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: white;
+}
+.major-card b {
+  font-size: 16px;
+  color: #f2eee4;
+}
+.major-card span {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  color: #afc1d9;
+  font-size: 14px;
+}
+.major-radio {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.selected-skill {
+  min-height: 24px;
+  margin: 20px 0;
+  text-align: center;
+  font-size: 14px;
+  color: #e3d4b5;
+}
+.launch-button {
+  width: 100%;
+  min-height: 48px;
+  background: #c5f277;
+  color: #182515;
+  font-size: 16px;
+  font-weight: 750;
+  border-radius: 10px;
+}
+.major-select-screen .launch-button,
+.game-guide .launch-button {
+  background: #eddfba;
+  color: #1f2832;
+  border-radius: 6px;
+}
+.game-guide {
+  max-width: 540px !important;
+  width: calc(100% - 32px);
+  max-height: calc(calc(var(--game-vh) * 100) - 40px);
+  max-height: calc(calc(var(--game-vh) * 100) - 40px);
+  overflow-y: auto;
+  padding: 28px;
+  background: #17233a;
+  border: 1px solid #bcb9b344;
+  gap: 16px;
+}
+.guide-title {
+  font-size: 25px;
+  color: #f3ecdb;
+}
+.guide-goal {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #c8d4e6;
+}
+.guide-keys {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.guide-keys > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #d8deed20;
+  font-size: 14px;
+}
+.guide-keys dt {
+  color: #c6d0e0;
+}
+.guide-keys dd {
+  margin: 0;
+  color: #efe4c9;
+}
+.guide-note {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #acbdd5;
+  margin: 0;
+}
+.guide-food {
+  display: flex;
+  gap: 22px;
+  font-size: 14px;
+  margin: 0;
+}
+.guide-food span:first-child {
+  color: #c5f277;
+}
+.guide-food span:last-child {
+  color: #ff9cab;
+}
+.battle-hud {
+  position: absolute;
+  top: max(14px, var(--game-safe-top));
+  left: 18px;
+  right: 18px;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 14px;
+  pointer-events: none;
+}
+.hp-panel,
+.race-clock,
+.battle-options,
+.wave-hud,
+.quest-hud {
+  background: #101a30d9;
+  border: 1px solid #c1c4eb35;
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+}
+.hp-panel {
+  width: 250px;
+  padding: 12px;
+}
+.hp-panel > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 14px;
+}
+.hp-panel span {
+  color: #c3cee1;
+}
+.hp-track,
+.boss-track {
+  height: 6px;
+  background: #394058;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 9px;
+}
+.hp-track i,
+.boss-track i {
+  height: 100%;
+  display: block;
+  background: #c5f277;
+  transition: width 0.1s;
+}
+.race-clock {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  padding: 9px 24px;
+}
+.race-clock small {
+  font-size: 12px;
+  color: #b5c3d8;
+  display: block;
+}
+.race-clock strong {
+  font-size: 27px;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1px;
+}
+.battle-options {
+  pointer-events: auto;
+  padding: 4px;
+  display: flex;
+}
+.wave-hud {
+  position: absolute;
+  top: 98px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 9px 18px;
+  min-width: 260px;
+  text-align: center;
+  pointer-events: none;
+}
+.wave-hud b {
+  font-size: 14px;
+  display: block;
+  color: #dfd0ff;
+}
+.wave-hud span {
+  font-size: 12px;
+  color: #c1cada;
+}
+.boss-track i {
+  background: linear-gradient(90deg, #bc87ff, #ff709c);
+}
+.quest-hud {
+  position: absolute;
+  left: 18px;
+  top: 98px;
+  max-width: 240px;
+  padding: 10px;
+  pointer-events: none;
+  font-size: 12px;
+  color: #c4cedd;
+}
+.quest-hud small {
+  display: block;
+  margin-top: 4px;
+  color: #d0f593;
+}
+.battle-toast {
+  position: absolute;
+  bottom: 108px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 80%;
+  padding: 9px 16px;
+  border-radius: 9px;
+  background: #17213de0;
+  text-align: center;
+  font-size: 14px;
+  color: #e2ecff;
+  pointer-events: none;
+}
+.battle-toast:empty {
+  display: none;
+}
+.battle-bottom {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: max(16px, var(--game-safe-bottom));
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 14px;
+  pointer-events: none;
+}
+.held-badges {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: #111b2fbc;
+  border: 1px solid #a4b9de40;
+  border-radius: 14px;
+  padding: 10px;
+}
+.held-badges > span {
+  position: relative;
+}
+.held-badges img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: white;
+}
+.held-badges .largest img {
+  width: 44px;
+  height: 44px;
+  box-shadow: 0 0 15px #c1f07f66;
+}
+.held-badges small {
+  position: absolute;
+  right: -3px;
+  bottom: -4px;
+  background: #263d54;
+  border-radius: 4px;
+  padding: 0 4px;
+  font-size: 12px;
+}
+.battle-skills {
+  display: flex;
+  gap: 10px;
+  pointer-events: auto;
+}
+.battle-skills button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 76px;
+  height: 82px;
+  border-radius: 16px;
+  background: #192841e8;
+  border: 1px solid #93bde966;
+  color: #ddecff;
+  touch-action: manipulation;
+}
+.battle-skills b {
+  font-size: 14px;
+}
+.battle-skills kbd {
+  font-size: 12px;
+  color: #b4c4dc;
+}
+.battle-skills button:disabled {
+  opacity: 0.55;
+}
+.battle-skills .ready-merge {
+  background: #3c582be8;
+  color: #e4ffb9;
+  border-color: #b6f57b;
+}
+.battle-skills .ready-skill {
+  background: linear-gradient(135deg, #713f91e8, #843e65e8);
+  border-color: #e5b4ff;
+}
+.movement-stick {
+  display: none;
+}
+.game-modal {
+  z-index: 5;
+}
+.game-modal section {
+  width: min(470px, 100%);
+  padding: 32px;
+  border: 1px solid #726385;
+  border-radius: 24px;
+  background: #141a2eed;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  gap: 16px;
+}
+.game-modal h2 {
+  font-size: 28px;
+  font-weight: 800;
+}
+.game-modal p {
+  color: #b8c6dc;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.victory-badge {
+  width: 105px;
+  height: 105px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 50px #bc73ff66;
+}
+.result-time {
+  font-size: 50px;
+  color: #dbffa8;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.result-stats {
+  display: flex;
+  gap: 18px;
+  font-size: 12px;
+  color: #c8d2e8;
+}
+.result-stats b {
+  display: block;
+  font-size: 20px;
+  color: white;
+}
+:where(.challenge[data-width-max-700='true']) .game-modal {
+  padding: 14px;
+  place-items: start center;
+}
+:where(.challenge[data-width-max-700='true']) .title-background {
+  object-position: 20% center;
+}
+:where(.challenge[data-width-max-700='true']) .title-shade {
+  background:
+    linear-gradient(0deg, #071327f5 0%, #0c1c30d4 28%, #0a172d18 80%),
+    linear-gradient(90deg, #0b17284d, transparent);
+}
+:where(.challenge[data-width-max-700='true']) .title-menu {
+  justify-content: end;
+  width: 100%;
+  min-width: 0;
+  min-height: 100%;
+  margin-left: 0;
+  padding: 90px 28px 98px;
+}
+:where(.challenge[data-width-max-700='true']) .title-menu h1 {
+  font-size: clamp(44px, calc(var(--game-vw) * 15), 66px);
+  line-height: 1.13;
+  margin: 16px 0 18px;
+}
+:where(.challenge[data-width-max-700='true']) .title-menu h1 span {
+  display: inline;
+}
+:where(.challenge[data-width-max-700='true']) .title-mode {
+  font-size: 12px;
+  letter-spacing: 0.15em;
+}
+:where(.challenge[data-width-max-700='true']) .title-rule {
+  margin-bottom: 24px;
+}
+:where(.challenge[data-width-max-700='true']) .title-actions {
+  width: 280px;
+}
+:where(.challenge[data-width-max-700='true']) .title-footer {
+  left: 28px;
+  right: 20px;
+  bottom: 18px;
+}
+:where(.challenge[data-width-max-700='true']) .photo-credit {
+  max-width: 55%;
+  font-size: 12px;
+}
+:where(.challenge[data-width-max-700='true']) .major-select-screen {
+  width: calc(100% - 28px);
+  margin: 76px auto 90px;
+  padding: 22px 16px;
+}
+:where(.challenge[data-width-max-700='true']) .major-grid {
+  gap: 7px;
+}
+:where(.challenge[data-width-max-700='true']) .major-card {
+  padding: 24px 4px 16px;
+  gap: 10px;
+}
+:where(.challenge[data-width-max-700='true']) .major-card img {
+  width: 52px;
+  height: 52px;
+}
+:where(.challenge[data-width-max-700='true']) .major-card b {
+  font-size: 14px;
+}
+:where(.challenge[data-width-max-700='true']) .major-card span {
+  font-size: 12px;
+  gap: 3px;
+}
+:where(.challenge[data-width-max-700='true']) .game-guide {
+  padding: 22px;
+}
+:where(.challenge[data-width-max-700='true']) .hp-panel {
+  width: 140px;
+  padding: 9px;
+}
+:where(.challenge[data-width-max-700='true']) .hp-panel > div:first-child {
+  font-size: 12px;
+  flex-direction: column;
+  gap: 0;
+}
+:where(.challenge[data-width-max-700='true']) .battle-hud {
+  left: 10px;
+  right: 10px;
+  gap: 8px;
+}
+:where(.challenge[data-width-max-700='true']) .race-clock {
+  padding: 8px 12px;
+  left: 53%;
+}
+:where(.challenge[data-width-max-700='true']) .race-clock strong {
+  font-size: 23px;
+}
+:where(.challenge[data-width-max-700='true']) .battle-options {
+  flex-direction: column;
+  padding: 0;
+}
+:where(.challenge[data-width-max-700='true']) .battle-options button {
+  width: 32px;
+  height: 32px;
+}
+:where(.challenge[data-width-max-700='true']) .wave-hud {
+  top: 94px;
+  min-width: 230px;
+}
+:where(.challenge[data-width-max-700='true']) .quest-hud {
+  top: 158px;
+  left: 10px;
+  max-width: 220px;
+  opacity: 0.85;
+}
+:where(.challenge[data-width-max-700='true']) .battle-bottom {
+  left: 10px;
+  right: 10px;
+  gap: 6px;
+}
+:where(.challenge[data-width-max-700='true']) .battle-skills {
+  gap: 6px;
+}
+:where(.challenge[data-width-max-700='true']) .battle-skills button {
+  width: 52px;
+  height: 66px;
+  border-radius: 12px;
+}
+:where(.challenge[data-width-max-700='true']) .battle-skills svg {
+  width: 20px;
+  height: 20px;
+}
+:where(.challenge[data-width-max-700='true']) .battle-skills b {
+  font-size: 12px;
+}
+:where(.challenge[data-width-max-700='true']) .battle-skills kbd {
+  font-size: 10px;
+}
+:where(.challenge[data-width-max-700='true']) .battle-toast {
+  font-size: 12px;
+  max-width: 90%;
+  width: max-content;
+  bottom: 155px;
+}
+:where(.challenge[data-width-max-700='true']) .held-badges {
+  gap: 5px;
+  padding: 6px;
+}
+:where(.challenge[data-width-max-700='true']) .held-badges img {
+  width: 25px;
+  height: 25px;
+}
+:where(.challenge[data-width-max-700='true']) .held-badges .largest img {
+  width: 32px;
+  height: 32px;
+}
+:where(.challenge[data-width-max-700='true']) .game-modal section {
+  margin: auto;
+  padding: 24px;
+}
+:where(.challenge[data-height-max-550='true'][data-width-min-701='true'])
+  .title-menu {
+  padding-top: 45px;
+  padding-bottom: 65px;
+}
+:where(.challenge[data-height-max-550='true'][data-width-min-701='true'])
+  .title-menu
+  h1 {
+  font-size: 58px;
+  margin: 14px 0;
+}
+:where(.challenge[data-height-max-550='true'][data-width-min-701='true'])
+  .title-menu
+  h1
+  span {
+  display: inline;
+}
+:where(.challenge[data-height-max-550='true'][data-width-min-701='true'])
+  .title-rule {
+  margin-bottom: 18px;
+}
+:where(.challenge[data-height-max-550='true'][data-width-min-701='true'])
+  .title-actions {
+  gap: 6px;
+}
+:where(.challenge[data-height-max-550='true'][data-width-min-701='true'])
+  .major-select-screen {
+  margin-top: 45px;
+}
+:where(.challenge[data-height-max-550='true'][data-width-min-701='true'])
+  .title-footer {
+  position: fixed;
+}
+:where(.challenge[data-height-max-550='true'][data-width-min-701='true'])
+  .quest-hud {
+  top: 80px;
+  max-width: 220px;
+}
+:where(.challenge[data-height-max-550='true'][data-width-min-701='true'])
+  .wave-hud {
+  top: 82px;
+  padding: 6px 12px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+
+.choosing-major .title-footer {
+  display: none;
+}
+
+/* Let the battlefield settle before the scorecard arrives. */
+.is-ending .battle-hud,
+.is-ending .wave-hud,
+.is-ending .quest-hud,
+.is-ending .battle-bottom,
+.is-ending .battle-toast {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.7s;
+}
+.ending-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  pointer-events: none;
+  color: #f7e7b5;
+  background: radial-gradient(ellipse, #1c17323d, #070d23c9);
+  animation: ending-scene 2.6s both;
+}
+.ending-emblem {
+  position: relative;
+  width: clamp(100px, calc(var(--game-vw) * 19), 190px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  box-shadow:
+    0 0 90px #d0a8ff66,
+    0 0 0 1px #e7d6a766;
+}
+.ending-emblem img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.ending-scene h2 {
+  font-size: clamp(28px, calc(var(--game-vw) * 5), 52px);
+  letter-spacing: 0.08em;
+  margin: 12px 0 0;
+}
+.ending-scene p {
+  font-size: 15px;
+  color: #e0dbe9;
+}
+.ending-scene.defeat {
+  color: #e9c9d5;
+}
+.ending-scene.defeat .ending-emblem {
+  filter: saturate(0.35);
+}
+.result-reveal {
+  animation: result-reveal 0.65s ease-out both;
+}
+.result-reveal > section {
+  animation: result-card 0.65s ease-out both;
+}
+@keyframes ending-scene {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  24%,
+  80% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+}
+@keyframes result-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes result-card {
+  from {
+    transform: translateY(20px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ending-scene {
+    animation: result-reveal 0.4s both;
+  }
+  .result-reveal > section {
+    animation: none;
+  }
+}
+
+/* Two-thumb touch layout, including hybrid touch devices and small browser windows. */
+.is-battle {
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+@media (pointer: coarse) and (hover: none) {
+  .battle-hud {
+    top: max(12px, var(--game-safe-top));
+    left: max(10px, var(--game-safe-left));
+    right: max(10px, var(--game-safe-right));
+  }
+  .battle-options button {
+    width: 44px;
+    height: 44px;
+  }
+  .battle-options {
+    gap: 2px;
+  }
+  .hp-panel {
+    width: 96px;
+  }
+  .race-clock {
+    left: 52%;
+    padding: 7px 9px;
+  }
+  .race-clock strong {
+    font-size: 21px;
+  }
+  .battle-bottom {
+    left: max(14px, var(--game-safe-left));
+    right: max(14px, var(--game-safe-right));
+    bottom: max(20px, var(--game-safe-bottom));
+    height: 148px;
+    gap: 10px;
+  }
+  .movement-stick {
+    display: grid;
+    place-items: center;
+    position: relative;
+    flex: 0 0 124px;
+    width: 124px;
+    height: 124px;
+    margin-bottom: 8px;
+    border: 2px solid #bedaff70;
+    border-radius: 50%;
+    background: radial-gradient(circle, #314d6a9e, #0e1b31b8);
+    box-shadow: inset 0 0 0 14px #d3e9ff0d;
+    touch-action: none;
+    pointer-events: auto;
+  }
+  .stick-cross {
+    position: absolute;
+    inset: 22px;
+    border: 1px dashed #bad7ff33;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .stick-thumb {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 28%, #d8e9fd, #6d99c0);
+    border: 2px solid #e0f1ffba;
+    box-shadow: 0 5px 15px #07122588;
+    pointer-events: none;
+    will-change: transform;
+  }
+  .stick-label {
+    position: absolute;
+    bottom: -20px;
+    color: #d4e3f5;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    pointer-events: none;
+  }
+  .battle-skills {
+    display: grid;
+    grid-template-columns: 64px 72px;
+    grid-template-rows: 64px 72px;
+    gap: 8px;
+    align-items: center;
+    justify-items: center;
+  }
+  .battle-skills button {
+    width: 64px;
+    height: 64px;
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: 50%;
+    touch-action: none;
+    box-shadow: 0 4px 16px #08122670;
+  }
+  .battle-skills button:first-child {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .battle-skills button:nth-child(2) {
+    grid-column: 2;
+    grid-row: 2;
+    width: 72px;
+    height: 72px;
+  }
+  .battle-skills button:nth-child(3) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .battle-skills button:active:not(:disabled) {
+    transform: scale(0.93);
+    border-color: #fff;
+  }
+  .battle-skills svg {
+    width: 22px;
+    height: 22px;
+  }
+  .battle-skills b {
+    font-size: 12px;
+  }
+  .battle-skills kbd {
+    display: none;
+  }
+  .held-badges {
+    position: absolute;
+    bottom: 162px;
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 5px;
+    padding: 5px 7px;
+  }
+  .held-badges img {
+    width: 25px;
+    height: 25px;
+  }
+  .held-badges .largest img {
+    width: 31px;
+    height: 31px;
+  }
+  .battle-toast {
+    bottom: calc(max(20px, var(--game-safe-bottom)) + 207px);
+    max-width: 86%;
+    font-size: 12px;
+  }
+  .wave-hud {
+    top: calc(max(12px, var(--game-safe-top)) + 90px);
+  }
+  .quest-hud {
+    top: calc(max(12px, var(--game-safe-top)) + 151px);
+  }
+  .title-sound {
+    top: max(18px, var(--game-safe-top));
+    right: max(18px, var(--game-safe-right));
+  }
+}
+@media (pointer: coarse) and (hover: none) {
+  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+    .battle-options {
+    flex-direction: row;
+  }
+  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+    .battle-bottom {
+    height: 122px;
+    bottom: max(10px, var(--game-safe-bottom));
+  }
+  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+    .movement-stick {
+    width: 100px;
+    height: 100px;
+    flex-basis: 100px;
+  }
+  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+    .stick-thumb {
+    width: 44px;
+    height: 44px;
+  }
+  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+    .stick-label {
+    display: none;
+  }
+  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+    .battle-skills {
+    grid-template-columns: 56px 62px;
+    grid-template-rows: 56px 62px;
+    gap: 4px;
+  }
+  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+    .battle-skills
+    button {
+    width: 56px;
+    height: 56px;
+  }
+  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+    .battle-skills
+    button:nth-child(2) {
+    width: 62px;
+    height: 62px;
+  }
+  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+    .held-badges {
+    bottom: 0;
+  }
+  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+    .wave-hud {
+    top: calc(max(8px, var(--game-safe-top)) + 58px);
+    padding: 5px 12px;
+  }
+  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+    .quest-hud {
+    display: none;
+  }
+  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+    .battle-toast {
+    bottom: 57px;
+    max-width: 45%;
+    padding: 6px 10px;
+  }
+}
+
+.main-weapon-label {
+  display: block;
+  color: #dfecb4;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-top: 3px;
+}
+.wave-hud {
+  max-width: calc(calc(var(--game-vw) * 100) - 28px);
+}
+:where(.challenge[data-width-max-600='true']) .title-actions {
+  gap: 8px;
+}
+@media (pointer: coarse) and (hover: none) {
+  .quest-hud {
+    top: calc(max(12px, var(--game-safe-top)) + 187px);
+  }
+}
+@media (pointer: coarse) and (hover: none) {
+  :where(.challenge[data-height-max-550='true']) .main-weapon-label {
+    display: none;
+  }
+}
+
+/* A single edge-mounted HUD keeps the center of the road clear. */
+.battle-hud {
+  display: grid;
+  grid-template-columns: 250px 125px minmax(160px, 1fr) 100px;
+  align-items: start;
+  gap: 16px;
+  top: max(12px, var(--game-safe-top));
+  left: max(14px, var(--game-safe-left));
+  right: max(14px, var(--game-safe-right));
+}
+.battle-hud .race-clock {
+  position: static;
+  transform: none;
+  align-self: center;
+}
+.battle-hud .wave-hud {
+  position: static;
+  transform: none;
+  min-width: 0;
+  max-width: 260px;
+  width: 100%;
+  justify-self: end;
+  padding: 7px 12px;
+  text-align: left;
+}
+.wave-hud b,
+.wave-hud span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+.battle-hud .battle-options {
+  position: static;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+}
+.battle-hud .battle-options button {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+}
+.quest-hud {
+  top: auto;
+  bottom: 100px;
+  left: 14px;
+  max-width: 215px;
+  background: #101a30aa;
+}
+.rotate-phone {
+  max-width: 360px;
+  width: calc(calc(var(--game-vw) * 100) - 32px);
+  background: #111a2e;
+  color: #f4e9d0;
+  text-align: center;
+  padding: 28px;
+  gap: 20px;
+}
+.rotate-phone > svg {
+  margin: auto;
+  color: #d6b7ff;
+}
+.rotate-phone [data-slot='dialog-description'] {
+  color: #ced8eb;
+  font-size: 16px;
+  line-height: 1.7;
+}
+.rotate-phone small {
+  color: #a5b4cd;
+  line-height: 1.6;
+  font-size: 13px;
+}
+:where(.challenge[data-width-max-900='true']) .battle-hud {
+  grid-template-columns: 106px 92px minmax(120px, 1fr) 92px;
+  gap: 9px;
+  left: max(10px, var(--game-safe-left));
+  right: max(10px, var(--game-safe-right));
+}
+:where(.challenge[data-width-max-900='true']) .battle-hud .hp-panel {
+  width: 106px;
+  padding: 7px;
+}
+:where(.challenge[data-width-max-900='true'])
+  .battle-hud
+  .hp-panel
+  > div:first-child {
+  display: block;
+  font-size: 12px;
+}
+:where(.challenge[data-width-max-900='true']) .battle-hud .hp-panel span {
+  display: none;
+}
+:where(.challenge[data-width-max-900='true']) .battle-hud .race-clock strong {
+  font-size: 24px;
+}
+:where(.challenge[data-width-max-900='true']) .battle-hud .wave-hud {
+  padding: 5px 8px;
+  max-width: 245px;
+  border-radius: 8px;
+}
+:where(.challenge[data-width-max-900='true']) .wave-hud b {
+  font-size: 12px;
+}
+:where(.challenge[data-width-max-900='true']) .wave-hud span {
+  font-size: 11px;
+}
+:where(.challenge[data-width-max-900='true']) .wave-hud .boss-track {
+  margin-top: 4px;
+  height: 4px;
+}
+:where(.challenge[data-width-max-900='true']) .quest-hud {
+  display: none;
+}
+@media (pointer: coarse) and (hover: none) {
+  .battle-hud {
+    grid-template-columns: 106px 92px minmax(120px, 1fr) 92px;
+    gap: 9px;
+    left: max(10px, var(--game-safe-left));
+    right: max(10px, var(--game-safe-right));
+  }
+  .battle-hud .hp-panel {
+    width: 106px;
+    padding: 7px;
+  }
+  .battle-hud .hp-panel > div:first-child {
+    display: block;
+    font-size: 12px;
+  }
+  .battle-hud .hp-panel span {
+    display: none;
+  }
+  .battle-hud .race-clock strong {
+    font-size: 24px;
+  }
+  .battle-hud .wave-hud {
+    padding: 5px 8px;
+    max-width: 245px;
+    border-radius: 8px;
+  }
+  .wave-hud b {
+    font-size: 12px;
+  }
+  .wave-hud span {
+    font-size: 11px;
+  }
+  .wave-hud .boss-track {
+    margin-top: 4px;
+    height: 4px;
+  }
+  .quest-hud {
+    display: none;
+  }
+}
+
+/* v0.4 searchable department loadout: compact on landscape phones. */
+.department-picker {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  text-align: left;
+  margin: 14px 0;
+}
+.department-picker label {
+  font-size: 12px;
+  color: #ddd2eb;
+}
+.department-picker input,
+.department-picker select {
+  width: 100%;
+  border: 1px solid #aa88bb66;
+  border-radius: 9px;
+  padding: 10px;
+  background: #191426;
+  color: #fff;
+  font-size: 15px;
+}
+.department-picker select option,
+.department-picker select optgroup {
+  background: #191426;
+  color: #fff;
+}
+.department-loadout {
+  display: flex;
+  gap: 16px;
+  text-align: left;
+  border-left: 3px solid;
+  padding: 10px 16px;
+  background: #100c22b8;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+.department-loadout img {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+}
+.department-loadout p {
+  font-size: 14px;
+  margin: 3px 0;
+}
+.department-loadout small {
+  color: #cdd3e7;
+  font-size: 12px;
+}
+.department-loadout em {
+  display: block;
+  font-size: 12px;
+  color: #f2cafa;
+  margin-top: 5px;
+  font-style: normal;
+}
+.skill-tooltip {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  white-space: nowrap;
+  font-size: 10px;
+  background: #181528bf;
+  padding: 3px 5px;
+  border-radius: 4px;
+  pointer-events: none;
+}
+:where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+  .major-select-screen {
+  max-width: 720px;
+  padding: 10px 18px !important;
+}
+:where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+  .major-select-screen
+  h2 {
+  font-size: 24px !important;
+}
+:where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+  .selection-subtitle {
+  margin: 2px !important;
+}
+:where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+  .department-picker {
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+  margin: 8px 0;
+}
+:where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+  .department-picker
+  label {
+  display: none;
+}
+:where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+  .department-loadout {
+  padding: 7px 12px;
+  margin-bottom: 8px;
+}
+:where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+  .department-loadout
+  em {
+  display: none;
+}
+:where(.challenge[data-height-max-550='true'][data-layout='landscape'])
+  .major-select-screen
+  .launch-button {
+  height: 42px !important;
+  min-height: 42px !important;
+}
+
+/* v0.5: thumb-relative steering, larger touch targets and a clear combat centre. */
+.stick-origin {
+  display: grid;
+  place-items: center;
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border: 1px solid #d2e9ff88;
+  border-radius: 50%;
+  background: radial-gradient(circle, #30486388, #101a3033);
+  pointer-events: none;
+}
+.skill-tooltip {
+  display: none;
+}
+.battle-skills button:hover .skill-tooltip,
+.battle-skills button:focus-visible .skill-tooltip {
+  display: block;
+}
+.battle-skills button:active {
+  transform: scale(0.93);
+}
+.department-picker input,
+.department-picker select {
+  font-size: 16px;
+}
+@media (pointer: coarse) and (hover: none) {
+  .battle-hud {
+    top: max(6px, var(--game-safe-top));
+    gap: 6px;
+  }
+  .battle-hud .wave-hud {
+    max-width: 320px;
+    background: #101827c7;
+  }
+  .battle-hud .wave-hud b {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .battle-hud .race-clock {
+    padding: 4px 5px;
+  }
+  .battle-hud .race-clock small {
+    font-size: 9px;
+  }
+  .battle-hud .race-clock strong {
+    font-size: 21px;
+  }
+  .battle-bottom {
+    height: 154px;
+    left: max(12px, var(--game-safe-left));
+    right: max(12px, var(--game-safe-right));
+    bottom: max(8px, var(--game-safe-bottom));
+  }
+  .movement-stick {
+    width: 164px;
+    height: 142px;
+    flex-basis: 164px;
+    border: 0;
+    border-radius: 18px;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    overflow: visible;
+  }
+  .stick-thumb {
+    width: 48px;
+    height: 48px;
+    opacity: 0.78;
+  }
+  .stick-cross {
+    inset: 12px;
+  }
+  .is-dragging .stick-origin {
+    border-color: #e4f9ff;
+  }
+  .is-dragging .stick-thumb {
+    opacity: 1;
+  }
+  .stick-label {
+    display: none;
+  }
+  .held-badges {
+    position: absolute;
+    bottom: 0;
+    left: 176px;
+    gap: 4px;
+    padding: 4px;
+    opacity: 0.8;
+  }
+  .held-badges img,
+  .held-badges .largest img {
+    width: 24px;
+    height: 24px;
+  }
+  .held-badges small {
+    font-size: 9px;
+  }
+  .battle-skills {
+    grid-template-columns: 66px 76px;
+    grid-template-rows: 66px 76px;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .battle-skills button {
+    width: 66px;
+    height: 66px;
+    background-color: #152139bc;
+  }
+  .battle-skills button:first-child {
+    width: 76px;
+    height: 76px;
+    grid-row: 2;
+    grid-column: 2;
+  }
+  .battle-skills button:nth-child(2) {
+    width: 66px;
+    height: 66px;
+    grid-row: 2;
+    grid-column: 1;
+  }
+  .battle-skills button:nth-child(3) {
+    width: 66px;
+    height: 66px;
+    grid-row: 1;
+    grid-column: 2;
+  }
+  .battle-skills button .skill-tooltip {
+    display: none;
+  }
+  .battle-skills b {
+    font-size: 12px;
+  }
+  .battle-toast {
+    bottom: auto;
+    top: 66px;
+    max-width: calc(100% - 230px);
+    padding: 4px 10px;
+    font-size: 11px;
+    background: #11182780;
+  }
+}
+@media (pointer: coarse) and (hover: none) {
+  :where(.challenge[data-width-max-680='true']) .battle-hud {
+    grid-template-columns: 84px 76px minmax(110px, 1fr) 92px;
+  }
+  :where(.challenge[data-width-max-680='true']) .battle-hud .hp-panel {
+    width: 84px;
+  }
+  :where(.challenge[data-width-max-680='true']) .battle-hud .wave-hud span {
+    font-size: 10px;
+  }
+  :where(.challenge[data-width-max-680='true']) .held-badges {
+    left: 158px;
+    gap: 2px;
+  }
+  :where(.challenge[data-width-max-680='true']) .held-badges img,
+  :where(.challenge[data-width-max-680='true']) .held-badges .largest img {
+    width: 21px;
+    height: 21px;
+  }
+  :where(.challenge[data-width-max-680='true']) .movement-stick {
+    width: 146px;
+    flex-basis: 146px;
+  }
+}
+@media (pointer: coarse) and (hover: none) {
+  .held-badges {
+    transform: none;
+  }
+}
+/* v0.5.1 input mode follows the primary pointer, never viewport width alone. */
+.desktop-controls .movement-stick {
+  display: none !important;
+}
+.desktop-controls .battle-bottom {
+  height: auto;
+  bottom: 16px;
+  align-items: end;
+}
+.desktop-controls .battle-skills {
+  display: flex;
+  gap: 10px;
+}
+.desktop-controls .battle-skills button {
+  width: 76px;
+  height: 82px;
+  border-radius: 14px;
+}
+.desktop-controls .battle-skills kbd {
+  display: block;
+}
+.desktop-controls .held-badges {
+  position: static;
+  transform: none;
+}
+.asset-recovery {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #e5d5bf;
+}
+.asset-recovery button {
+  padding: 6px 12px;
+  border: 1px solid #dac8e8;
+  border-radius: 8px;
+  color: #fff;
+}
+.touch-controls .battle-bottom {
+  left: max(10px, var(--game-safe-left));
+  right: max(16px, var(--game-safe-right));
+}
+.touch-controls .movement-stick {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: min(calc(var(--game-vw) * 44), 400px);
+  height: min(calc(var(--game-vh) * 53), 260px);
+  height: min(calc(var(--game-vh) * 53), 260px);
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  touch-action: none;
+}
+.touch-controls .stick-origin {
+  position: absolute;
+  left: clamp(80px, calc(var(--game-vw) * 16), 150px);
+  top: calc(100% - 88px);
+  transform: translate(-50%, -50%);
+  width: 112px;
+  height: 112px;
+}
+.touch-controls .stick-thumb {
+  width: 48px;
+  height: 48px;
+}
+.touch-controls .held-badges {
+  left: 50%;
+  bottom: 2px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.touch-controls .battle-skills {
+  margin-left: auto;
+}
+
+/* v0.5.2: a landscape stage also works inside a portrait-locked webview. */
+.challenge {
+  --game-vw: 1vw;
+  --game-vh: 1vh;
+  --game-rotated: 0;
+  --game-safe-top: env(safe-area-inset-top, 0px);
+  --game-safe-right: env(safe-area-inset-right, 0px);
+  --game-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --game-safe-left: env(safe-area-inset-left, 0px);
+  width: calc(var(--game-vw) * 100);
+  height: calc(var(--game-vh) * 100);
+}
+@supports (height: 100dvh) {
+  .challenge {
+    --game-vh: 1dvh;
+  }
+}
+@media (pointer: coarse) and (hover: none) and (orientation: portrait) {
+  .challenge {
+    --game-vw: 1vh;
+    --game-vh: 1vw;
+    --game-rotated: 1;
+    --game-safe-top: env(safe-area-inset-right, 0px);
+    --game-safe-right: env(safe-area-inset-bottom, 0px);
+    --game-safe-bottom: env(safe-area-inset-left, 0px);
+    --game-safe-left: env(safe-area-inset-top, 0px);
+    top: 0;
+    left: 100%;
+    right: auto;
+    bottom: auto;
+    transform-origin: top left;
+    transform: rotate(90deg);
+  }
+  @supports (height: 100dvh) {
+    .challenge {
+      --game-vw: 1dvh;
+    }
+  }
+}

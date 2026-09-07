@@ -1,0 +1,17 @@
+name: 配乐 / 美术 / 玩法贡献
+description: 讨论想贡献的内容或需要协助的地方
+body:
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 想贡献什么，适合哪个游戏场景
+    validations:
+      required: true
+  - type: textarea
+    id: asset
+    attributes:
+      label: 素材作者、许可、试听链接（如涉及素材）
+  - type: textarea
+    id: help
+    attributes:
+      label: 是否需要维护者帮助接入

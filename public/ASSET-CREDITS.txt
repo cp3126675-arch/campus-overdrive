@@ -1,0 +1,631 @@
+期末暴走 · 校园合成幸存者
+
+院系和书院背景参考：合成大院系 https://synthesis-college.netlify.app/
+30 枚原版院系、书院与清华大学徽章保留原图，来源为上述网站的 assets/img/round/。
+徽章用于用户要求的非官方概念 Demo；本作品不代表相关学校或院系。
+校园地图、学生与怪物美术为本 Demo 生成的原创视觉资产。
+游戏实现、战斗规则与界面为本项目重新编写，未复制参考网站的游戏脚本。
+
+2026-09-07 meme-atlas.png: original AI-generated fictional student cyclist, vendor and goose/duck leg game sprites, generated with OpenAI imagegen. No real-person likeness.
+
+2026-09-07 title-screen and battle-background photographs: tsinghua-gate-1280.jpg and tsinghua-gate-3840.jpg
+Building: 2nd Gate, Tsinghua University, Beijing.
+Photograph: 2019年二校門.jpg, photographed 2019-10-27 by 清華匿名學生; source 清華樹洞.
+Source page: https://commons.wikimedia.org/wiki/File:2019年二校門.jpg
+License: CC0 1.0 Universal Public Domain Dedication; https://creativecommons.org/publicdomain/zero/1.0/
+Original: https://upload.wikimedia.org/wikipedia/commons/d/dd/2019%E5%B9%B4%E4%BA%8C%E6%A0%A1%E9%96%80.jpg
+These are Wikimedia-provided 1280px and 3840px thumbnail renditions, without local pixel edits. The title uses responsive CSS cropping and a dark overlay. Combat uses canvas cropping, continuous forward zoom, overlapping transitions and player parallax; the source image pixels are unmodified.
+
+2026-09-07 gameplay reference photographs and textbook cover images (source rights retained):
+- xuetang-road.jpg: 学堂路, photograph by 霍元东, 清华大学电子工程系《你好！新学期》(2023-09-19).
+  https://www.ee.tsinghua.edu.cn/info/1076/4185.htm
+  https://www.ee.tsinghua.edu.cn/__local/B/1D/F6/779F48914761FE3479E15880F8D_5BE7BBBF_2A21F.jpg?e=.jpeg
+- bike-photo.jpg: 学堂路车神 event photograph from 澎湃号媒体 article (2020-10-01).
+  https://www.thepaper.cn/newsDetail_forward_9437522
+  https://imagepphcloud.thepaper.cn/pph/image/91/922/414.jpg
+- textbook-math.jpg: 高等数学（上册）, 袁学刚、张友, 清华大学出版社 book cover.
+  https://www.tup.com.cn/booksCenter/book_07649702.html
+  https://www.tup.com.cn/upload/bigbookimg/076497-02.jpg
+- textbook-cs.jpg: 数据结构（C++语言版）第三版, 邓俊辉, author-hosted jacket.
+  https://dsa.cs.tsinghua.edu.cn/~deng/ds/dsacpp/
+  https://dsa.cs.tsinghua.edu.cn/~deng/ds/dsacpp/image/cover_a-3rd.jpg
+- textbook-arch.jpg: 房屋建筑构造（第3版）（微课版）, 魏松、刘涛、毛风华、张华洁, 清华大学出版社 book cover.
+  https://www.tup.com.cn/booksCenter/book_10163301.html
+  https://www.tup.com.cn/upload/bigbookimg/101633-01.jpg
+Photos and covers remain unmodified local source files; the canvas applies display cropping, transparency and game overlays. No open license is claimed for these five assets. Textbook enemies, attacks and fantasy skill behavior are fictional game adaptations, not representations of authors, publishers or subjects' endorsements.
+
+2026-09-07 additional textbook enemy covers (清华大学出版社 source rights retained):
+- textbook-linear.jpg
+  https://www.tup.com.cn/booksCenter/book_09361001.html
+  https://www.tup.com.cn/upload/bigbookimg/093610-01.jpg
+- textbook-probability.jpg
+  https://www.tup.com.cn/booksCenter/book_07358801.html
+  https://www.tup.com.cn/upload/bigbookimg/073588-01.jpg
+- textbook-network.jpg
+  https://www.tup.com.cn/booksCenter/book_06343902.html
+  https://www.tup.com.cn/upload/bigbookimg/063439-02.jpg
+- textbook-os.jpg
+  https://www.tup.com.cn/booksCenter/book_08427001.html
+  https://www.tup.com.cn/upload/bigbookimg/084270-01.jpg
+- textbook-cad.jpg
+  https://www.tup.com.cn/booksCenter/book_09278601.html
+  https://www.tup.com.cn/upload/bigbookimg/092786-01.jpg
+- textbook-history.jpg
+  https://www.tup.com.cn/booksCenter/book_08625701.html
+  https://www.tup.com.cn/upload/bigbookimg/086257-01.jpg
+Only public cover images are included. No textbook contents are reproduced. HP, speed, archetypes and effects are fictional balancing choices.
+
+
+四年课表新增封面（2026-09-07）
+art/textbook-ode.jpg
+出版社页面：https://www.tup.com.cn/booksCenter/book_02465505.html
+封面：https://www.tup.com.cn/upload/bigbookimg/024655-05.jpg
+art/textbook-real.jpg
+出版社页面：https://www.tup.com.cn/booksCenter/book_07170002.html
+封面：https://www.tup.com.cn/upload/bigbookimg/071700-02.jpg
+art/textbook-complex.jpg
+出版社页面：https://www.tup.com.cn/booksCenter/book_09302901.html
+封面：https://www.tup.com.cn/upload/bigbookimg/093029-01.jpg
+art/textbook-numerical.jpg
+出版社页面：https://www.tup.com.cn/booksCenter/book_08980301.html
+封面：https://www.tup.com.cn/upload/bigbookimg/089803-01.jpg
+art/textbook-functional.jpg
+出版社页面：https://www.tup.com.cn/booksCenter/book_02693101.html
+封面：https://www.tup.com.cn/upload/bigbookimg/026931-01.jpg
+art/textbook-c.jpg
+出版社页面：https://www.tup.com.cn/booksCenter/book_09003301.html
+封面：https://www.tup.com.cn/upload/bigbookimg/090033-01.jpg
+art/textbook-discrete.jpg
+出版社页面：https://www.tup.com.cn/booksCenter/book_09590201.html
+封面：https://www.tup.com.cn/upload/bigbookimg/095902-01.jpg
+art/textbook-computer.jpg
+出版社页面：https://www.tup.com.cn/booksCenter/book_03704801.html
+封面：https://www.tup.com.cn/upload/bigbookimg/037048-01.jpg
+art/textbook-compiler.jpg
+出版社页面：https://www.tup.com.cn/booksCenter/book_02631503.html
+封面：https://www.tup.com.cn/upload/bigbookimg/026315-03.jpg
+art/textbook-design.jpg
+出版社页面：https://www.tup.com.cn/booksCenter/book_09303001.html
+封面：https://www.tup.com.cn/upload/bigbookimg/093030-01.jpg
+art/textbook-thermal.jpg
+出版社页面：https://www.tup.com.cn/booksCenter/book_00758202.html
+封面：https://www.tup.com.cn/upload/bigbookimg/007582-02.jpg
+art/textbook-structure.jpg
+出版社页面：https://www.tup.com.cn/booksCenter/book_11186101.html
+封面：https://www.tup.com.cn/upload/bigbookimg/111861-01.jpg
+art/textbook-urban.jpg
+出版社页面：https://www.tup.com.cn/booksCenter/book_05216704.html
+封面：https://www.tup.com.cn/upload/bigbookimg/052167-04.jpg
+art/textbook-green.jpg
+出版社页面：https://www.tup.com.cn/booksCenter/book_06999901.html
+封面：https://www.tup.com.cn/upload/bigbookimg/069999-01.jpg
+art/textbook-ml.jpg
+出版社页面：https://www.tup.com.cn/booksCenter/book_06402703.html
+封面：https://www.tup.com.cn/upload/bigbookimg/064027-03.jpg
+
+上述封面版权归原作者及出版社所有，来源公开可访问不等于开放许可。未改动原始图片；游戏内以封面卡呈现。教材年级为游戏编排，并非学校官方课表。
+art/coder-pity.png：玩家提供的“码农出击 / That’s pity”图片，保留原图。
+六种 Boss 机器形象、技能图形与徽章梗文案：游戏原创 Canvas / 代码绘制；新闻为背景参考，不使用涉事人的肖像。
+
+2026-09-07 v0.5.0 real textbook and representative Boss pictures
+New textbook covers are publisher-provided originals / display thumbnails, source rights retained. Course-family and year assignments are fictional game pacing, not an official Tsinghua curriculum. Source image pixels remain unchanged.
+- photos/book-10300301.jpg: 工程制图（第2版）
+  https://www.tup.com.cn/booksCenter/book_10300301.html
+  https://www.tup.com.cn/upload/smallbookimg/103003-01.jpg
+- photos/book-09957801.jpg: 理论力学
+  https://www.tup.com.cn/booksCenter/book_09957801.html
+  https://www.tup.com.cn/upload/smallbookimg/099578-01.jpg
+- photos/book-09468701.jpg: 混凝土结构设计
+  https://www.tup.com.cn/booksCenter/book_09468701.html
+  https://www.tup.com.cn/upload/smallbookimg/094687-01.jpg
+- photos/book-10562201.jpg: 工程项目管理（第2版）
+  https://www.tup.com.cn/booksCenter/book_10562201.html
+  https://www.tup.com.cn/upload/smallbookimg/105622-01.jpg
+- photos/book-08610702.jpg: 水力学（第3版）
+  https://www.tup.com.cn/booksCenter/book_08610702.html
+  https://www.tup.com.cn/upload/bigbookimg/086107-02.jpg
+- photos/book-09180901.jpg: 工程流体力学
+  https://www.tup.com.cn/booksCenter/book_09180901.html
+  https://www.tup.com.cn/upload/smallbookimg/091809-01.jpg
+- photos/book-01479503.jpg: 水资源系统分析方法及应用
+  https://www.tup.com.cn/booksCenter/book_01479503.html
+  https://www.tup.com.cn/upload/bigbookimg/014795-03.jpg
+- photos/book-07069001.jpg: 水利工程专业英语
+  https://www.tup.com.cn/booksCenter/book_07069001.html
+  https://www.tup.com.cn/upload/smallbookimg/070690-01.jpg
+- photos/book-07222101.jpg: 船舶与海洋工程概论
+  https://www.tup.com.cn/booksCenter/book_07222101.html
+  https://www.tup.com.cn/upload/smallbookimg/072221-01.jpg
+- photos/book-04991801.jpg: 海洋工程装备
+  https://www.tup.com.cn/booksCenter/book_04991801.html
+  https://www.tup.com.cn/upload/bigbookimg/049918-01.jpg
+- photos/book-10046001.jpg: 交通工程概论（英文版）
+  https://www.tup.com.cn/booksCenter/book_10046001.html
+  https://www.tup.com.cn/upload/smallbookimg/100460-01.jpg
+- photos/book-01586801.jpg: 交通规划理论研究前沿
+  https://www.tup.com.cn/booksCenter/book_01586801.html
+  https://www.tup.com.cn/upload/bigbookimg/015868-01.jpg
+- photos/book-08878601.jpg: 道路工程
+  https://www.tup.com.cn/booksCenter/book_08878601.html
+  https://www.tup.com.cn/upload/smallbookimg/088786-01.jpg
+- photos/book-10925001.jpg: 节奏式交通控制——概念原理、性能分析与设计方法
+  https://www.tup.com.cn/booksCenter/book_10925001.html
+  https://www.tup.com.cn/upload/bigbookimg/109250-01.jpg
+- photos/book-09583201.jpg: 环境学概论
+  https://www.tup.com.cn/booksCenter/book_09583201.html
+  https://www.tup.com.cn/upload/smallbookimg/095832-01.jpg
+- photos/book-10292201.jpg: 环境化学实验
+  https://www.tup.com.cn/booksCenter/book_10292201.html
+  https://www.tup.com.cn/upload/smallbookimg/102922-01.jpg
+- photos/book-09896401.jpg: 水污染控制工程实验
+  https://www.tup.com.cn/booksCenter/book_09896401.html
+  https://www.tup.com.cn/upload/bigbookimg/098964-01.jpg
+- photos/book-10470101.jpg: 环境影响评价及其案例分析
+  https://www.tup.com.cn/booksCenter/book_10470101.html
+  https://www.tup.com.cn/upload/smallbookimg/104701-01.jpg
+- photos/book-08647601.jpg: 机械原理
+  https://www.tup.com.cn/booksCenter/book_08647601.html
+  https://www.tup.com.cn/upload/smallbookimg/086476-01.jpg
+- photos/book-10652001.jpg: 机械设计基础——理论、方法与标准（第3版）
+  https://www.tup.com.cn/booksCenter/book_10652001.html
+  https://www.tup.com.cn/upload/smallbookimg/106520-01.jpg
+- photos/book-10230901.jpg: 机械制造技术基础（第2版）
+  https://www.tup.com.cn/booksCenter/book_10230901.html
+  https://www.tup.com.cn/upload/smallbookimg/102309-01.jpg
+- photos/book-07221101.jpg: 工程热力学
+  https://www.tup.com.cn/booksCenter/book_07221101.html
+  https://www.tup.com.cn/upload/smallbookimg/072211-01.jpg
+- photos/book-08743001.jpg: 热工基础
+  https://www.tup.com.cn/booksCenter/book_08743001.html
+  https://www.tup.com.cn/upload/smallbookimg/087430-01.jpg
+- photos/book-10587001.jpg: 新能源与可持续发展概论
+  https://www.tup.com.cn/booksCenter/book_10587001.html
+  https://www.tup.com.cn/upload/smallbookimg/105870-01.jpg
+- photos/book-05980901.jpg: 可再生能源系统
+  https://www.tup.com.cn/booksCenter/book_05980901.html
+  https://www.tup.com.cn/upload/bigbookimg/059809-01.jpg
+- photos/book-07650702.jpg: 汽车构造
+  https://www.tup.com.cn/booksCenter/book_07650702.html
+  https://www.tup.com.cn/upload/smallbookimg/076507-02.jpg
+- photos/book-05052301.jpg: 汽车理论
+  https://www.tup.com.cn/booksCenter/book_05052301.html
+  https://www.tup.com.cn/upload/bigbookimg/050523-01.jpg
+- photos/book-05063201.jpg: 汽车设计
+  https://www.tup.com.cn/booksCenter/book_05063201.html
+  https://www.tup.com.cn/upload/bigbookimg/050632-01.jpg
+- photos/book-10348001.jpg: 新能源汽车维护
+  https://www.tup.com.cn/booksCenter/book_10348001.html
+  https://www.tup.com.cn/upload/smallbookimg/103480-01.jpg
+- photos/book-10065701.jpg: 智能制造工程导论
+  https://www.tup.com.cn/booksCenter/book_10065701.html
+  https://www.tup.com.cn/upload/smallbookimg/100657-01.jpg
+- photos/book-11464201.jpg: 运筹学及其应用（第4版）
+  https://www.tup.com.cn/booksCenter/book_11464201.html
+  https://www.tup.com.cn/upload/smallbookimg/114642-01.jpg
+- photos/book-09344501.jpg: 生产计划与控制
+  https://www.tup.com.cn/booksCenter/book_09344501.html
+  https://www.tup.com.cn/upload/smallbookimg/093445-01.jpg
+- photos/book-10038301.jpg: 质量管理工程
+  https://www.tup.com.cn/booksCenter/book_10038301.html
+  https://www.tup.com.cn/upload/smallbookimg/100383-01.jpg
+- photos/book-04643503.jpg: 飞机空气动力学
+  https://www.tup.com.cn/booksCenter/book_04643503.html
+  https://www.tup.com.cn/upload/bigbookimg/046435-03.jpg
+- photos/book-06302801.jpg: 四旋翼飞行器设计与实现
+  https://www.tup.com.cn/booksCenter/book_06302801.html
+  https://www.tup.com.cn/upload/smallbookimg/063028-01.jpg
+- photos/book-05418301.jpg: 现代飞行器推进原理与进展
+  https://www.tup.com.cn/booksCenter/book_05418301.html
+  https://www.tup.com.cn/upload/bigbookimg/054183-01.jpg
+- photos/book-10402801.jpg: 电路原理（第2版）
+  https://www.tup.com.cn/booksCenter/book_10402801.html
+  https://www.tup.com.cn/upload/smallbookimg/104028-01.jpg
+- photos/book-10833301.jpg: 模拟电子技术
+  https://www.tup.com.cn/booksCenter/book_10833301.html
+  https://www.tup.com.cn/upload/smallbookimg/108333-01.jpg
+- photos/book-11258101.jpg: 信号与系统——第2版
+  https://www.tup.com.cn/booksCenter/book_11258101.html
+  https://www.tup.com.cn/upload/bigbookimg/112581-01.jpg
+- photos/book-11006301.jpg: 通信原理（第3版）
+  https://www.tup.com.cn/booksCenter/book_11006301.html
+  https://www.tup.com.cn/upload/smallbookimg/110063-01.jpg
+- photos/book-11434601.jpg: 自动控制原理（第4版）
+  https://www.tup.com.cn/booksCenter/book_11434601.html
+  https://www.tup.com.cn/upload/smallbookimg/114346-01.jpg
+- photos/book-10233101.jpg: 现代控制理论基础教程
+  https://www.tup.com.cn/booksCenter/book_10233101.html
+  https://www.tup.com.cn/upload/smallbookimg/102331-01.jpg
+- photos/book-08917601.jpg: 机器人学基础
+  https://www.tup.com.cn/booksCenter/book_08917601.html
+  https://www.tup.com.cn/upload/smallbookimg/089176-01.jpg
+- photos/book-07072801.jpg: 半导体物理基础教程
+  https://www.tup.com.cn/booksCenter/book_07072801.html
+  https://www.tup.com.cn/upload/smallbookimg/070728-01.jpg
+- photos/book-08916601.jpg: 数字电子技术基础
+  https://www.tup.com.cn/booksCenter/book_08916601.html
+  https://www.tup.com.cn/upload/smallbookimg/089166-01.jpg
+- photos/book-06028201.jpg: CMOS模拟集成电路
+  https://www.tup.com.cn/booksCenter/book_06028201.html
+  https://www.tup.com.cn/upload/smallbookimg/060282-01.jpg
+- photos/book-07350601.jpg: 集成电路芯片设计
+  https://www.tup.com.cn/booksCenter/book_07350601.html
+  https://www.tup.com.cn/upload/smallbookimg/073506-01.jpg
+- photos/book-09884401.jpg: 电子材料科学基础（上册）
+  https://www.tup.com.cn/booksCenter/book_09884401.html
+  https://www.tup.com.cn/upload/smallbookimg/098844-01.jpg
+- photos/book-08508502.jpg: 材料力学
+  https://www.tup.com.cn/booksCenter/book_08508502.html
+  https://www.tup.com.cn/upload/bigbookimg/085085-02.jpg
+- photos/book-10292101.jpg: 材料物理化学
+  https://www.tup.com.cn/booksCenter/book_10292101.html
+  https://www.tup.com.cn/upload/bigbookimg/102921-01.jpg
+- photos/book-11119201.jpg: 复合材料原理（第4版）
+  https://www.tup.com.cn/booksCenter/book_11119201.html
+  https://www.tup.com.cn/upload/smallbookimg/111192-01.jpg
+- photos/book-07296801.jpg: 电工学
+  https://www.tup.com.cn/booksCenter/book_07296801.html
+  https://www.tup.com.cn/upload/smallbookimg/072968-01.jpg
+- photos/book-02573001.jpg: 电机学
+  https://www.tup.com.cn/booksCenter/book_02573001.html
+  https://www.tup.com.cn/upload/bigbookimg/025730-01.jpg
+- photos/book-08854401.jpg: 电力电子技术
+  https://www.tup.com.cn/booksCenter/book_08854401.html
+  https://www.tup.com.cn/upload/smallbookimg/088544-01.jpg
+- photos/book-08346102.jpg: 电力系统分析（第2版）
+  https://www.tup.com.cn/booksCenter/book_08346102.html
+  https://www.tup.com.cn/upload/smallbookimg/083461-02.jpg
+- photos/book-11418801.jpg: 大学物理（上册）——第2版
+  https://www.tup.com.cn/booksCenter/book_11418801.html
+  https://www.tup.com.cn/upload/bigbookimg/114188-01.jpg
+- photos/book-10506001.jpg: 电动力学
+  https://www.tup.com.cn/booksCenter/book_10506001.html
+  https://www.tup.com.cn/upload/smallbookimg/105060-01.jpg
+- photos/book-10310601.jpg: 量子力学基础教程
+  https://www.tup.com.cn/booksCenter/book_10310601.html
+  https://www.tup.com.cn/upload/smallbookimg/103106-01.jpg
+- photos/book-02758201.jpg: 热力学与统计物理简明教程
+  https://www.tup.com.cn/booksCenter/book_02758201.html
+  https://www.tup.com.cn/upload/bigbookimg/027582-01.jpg
+- photos/book-09294101.jpg: 恒星中的核物理（第2版）
+  https://www.tup.com.cn/booksCenter/book_09294101.html
+  https://www.tup.com.cn/upload/bigbookimg/092941-01.jpg
+- photos/book-06903501.jpg: 核能利用与核材料
+  https://www.tup.com.cn/booksCenter/book_06903501.html
+  https://www.tup.com.cn/upload/smallbookimg/069035-01.jpg
+- photos/book-04468904.jpg: 无机化学
+  https://www.tup.com.cn/booksCenter/book_04468904.html
+  https://www.tup.com.cn/upload/bigbookimg/044689-04.jpg
+- photos/book-04641202.jpg: 有机化学
+  https://www.tup.com.cn/booksCenter/book_04641202.html
+  https://www.tup.com.cn/upload/bigbookimg/046412-02.jpg
+- photos/book-11275801.jpg: 化工原理
+  https://www.tup.com.cn/booksCenter/book_11275801.html
+  https://www.tup.com.cn/upload/smallbookimg/112758-01.jpg
+- photos/book-09541801.jpg: 自然地理综合实习教程——青藏高原北缘及河西走廊地区
+  https://www.tup.com.cn/booksCenter/book_09541801.html
+  https://www.tup.com.cn/upload/bigbookimg/095418-01.jpg
+- photos/book-02849501.jpg: 地理信息系统导论
+  https://www.tup.com.cn/booksCenter/book_02849501.html
+  https://www.tup.com.cn/upload/bigbookimg/028495-01.jpg
+- photos/book-09647401.jpg: 超越对立：中国气候变化政策的学习理论研究
+  https://www.tup.com.cn/booksCenter/book_09647401.html
+  https://www.tup.com.cn/upload/smallbookimg/096474-01.jpg
+- photos/book-02097701.jpg: 天文知识基础——你想知道的天文学
+  https://www.tup.com.cn/booksCenter/book_02097701.html
+  https://www.tup.com.cn/upload/bigbookimg/020977-01.jpg
+- photos/book-10338501.jpg: 宇宙学概论
+  https://www.tup.com.cn/booksCenter/book_10338501.html
+  https://www.tup.com.cn/upload/smallbookimg/103385-01.jpg
+- photos/book-04281901.jpg: 普通心理学
+  https://www.tup.com.cn/booksCenter/book_04281901.html
+  https://www.tup.com.cn/upload/bigbookimg/042819-01.jpg
+- photos/book-09541501.jpg: 发展心理学
+  https://www.tup.com.cn/booksCenter/book_09541501.html
+  https://www.tup.com.cn/upload/smallbookimg/095415-01.jpg
+- photos/book-07662001.jpg: 认知心理学
+  https://www.tup.com.cn/booksCenter/book_07662001.html
+  https://www.tup.com.cn/upload/bigbookimg/076620-01.jpg
+- photos/book-06562301.jpg: 心理测量
+  https://www.tup.com.cn/booksCenter/book_06562301.html
+  https://www.tup.com.cn/upload/smallbookimg/065623-01.jpg
+- photos/book-05266601.jpg: 普通生物学探究性实验指导
+  https://www.tup.com.cn/booksCenter/book_05266601.html
+  https://www.tup.com.cn/upload/bigbookimg/052666-01.jpg
+- photos/book-01674101.jpg: 分子细胞生物学
+  https://www.tup.com.cn/booksCenter/book_01674101.html
+  https://www.tup.com.cn/upload/bigbookimg/016741-01.jpg
+- photos/book-09213801.jpg: 生物化学（第5版）
+  https://www.tup.com.cn/booksCenter/book_09213801.html
+  https://www.tup.com.cn/upload/smallbookimg/092138-01.jpg
+- photos/book-05105604.jpg: 分子生物学与基因工程实验教程
+  https://www.tup.com.cn/booksCenter/book_05105604.html
+  https://www.tup.com.cn/upload/bigbookimg/051056-04.jpg
+- photos/book-09886701.jpg: 人体解剖学实验教程
+  https://www.tup.com.cn/booksCenter/book_09886701.html
+  https://www.tup.com.cn/upload/smallbookimg/098867-01.jpg
+- photos/book-09637201.jpg: 生理学
+  https://www.tup.com.cn/booksCenter/book_09637201.html
+  https://www.tup.com.cn/upload/smallbookimg/096372-01.jpg
+- photos/book-01911501.jpg: 病理学
+  https://www.tup.com.cn/booksCenter/book_01911501.html
+  https://www.tup.com.cn/upload/bigbookimg/019115-01.jpg
+- photos/book-01912701.jpg: 诊断学
+  https://www.tup.com.cn/booksCenter/book_01912701.html
+  https://www.tup.com.cn/upload/bigbookimg/019127-01.jpg
+- photos/book-08479701.jpg: 药理学实验指导
+  https://www.tup.com.cn/booksCenter/book_08479701.html
+  https://www.tup.com.cn/upload/smallbookimg/084797-01.jpg
+- photos/book-04620301.jpg: 药物化学
+  https://www.tup.com.cn/booksCenter/book_04620301.html
+  https://www.tup.com.cn/upload/bigbookimg/046203-01.jpg
+- photos/book-09801901.jpg: 公共卫生安全导论
+  https://www.tup.com.cn/booksCenter/book_09801901.html
+  https://www.tup.com.cn/upload/smallbookimg/098019-01.jpg
+- photos/book-05754801.jpg: 流行病学(留学生与双语教学用)（英文版）
+  https://www.tup.com.cn/booksCenter/book_05754801.html
+  https://www.tup.com.cn/upload/bigbookimg/057548-01.jpg
+- photos/book-08321001.jpg: 医疗卫生统计分析
+  https://www.tup.com.cn/booksCenter/book_08321001.html
+  https://www.tup.com.cn/upload/smallbookimg/083210-01.jpg
+- photos/book-11234601.jpg: 医院管理与实践分析
+  https://www.tup.com.cn/booksCenter/book_11234601.html
+  https://www.tup.com.cn/upload/smallbookimg/112346-01.jpg
+- photos/book-08069901.jpg: 管理学原理
+  https://www.tup.com.cn/booksCenter/book_08069901.html
+  https://www.tup.com.cn/upload/smallbookimg/080699-01.jpg
+- photos/book-09149801.jpg: 组织行为学
+  https://www.tup.com.cn/booksCenter/book_09149801.html
+  https://www.tup.com.cn/upload/smallbookimg/091498-01.jpg
+- photos/book-09761303.jpg: 市场营销学（第6版）
+  https://www.tup.com.cn/booksCenter/book_09761303.html
+  https://www.tup.com.cn/upload/smallbookimg/097613-03.jpg
+- photos/book-10251101.jpg: 战略管理理论与应用
+  https://www.tup.com.cn/booksCenter/book_10251101.html
+  https://www.tup.com.cn/upload/smallbookimg/102511-01.jpg
+- photos/book-09421401.jpg: 基础会计
+  https://www.tup.com.cn/booksCenter/book_09421401.html
+  https://www.tup.com.cn/upload/smallbookimg/094214-01.jpg
+- photos/book-10844701.jpg: 财务会计（英文版·第14版）
+  https://www.tup.com.cn/booksCenter/book_10844701.html
+  https://www.tup.com.cn/upload/smallbookimg/108447-01.jpg
+- photos/book-11230301.jpg: 管理会计
+  https://www.tup.com.cn/booksCenter/book_11230301.html
+  https://www.tup.com.cn/upload/smallbookimg/112303-01.jpg
+- photos/book-11636101.jpg: 审计学
+  https://www.tup.com.cn/booksCenter/book_11636101.html
+  https://www.tup.com.cn/upload/smallbookimg/116361-01.jpg
+- photos/book-08227601.jpg: 微观经济学
+  https://www.tup.com.cn/booksCenter/book_08227601.html
+  https://www.tup.com.cn/upload/smallbookimg/082276-01.jpg
+- photos/book-08961601.jpg: 宏观经济学（第8版）
+  https://www.tup.com.cn/booksCenter/book_08961601.html
+  https://www.tup.com.cn/upload/smallbookimg/089616-01.jpg
+- photos/book-09150901.jpg: 计量经济学
+  https://www.tup.com.cn/booksCenter/book_09150901.html
+  https://www.tup.com.cn/upload/smallbookimg/091509-01.jpg
+- photos/book-07112802.jpg: 国际经济学
+  https://www.tup.com.cn/booksCenter/book_07112802.html
+  https://www.tup.com.cn/upload/smallbookimg/071128-02.jpg
+- photos/book-11181701.jpg: 金融学基础
+  https://www.tup.com.cn/booksCenter/book_11181701.html
+  https://www.tup.com.cn/upload/smallbookimg/111817-01.jpg
+- photos/book-10514301.jpg: 证券投资学
+  https://www.tup.com.cn/booksCenter/book_10514301.html
+  https://www.tup.com.cn/upload/smallbookimg/105143-01.jpg
+- photos/book-10756901.jpg: 公司金融
+  https://www.tup.com.cn/booksCenter/book_10756901.html
+  https://www.tup.com.cn/upload/smallbookimg/107569-01.jpg
+- photos/book-10403701.jpg: 金融风险管理
+  https://www.tup.com.cn/booksCenter/book_10403701.html
+  https://www.tup.com.cn/upload/smallbookimg/104037-01.jpg
+- photos/book-01310601.jpg: 政治学概论
+  https://www.tup.com.cn/booksCenter/book_01310601.html
+  https://www.tup.com.cn/upload/bigbookimg/013106-01.jpg
+- photos/book-05183202.jpg: 公共管理学
+  https://www.tup.com.cn/booksCenter/book_05183202.html
+  https://www.tup.com.cn/upload/bigbookimg/051832-02.jpg
+- photos/book-00846301.jpg: 国际关系基本理论
+  https://www.tup.com.cn/booksCenter/book_00846301.html
+  https://www.tup.com.cn/upload/bigbookimg/008463-01.jpg
+- photos/book-07061601.jpg: 公共政策学
+  https://www.tup.com.cn/booksCenter/book_07061601.html
+  https://www.tup.com.cn/upload/smallbookimg/070616-01.jpg
+- photos/book-07918901.jpg: 马克思主义基本原理概论教学指导书
+  https://www.tup.com.cn/booksCenter/book_07918901.html
+  https://www.tup.com.cn/upload/smallbookimg/079189-01.jpg
+- photos/book-07294102.jpg: 政治经济学原理
+  https://www.tup.com.cn/booksCenter/book_07294102.html
+  https://www.tup.com.cn/upload/smallbookimg/072941-02.jpg
+- photos/book-07904002.jpg: 毛泽东思想和中国特色社会主义理论体系概论教学指导书
+  https://www.tup.com.cn/booksCenter/book_07904002.html
+  https://www.tup.com.cn/upload/smallbookimg/079040-02.jpg
+- photos/book-08364601.jpg: 思想政治教育热点问题研究新进展
+  https://www.tup.com.cn/booksCenter/book_08364601.html
+  https://www.tup.com.cn/upload/smallbookimg/083646-01.jpg
+- photos/book-08639601.jpg: 现代汉语
+  https://www.tup.com.cn/booksCenter/book_08639601.html
+  https://www.tup.com.cn/upload/smallbookimg/086396-01.jpg
+- photos/book-03173401.jpg: 中国文学名著导读
+  https://www.tup.com.cn/booksCenter/book_03173401.html
+  https://www.tup.com.cn/upload/bigbookimg/031734-01.jpg
+- photos/book-06117201.jpg: 古代汉语读本(上、下)
+  https://www.tup.com.cn/booksCenter/book_06117201.html
+  https://www.tup.com.cn/upload/smallbookimg/061172-01.jpg
+- photos/book-11045201.jpg: 首届古文字与中华文明国际学术论坛论文集
+  https://www.tup.com.cn/booksCenter/book_11045201.html
+  https://www.tup.com.cn/upload/smallbookimg/110452-01.jpg
+- photos/book-02461901.jpg: 历史学专业基础综合辅导
+  https://www.tup.com.cn/booksCenter/book_02461901.html
+  https://www.tup.com.cn/upload/bigbookimg/024619-01.jpg
+- photos/book-09162901.jpg: 科学技术史手册
+  https://www.tup.com.cn/booksCenter/book_09162901.html
+  https://www.tup.com.cn/upload/smallbookimg/091629-01.jpg
+- photos/book-07709601.jpg: 大问题：简明哲学导论（第10版）
+  https://www.tup.com.cn/booksCenter/book_07709601.html
+  https://www.tup.com.cn/upload/smallbookimg/077096-01.jpg
+- photos/book-09136601.jpg: 逻辑学
+  https://www.tup.com.cn/booksCenter/book_09136601.html
+  https://www.tup.com.cn/upload/smallbookimg/091366-01.jpg
+- photos/book-09530901.jpg: 工程伦理学
+  https://www.tup.com.cn/booksCenter/book_09530901.html
+  https://www.tup.com.cn/upload/smallbookimg/095309-01.jpeg
+- photos/book-02736401.jpg: 西方哲学名著导读
+  https://www.tup.com.cn/booksCenter/book_02736401.html
+  https://www.tup.com.cn/upload/bigbookimg/027364-01.jpg
+- photos/book-08849901.jpg: 普通语言学新发展研究
+  https://www.tup.com.cn/booksCenter/book_08849901.html
+  https://www.tup.com.cn/upload/smallbookimg/088499-01.jpg
+- photos/book-06074904.jpg: 实用大学英语语法新编
+  https://www.tup.com.cn/booksCenter/book_06074904.html
+  https://www.tup.com.cn/upload/bigbookimg/060749-04.jpg
+- photos/book-06286204.jpg: 英汉翻译  译·注·评
+  https://www.tup.com.cn/booksCenter/book_06286204.html
+  https://www.tup.com.cn/upload/smallbookimg/062862-04.jpg
+- photos/book-10397201.jpg: 学术英语写作
+  https://www.tup.com.cn/booksCenter/book_10397201.html
+  https://www.tup.com.cn/upload/smallbookimg/103972-01.jpg
+- photos/book-04691402.jpg: 社会学概论
+  https://www.tup.com.cn/booksCenter/book_04691402.html
+  https://www.tup.com.cn/upload/bigbookimg/046914-02.jpg
+- photos/book-05242702.jpg: 社会调查研究方法
+  https://www.tup.com.cn/booksCenter/book_05242702.html
+  https://www.tup.com.cn/upload/bigbookimg/052427-02.jpg
+- photos/book-05915602.jpg: 社会研究方法
+  https://www.tup.com.cn/booksCenter/book_05915602.html
+  https://www.tup.com.cn/upload/bigbookimg/059156-02.jpg
+- photos/book-06797401.jpg: 社会心理学
+  https://www.tup.com.cn/booksCenter/book_06797401.html
+  https://www.tup.com.cn/upload/smallbookimg/067974-01.jpg
+- photos/book-05180401.jpg: 法理学
+  https://www.tup.com.cn/booksCenter/book_05180401.html
+  https://www.tup.com.cn/upload/bigbookimg/051804-01.jpg
+- photos/book-04387701.jpg: 民法学
+  https://www.tup.com.cn/booksCenter/book_04387701.html
+  https://www.tup.com.cn/upload/bigbookimg/nocoverb.jpg
+- photos/book-07351701.jpg: 刑法学（第二版）
+  https://www.tup.com.cn/booksCenter/book_07351701.html
+  https://www.tup.com.cn/upload/smallbookimg/073517-01.jpg
+- photos/book-03726301.jpg: 行政法讲义
+  https://www.tup.com.cn/booksCenter/book_03726301.html
+  https://www.tup.com.cn/upload/bigbookimg/037263-01.jpg
+- photos/book-09946901.jpg: 融合新闻学
+  https://www.tup.com.cn/booksCenter/book_09946901.html
+  https://www.tup.com.cn/upload/smallbookimg/099469-01.jpg
+- photos/book-09961901.jpg: 传播学引论（第四版）
+  https://www.tup.com.cn/booksCenter/book_09961901.html
+  https://www.tup.com.cn/upload/smallbookimg/099619-01.jpg
+- photos/book-07779302.jpg: 新闻采访与写作
+  https://www.tup.com.cn/booksCenter/book_07779302.html
+  https://www.tup.com.cn/upload/smallbookimg/077793-02.jpg
+- photos/book-08116902.jpg: 智能时代新媒体概论
+  https://www.tup.com.cn/booksCenter/book_08116902.html
+  https://www.tup.com.cn/upload/smallbookimg/081169-02.jpg
+- photos/book-10730501.jpg: 素描(第2版)
+  https://www.tup.com.cn/booksCenter/book_10730501.html
+  https://www.tup.com.cn/upload/smallbookimg/107305-01.jpg
+- photos/book-10431901.jpg: 艺术概论
+  https://www.tup.com.cn/booksCenter/book_10431901.html
+  https://www.tup.com.cn/upload/smallbookimg/104319-01.jpg
+- photos/book-04290001.jpg: 设计史
+  https://www.tup.com.cn/booksCenter/book_04290001.html
+  https://www.tup.com.cn/upload/bigbookimg/nocoverb.jpg
+- photos/book-10243001.jpg: 交互设计创新方法与实践
+  https://www.tup.com.cn/booksCenter/book_10243001.html
+  https://www.tup.com.cn/upload/smallbookimg/102430-01.jpg
+- photos/book-10287501.jpg: 教育学基础
+  https://www.tup.com.cn/booksCenter/book_10287501.html
+  https://www.tup.com.cn/upload/smallbookimg/102875-01.jpg
+- photos/book-10437001.jpg: 教育心理学
+  https://www.tup.com.cn/booksCenter/book_10437001.html
+  https://www.tup.com.cn/upload/smallbookimg/104370-01.jpg
+- photos/book-11482301.jpg: 现代课程与教学论
+  https://www.tup.com.cn/booksCenter/book_11482301.html
+  https://www.tup.com.cn/upload/smallbookimg/114823-01.jpg
+- photos/book-07664002.jpg: 教育科学研究方法
+  https://www.tup.com.cn/booksCenter/book_07664002.html
+  https://www.tup.com.cn/upload/smallbookimg/076640-02.jpg
+- photos/book-07601901.jpg: 大学体育教程
+  https://www.tup.com.cn/booksCenter/book_07601901.html
+  https://www.tup.com.cn/upload/smallbookimg/076019-01.jpg
+- photos/book-00619501.jpg: 运动心理学——概念与应用（第5版）
+  https://www.tup.com.cn/booksCenter/book_00619501.html
+  https://www.tup.com.cn/upload/bigbookimg/006195-01.jpg
+- photos/book-06227001.jpg: 运动训练动作设计原理与实践
+  https://www.tup.com.cn/booksCenter/book_06227001.html
+  https://www.tup.com.cn/upload/bigbookimg/062270-01.jpg
+- photos/book-10403401.jpg: 体育与健康
+  https://www.tup.com.cn/booksCenter/book_10403401.html
+  https://www.tup.com.cn/upload/smallbookimg/104034-01.jpg
+- photos/book-11175401.jpg: 安全与应急管理
+  https://www.tup.com.cn/booksCenter/book_11175401.html
+  https://www.tup.com.cn/upload/smallbookimg/111754-01.jpg
+- photos/book-11025801.jpg: 公共安全管理学（微课版）
+  https://www.tup.com.cn/booksCenter/book_11025801.html
+  https://www.tup.com.cn/upload/smallbookimg/110258-01.jpg
+- photos/book-11046201.jpg: 风险管理概论
+  https://www.tup.com.cn/booksCenter/book_11046201.html
+  https://www.tup.com.cn/upload/smallbookimg/110462-01.jpg
+- photos/book-11063501.jpg: 灾害应急管理与护理
+  https://www.tup.com.cn/booksCenter/book_11063501.html
+  https://www.tup.com.cn/upload/smallbookimg/110635-01.jpg
+- photos/book-08942401.jpg: 传感器原理与应用
+  https://www.tup.com.cn/booksCenter/book_08942401.html
+  https://www.tup.com.cn/upload/smallbookimg/089424-01.jpg
+- photos/book-10590301.jpg: 现代测控技术与系统（第2版）
+  https://www.tup.com.cn/booksCenter/book_10590301.html
+  https://www.tup.com.cn/upload/smallbookimg/105903-01.jpg
+- photos/book-09943601.jpg: 电子测量技术
+  https://www.tup.com.cn/booksCenter/book_09943601.html
+  https://www.tup.com.cn/upload/smallbookimg/099436-01.jpg
+- photos/book-01913201.jpg: 医学细胞生物学
+  https://www.tup.com.cn/booksCenter/book_01913201.html
+  https://www.tup.com.cn/upload/bigbookimg/019132-01.jpg
+- photos/book-02959101.jpg: 生物医学工程检测和基础实验
+  https://www.tup.com.cn/booksCenter/book_02959101.html
+  https://www.tup.com.cn/upload/bigbookimg/029591-01.png
+- photos/book-01308001.jpg: 医学成像系统
+  https://www.tup.com.cn/booksCenter/book_01308001.html
+  https://www.tup.com.cn/upload/bigbookimg/013080-01.jpg
+- photos/book-03719901.jpg: 雕塑概论
+  https://www.tup.com.cn/booksCenter/book_03719901.html
+  https://www.tup.com.cn/upload/bigbookimg/037199-01.jpg
+- photos/book-10057401.jpg: 陶瓷艺术论
+  https://www.tup.com.cn/booksCenter/book_10057401.html
+  https://www.tup.com.cn/upload/bigbookimg/100574-01.jpg
+- photos/book-06691801.jpg: 服装设计与实战
+  https://www.tup.com.cn/booksCenter/book_06691801.html
+  https://www.tup.com.cn/upload/smallbookimg/066918-01.jpg
+- photos/book-02516301.jpg: 中国传统工艺美术的保护与发展
+  https://www.tup.com.cn/booksCenter/book_02516301.html
+  https://www.tup.com.cn/upload/bigbookimg/nocoverb.jpg
+- photos/book-09912801.jpg: 设计素描
+  https://www.tup.com.cn/booksCenter/book_09912801.html
+  https://www.tup.com.cn/upload/smallbookimg/099128-01.jpg
+- photos/book-10204301.jpg: 工业设计概论（第三版）
+  https://www.tup.com.cn/booksCenter/book_10204301.html
+  https://www.tup.com.cn/upload/smallbookimg/102043-01.jpg
+- photos/book-06853301.jpg: 产品设计思维
+  https://www.tup.com.cn/booksCenter/book_06853301.html
+  https://www.tup.com.cn/upload/smallbookimg/068533-01.jpg
+- photos/book-04285502.jpg: 视觉传达设计
+  https://www.tup.com.cn/booksCenter/book_04285502.html
+  https://www.tup.com.cn/upload/bigbookimg/042855-02.jpg
+- photos/book-03794801.jpg: 图形对话——什么是信息设计
+  https://www.tup.com.cn/booksCenter/book_03794801.html
+  https://www.tup.com.cn/upload/bigbookimg/037948-01.jpg
+- photos/boss-weishen.jpg: 韦东奕拿馒头与矿泉水的采访画面
+  https://www.thepaper.cn/newsDetail_forward_12902642
+  https://imagepphcloud.thepaper.cn/pph/image/134/373/739.jpg
+- photos/boss-goosequeue.jpg: 北京日报鹅腿排队现场报道（新浪转载）；Boss 是虚构抢号机，阿姨仍为补给 NPC
+  https://news.sina.cn/2023-11-28/detail-imzwcnqe7623839.d.html
+  https://k.sinaimg.cn/n/sinakd20231128s/328/w1512h2016/20231128/dfd5-2dfd38e69ff6fb97107fe39918c4a5dc.jpg/w700d1q75cms.jpg?by=cms_fixed_width
+- photos/boss-swim.jpg: 清华体育部泳测现场；图片人物不对应虚构教练角色
+  https://www.thsports.tsinghua.edu.cn/info/1119/1021.htm
+  https://www.thsports.tsinghua.edu.cn/__local/4/46/B3/44F9FFE25524F0F9588EB1FBFA4_AAB07281_271D0.jpg?e=.jpg
+- photos/boss-snake.jpg: 清新时报紫荆园招牌照片；Chinese Snake 为另绘游戏标牌，不声称照片拍到了英文错字
+  https://qxcm.tsjc.tsinghua.edu.cn/pc/folder120/folder649/2021-11-29/mbudhG6rohYweeTr.html
+  https://img.tsjc.tsinghua.edu.cn/202111270abaa2d6e107d295219859a7205c3761.jpg
+- photos/boss-hotsearch.jpg: 澎湃转载报道中的孙宇晨公开活动照片；机甲招式为虚构梗改编，不认定私人经历
+  https://www.thepaper.cn/newsDetail_forward_33966429
+  https://imgpai.thepaper.cn/pphimage/20260828/fd50541a-14a9-4db8-b30a-7b67b187756e.jpg
+Boss reuse: coder-pity.png is the user-provided image; bike-photo.jpg and tsinghua-gate-1280.jpg retain earlier source / license records above.
