@@ -1,44 +1,62 @@
-name: Import reviewed community source
+name: Integrate reviewed v0.6.0
 on:
   workflow_dispatch:
 permissions:
   contents: write
 jobs:
-  import:
+  integrate:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v6
-      - name: Verify and extract reviewed source only
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Resolve reviewed music contribution and import verified source
         env:
-          EXPECTED_SOURCE_SHA256: bed4a63bf6c39dce95a9947e2d56e89c8dcb7c67cff7a133abd1f37db4639895
+          EXPECTED_PATCH: 877e652948dcffadb9b51d74b74d4d1e1be67dd460c846111cdd616117f27d95
+          EXPECTED_PR: 16abc67c738146ae8d9bad4e78e5e1856a47d38a
         run: |
-          python3 - <<'PYIMPORT'
+          test -f package.json
+          git switch -c codex/v0.6.0-music-performance
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin main pull/1/head:refs/remotes/origin/pr-1-reviewed
+          test "$(git rev-parse refs/remotes/origin/pr-1-reviewed)" = "$EXPECTED_PR"
+          git merge --no-edit origin/main
+          python3 - <<'PY'
           import hashlib, os, pathlib, zipfile
-          p = pathlib.Path('source-bootstrap.zip')
-          assert hashlib.sha256(p.read_bytes()).hexdigest() == os.environ['EXPECTED_SOURCE_SHA256']
-          allowed = {'app','components','hooks','lib','public','docs','scripts','deploy','.github'}
+          p = pathlib.Path('reviewed-v060.zip')
+          assert hashlib.sha256(p.read_bytes()).hexdigest() == os.environ['EXPECTED_PATCH']
           with zipfile.ZipFile(p) as z:
               assert z.testzip() is None
               names = set()
-              for info in z.infolist():
-                  q = pathlib.PurePosixPath(info.filename)
-                  assert not q.is_absolute() and '..' not in q.parts and chr(92) not in info.filename
-                  assert info.filename not in names
-                  assert not info.filename.startswith('.github/workflows/')
-                  assert ((info.external_attr >> 16) & 0o170000) != 0o120000
-                  assert q.parts[0] not in {'.git','.openai','node_modules','outputs','dist'}
-                  assert len(q.parts) == 1 or q.parts[0] in allowed
-                  assert info.filename != 'campus-game.zip'
-                  names.add(info.filename)
-              assert {'package.json','package-lock.json','CONTRIBUTING.md','LICENSE','lib/game.ts'} <= names
+              for i in z.infolist():
+                  q = pathlib.PurePosixPath(i.filename)
+                  assert not q.is_absolute() and '..' not in q.parts and chr(92) not in i.filename
+                  assert i.filename not in names
+                  assert q.parts[0] not in {'.git','.github','.openai','node_modules','outputs'}
+                  assert ((i.external_attr >> 16) & 0o170000) != 0o120000
+                  names.add(i.filename)
+              assert {'campus-game.zip','lib/music.ts','public/version.json','lib/asset-manifest.json'} <= names
+          PY
+          if ! git merge --no-commit --no-ff "$EXPECTED_PR"; then
+            test "$(git diff --name-only --diff-filter=U)" = 'campus-game.zip'
+          fi
+          python3 - <<'PY'
+          import pathlib, zipfile, hashlib, json
+          with zipfile.ZipFile('reviewed-v060.zip') as z:
               z.extractall('.')
-          PYIMPORT
-      - name: Create source review branch
-        run: |
-          git switch -c codex/open-source-project
-          git rm source-bootstrap.zip
+          package = pathlib.Path('campus-game.zip')
+          assert hashlib.sha256(package.read_bytes()).hexdigest() == '4d1062623a7ad3f97bf343f120cc4157b7191ab497cc9f33d79a924bd924076f'
+          with zipfile.ZipFile(package) as z:
+              assert json.loads(z.read('version.json'))['version'] == '0.6.0'
+          p = pathlib.Path('RELEASES.md')
+          previous = p.read_text() if p.exists() else ''
+          lines = ['# v0.6.0 · 配乐与轻量战斗', '', '四场景音乐；图片 20.38 MB → 3.17 MB；首批 4 张 467 KB；分批加载、教材缓存、背景 30 Hz、重复音效合并。', '', 'Source: 3535570f9a59402e341c8190f78fa2cabfc47489', 'ZIP SHA256: 4d1062623a7ad3f97bf343f120cc4157b7191ab497cc9f33d79a924bd924076f', 'Rollback v0.5.2: 124b78d62e02e2d5631264be15477cb4137a8752 / 9801518cecd3c1760b6addf8624d36508de740f7cc79c54a7b290584a8c2757c', '', 'Clean install, checks, tests, both builds and 245 local HTTP hashes passed. OPPO WeChat QA pending.', 'PR #1 was closed by its contributor. Maintainer confirmed retaining its four tracks and original commit. Audio authorship/license not asserted; see NOTICE.', '', '---', '', previous]
+          p.write_text(chr(10).join(lines))
+          PY
+          git rm reviewed-v060.zip
           git add --all
-          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Import reviewed complete source and community contribution workflow'
-          git push origin HEAD:refs/heads/codex/open-source-project
-          echo 'Source branch ready for a pull request: codex/open-source-project' >> "$GITHUB_STEP_SUMMARY"
+          git commit -m 'feat: v0.6.0 integrates music contribution and lightweight assets' -m 'Preserve contributor commit as merge parent; resolve the old ZIP using the verified current build. Original PR was closed; maintainer confirmed adopting the four tracks.'
+          git push origin HEAD:refs/heads/codex/v0.6.0-music-performance
