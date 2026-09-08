@@ -1195,6 +1195,62 @@ export class GameModel {
           color,
           { radius: 55, warn: 2.25, damage: 27 },
         );
+    } else if (boss.boss === 'sunshine') {
+      if (n % 3 === 0) {
+        // Freeze all three checkpoints at announcement; no tracking or surprise retarget.
+        for (let i = 0; i < 3; i++)
+          this.addHazard(
+            'circle',
+            clamp(p.x + (i - 1) * 105, 55, this.world.width - 55),
+            clamp(p.y + (i === 1 ? -65 : 35), 55, this.world.height - 55),
+            ['起点 · 滴！请刷卡', '中途 · 别漏打', '终点 · 跑完记得刷'][i],
+            color,
+            { radius: 48, warn: 1.4 + i * 0.45, duration: 0.55, damage: 25 },
+          );
+      } else if (n % 3 === 1) {
+        const gapAngle =
+          Math.atan2(p.y - boss.y, p.x - boss.x) + (n % 2 ? 0.32 : -0.32);
+        for (let i = 0; i < 2; i++)
+          this.addHazard(
+            'ring',
+            boss.x,
+            boss.y,
+            i ? '七圈半 · 还有半圈' : '三千米 · 配速跟上',
+            color,
+            {
+              radius: 440,
+              width: 12,
+              warn: 1.4 + i * 0.8,
+              duration: 2.3,
+              damage: 25,
+              gapAngle,
+              gapHalfAngle: 0.26,
+            },
+          );
+      } else {
+        const v = this.view,
+          laneWidth = v.width / 4;
+        const current = clamp(Math.floor((p.x - v.x) / laneWidth), 0, 3);
+        const gap = current === 3 ? 2 : current + 1;
+        for (let lane = 0; lane < 4; lane++) {
+          if (lane === gap) continue;
+          this.addHazard(
+            'line',
+            v.x + laneWidth * (lane + 0.5),
+            v.y + v.height / 2,
+            '最后一圈 · 冲线让道',
+            color,
+            {
+              angle: Math.PI / 2,
+              length: v.height + 60,
+              width: Math.max(10, laneWidth / 2 - 26),
+              warn: 1.8,
+              duration: 0.65,
+              damage: 28,
+            },
+          );
+        }
+      }
     } else if (boss.boss === 'swim') {
       const v = this.view,
         gap = n % 5;
@@ -1290,6 +1346,18 @@ export class GameModel {
             axis % 2 ? '∫' : '显然',
           );
       for (const side of [-1, 1]) emit(aim + side * 0.4, 125, '馒头');
+    } else if (id === 'sunshine') {
+      if (n % 3 === 1) {
+        for (let i = 0; i < 12; i++)
+          if (i !== n % 12) emit((i * Math.PI) / 6, 155, '圈');
+      } else if (n % 3 === 2) {
+        for (const side of [-1, 1])
+          for (let i = 0; i < 3; i++)
+            emit(aim, 175 + i * 20, '鞋', side * (42 + i * 6));
+      } else {
+        for (let i = -3; i <= 3; i++)
+          if (i !== (n % 2 ? -1 : 1)) emit(aim + i * 0.2, 165, '滴');
+      }
     } else if (id === 'swim') {
       for (let i = -4; i <= 4; i++)
         if (i !== (n % 2 ? -1 : 1))

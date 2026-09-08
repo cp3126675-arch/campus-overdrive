@@ -688,6 +688,40 @@ export class CampusGame {
           spec.color,
         );
       }
+    } else if (e.boss === 'sunshine') {
+      // A stopwatch/card-reader, not an enlarged course sprite or a real runner as villain.
+      c.save();
+      c.scale(1, 0.58);
+      for (const r of [87, 97, 107])
+        this.circle(0, 55, r, '#9e482022', '#ffc982', 2);
+      c.restore();
+      box(-14, -86, 28, 16, '#ffcf7a');
+      this.circle(0, -15, 54, '#23313a', '#ffb95e', 6);
+      for (let i = 0; i < 12; i++) {
+        const a = (i * Math.PI) / 6;
+        this.circle(Math.cos(a) * 45, -15 + Math.sin(a) * 45, 2, '#ffe7b9');
+      }
+      c.strokeStyle = '#fff0c7';
+      c.lineWidth = 3;
+      c.beginPath();
+      c.moveTo(0, -15);
+      c.lineTo(Math.cos(m.time * 2) * 33, -15 + Math.sin(m.time * 2) * 33);
+      c.stroke();
+      box(-39, -10, 78, 27, '#172327');
+      this.text('3000m', 0, 4, 22, '#ffdf93');
+      box(-44, 39, 88, 31, '#304c41');
+      this.text(
+        ['起点刷卡', '中途刷卡', '终点刷卡'][m.bossCast % 3],
+        0,
+        54,
+        14,
+        '#e8ffc2',
+      );
+      for (const side of [-1, 1]) {
+        const lift = Math.sin(m.time * 9) * side * 8;
+        box(side * 41 - 15, 72 + lift, 38, 13, '#fff0cd');
+      }
+      this.text('七圈半 · 一圈也不能少', 0, -72, 12, '#ffe1ad');
     } else if (e.boss === 'swim') {
       c.save();
       c.scale(1, 0.6);
@@ -805,6 +839,7 @@ export class CampusGame {
     if (image) {
       const { width: w, height: h, radius } = photo;
       c.save();
+      if (e.boss === 'sunshine') c.translate(-95, 0);
       c.shadowBlur = 0;
       c.fillStyle = '#0b101c';
       c.strokeStyle = e.hit > 0 ? '#fff' : spec.color;
@@ -823,7 +858,13 @@ export class CampusGame {
       c.drawImage(image, -iw / 2, -ih / 2, iw, ih);
       c.restore();
       c.shadowBlur = 0;
-      this.text(photo.caption, 0, h / 2 + 18, 12, spec.color);
+      this.text(
+        photo.caption,
+        e.boss === 'sunshine' ? -95 : 0,
+        h / 2 + 18,
+        12,
+        spec.color,
+      );
     }
     c.shadowBlur = 0;
     this.text(spec.name, 0, -102, 19, '#fff2e4');
@@ -865,6 +906,29 @@ export class CampusGame {
         );
       this.circle(2, -3, 2, '#fff');
       this.circle(2, 3, 2, '#fff');
+    } else if (id === 'sunshine') {
+      if (s.glyph === '鞋') {
+        c.rotate(Math.atan2(s.vy, s.vx));
+        c.fillStyle = '#ffdf94';
+        c.beginPath();
+        roundRect(c, -13, -7, 26, 14, 4);
+        c.fill();
+        c.stroke();
+        c.beginPath();
+        c.moveTo(-9, 3);
+        c.lineTo(10, 3);
+        c.stroke();
+      } else if (s.glyph === '圈') {
+        this.circle(0, 0, 11, '#583224', '#ffb95e', 3);
+        this.text('圈', 0, 0, 11, '#fff3d5');
+      } else {
+        c.fillStyle = '#fff0c7';
+        c.beginPath();
+        roundRect(c, -13, -10, 26, 20, 3);
+        c.fill();
+        c.stroke();
+        this.text('滴', 0, 0, 13, '#864422');
+      }
     } else if (id === 'swim') {
       c.rotate(Math.atan2(s.vy, s.vx));
       c.strokeStyle = '#ff718c';
@@ -1032,6 +1096,7 @@ export class CampusGame {
               bike: '➜',
               weishen: h.shape === 'circle' ? '馒头' : '∫',
               swim: '≈',
+              sunshine: h.shape === 'line' ? '➜' : '滴',
               final: '清華',
             } as Record<string, string>
           )[h.motif] || '';

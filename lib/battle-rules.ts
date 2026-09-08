@@ -1,5 +1,5 @@
 // Discrete badge levels give visible, repeatable checkpoints. Final node is always Lv.15.
-export const BOSS_LEVELS = [2, 4, 6, 8, 10, 11, 13, 14] as const;
+export const BOSS_LEVELS = [2, 4, 6, 8, 9, 10, 11, 13, 14] as const;
 export const mergePercent = (level: number) =>
   Math.round((Math.min(14, Math.max(0, level)) * 100) / 14);
 export const needsLandscape = (touch: boolean, width: number, height: number) =>

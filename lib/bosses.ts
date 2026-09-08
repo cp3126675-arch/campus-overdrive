@@ -78,6 +78,20 @@ export const BOSSES = [
       '取材于清华游泳测试相关规定的校园记忆；真实规定设有免测等安排。教练与招式为原创。',
   },
   {
+    id: 'sunshine',
+    name: '阳光长跑 · 三千米打卡机',
+    subtitle: '人已跑完，卡说你没来',
+    color: '#ffb95e',
+    glyph: '3000m',
+    move: '起终点刷卡 / 七圈半套圈 / 最后一圈冲线',
+    tip: '刷卡点依次点名；从跑圈缺口穿过；冲线时换到空跑道。',
+    source: 'https://www.tsinghua.edu.cn/info/1797/72720.htm',
+    year: '体育传统 · 2013年刷卡记忆',
+    background:
+      '以清华三千米测试与阳光长跑组合创作的虚构打卡机。2013年报道记录起点、中途、终点三次刷卡；两项安排不等同，三次刷卡不是对现行规定的描述。现场照片只用于呈现跑步打卡场景。',
+    memeSource: 'https://www.tsinghua.edu.cn/info/2116/81188.htm',
+  },
+  {
     id: 'hotsearch',
     name: '孙宇晨 · 热搜机甲',
     subtitle: '抛光一小时，热搜一整天',

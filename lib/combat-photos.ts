@@ -170,6 +170,13 @@ export const BOSS_PHOTOS: Record<
     caption: '50m 泳测 · 下一个',
     radius: 26,
   },
+  sunshine: {
+    file: 'photos/boss-sunshine.jpg',
+    width: 58,
+    height: 100,
+    caption: '阳光长跑',
+    radius: 6,
+  },
   hotsearch: {
     file: 'photos/boss-hotsearch.jpg',
     width: 136,

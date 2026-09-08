@@ -11,3 +11,7 @@ MIT **不授予第三方图片、校徽、教材封面、新闻照片、人物�
 ## PR #1 历史配乐
 
 v0.6.0 候选版的 `public/audio/pr1-*.mp3` 来自 [FreneticWind60 的 PR #1](https://github.com/cp3126675-arch/campus-overdrive/pull/1)，原作者、曲名及授权未注明，许可记录为 `NOASSERTION`。这四个文件不适用本项目的 MIT 许可；来源记录也不构成对外部音乐权利的授权。详细字节校验与接入差异见 `docs/contributions/PR-1-配乐接入.md`。
+
+## v0.6.10 阳光长跑图片
+
+`public/art/photos/boss-sunshine.jpg`来自[清华新闻网2013年阳光长跑报道](https://www.tsinghua.edu.cn/info/1181/55101.htm)，研通社记者王涵摄，许可NOASSERTION，不适用代码MIT。保留水印，仅作场景素材。详见[出处记录](docs/research/0.6.10-阳光长跑.md)。

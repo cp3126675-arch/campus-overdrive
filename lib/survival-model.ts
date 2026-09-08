@@ -383,13 +383,20 @@ export class SurvivalGameModel extends GameModel {
   override castBoss(boss: Enemy) {
     const first = this.hazards.length;
     super.castBoss(boss);
-    const strong = boss.boss === 'goosequeue' || boss.boss === 'swim';
+    const strong =
+      boss.boss === 'goosequeue' ||
+      boss.boss === 'swim' ||
+      (boss.boss === 'sunshine' && this.bossCast % 3 !== 1);
     if (strong) {
       for (const h of this.hazards.slice(first)) {
         h.warn += 0.2;
         if (h.shape === 'line') h.width *= 0.85;
       }
-    } else if (this.bossCast % 2 === 1) {
+    } else if (
+      boss.boss === 'sunshine'
+        ? this.bossCast % 3 === 1
+        : this.bossCast % 2 === 1
+    ) {
       // Extra invigilation for formerly easy examiners; always leave an adjacent lane.
       const v = this.view,
         laneWidth = v.width / 3;
@@ -402,6 +409,7 @@ export class SurvivalGameModel extends GameModel {
         current === 1 ? (Math.floor(this.bossCast / 2) % 2 ? 0 : 2) : 1;
       const labels: Record<string, string> = {
         coder: '编译限时卷',
+        sunshine: '刷卡通道 · 依次通过',
         snake: '蛇形附加题',
         bike: '借道补测',
         weishen: '显然加试',
