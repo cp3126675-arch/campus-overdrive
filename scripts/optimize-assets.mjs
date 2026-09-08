@@ -18,10 +18,11 @@ async function walk(dir) {
     if (!/\.(png|jpe?g)$/i.test(file)) continue;
     const bytes = await readFile(join('public', file));
     const atlas = file.includes('atlas');
+    const campusMap = /tsinghua-campus-map/.test(file);
     const size = file.startsWith('badges/')
       ? 128
-      : /tsinghua-campus-map/.test(file)
-        ? 1468
+      : campusMap
+        ? 3072
         : /xuetang-road|tsinghua-gate/.test(file)
           ? 1280
           : 512;
@@ -32,7 +33,7 @@ async function walk(dir) {
         withoutEnlargement: true,
       });
     const encoded = await pipeline
-      .webp({ quality: atlas ? 86 : 82, effort: 6 })
+      .webp({ quality: campusMap ? 90 : atlas ? 86 : 82, effort: 6 })
       .toBuffer();
     const output = `optimized/${hash(encoded).slice(0, 20)}.webp`;
     await writeFile(join('public', output), encoded);
