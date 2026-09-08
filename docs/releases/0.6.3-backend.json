@@ -1,0 +1,11 @@
+{
+  "version": "0.6.3",
+  "status": "production API verified; test player cleaned",
+  "serviceUrl": "https://campus-overdrive-scores.pages.dev",
+  "deploymentUrl": "https://9d78f687.campus-overdrive-scores.pages.dev",
+  "sourceCommit": "e0bac34473899b49b0254ba3ec1c283055111432",
+  "migration": "0002_survival.sql",
+  "previousDeploymentId": "8d172d87-b67b-423f-b08d-231c605de172",
+  "backupSha256": "0ab6e2d8fd37ae4162f563a8eeb4f64545bc94ba0bcfe904081db74fe93073e8",
+  "dataPreservation": "Additive survival tables; existing race data preserved; only exact smoke-test player was deleted."
+}

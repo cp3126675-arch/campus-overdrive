@@ -1,0 +1,12 @@
+{
+  "version": "0.6.3",
+  "api": "https://campus-overdrive-scores.pages.dev",
+  "checks": [
+    "health schema2 / CORS",
+    "authenticated registration and both score modes",
+    "concurrent survival max / shorter retry ignored",
+    "legacy race min retained",
+    "department/global isolation and bounded queries"
+  ],
+  "cleanup": true
+}
