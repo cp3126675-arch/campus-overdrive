@@ -1,0 +1,10 @@
+{
+  "version": "0.6.3-dev.1",
+  "status": "local only; not published",
+  "httpFiles": 246,
+  "zipSha256": "a134ba4716832d90d7b549b84fb1115795e586291a4cbb1fb017e855725ca5b1",
+  "bytes": 10509864,
+  "public062ArchiveUnchanged": true,
+  "preview": "http://127.0.0.1:3001/",
+  "visualAndPhoneQA": false
+}

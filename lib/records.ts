@@ -1,8 +1,13 @@
+export type ScoreMode = 'race' | 'survival';
 export const DEPARTMENT_RECORD_LIMIT = 10;
 export const OVERALL_RECORD_LIMIT = 20;
 export const RECORD_STORAGE_KEY = 'campus-records-v1';
+export const SURVIVAL_RECORD_STORAGE_KEY = 'campus-survival-records-v1';
+export const recordStorageKey = (mode: ScoreMode) =>
+  mode === 'survival' ? SURVIVAL_RECORD_STORAGE_KEY : RECORD_STORAGE_KEY;
 const MAX_STORAGE_LENGTH = 500_000;
 export interface RunRecord {
+  mode?: ScoreMode;
   id: string;
   departmentId: string;
   timeMs: number;
@@ -19,9 +24,13 @@ export const emptyRecordBook = (): RecordBook => ({
   departments: {},
   overall: [],
 });
-export function compareRecords(a: RunRecord, b: RunRecord) {
+export function compareRecords(
+  a: RunRecord,
+  b: RunRecord,
+  mode: ScoreMode = 'race',
+) {
   return (
-    a.timeMs - b.timeMs ||
+    (mode === 'survival' ? b.timeMs - a.timeMs : a.timeMs - b.timeMs) ||
     a.completedAt - b.completedAt ||
     a.id.localeCompare(b.id)
   );
@@ -29,10 +38,12 @@ export function compareRecords(a: RunRecord, b: RunRecord) {
 function validRecord(
   value: unknown,
   known: ReadonlySet<string>,
+  mode: ScoreMode = 'race',
 ): value is RunRecord {
   if (!value || typeof value !== 'object') return false;
   const r = value as RunRecord;
   return (
+    (r.mode ?? 'race') === mode &&
     typeof r.id === 'string' &&
     r.id.length > 0 &&
     r.id.length <= 100 &&
@@ -46,10 +57,10 @@ function validRecord(
     /^\d+\.\d+\.\d+$/.test(r.version)
   );
 }
-function top(records: RunRecord[], limit: number) {
+function top(records: RunRecord[], limit: number, mode: ScoreMode = 'race') {
   const seen = new Set<string>();
   return [...records]
-    .sort(compareRecords)
+    .sort((a, b) => compareRecords(a, b, mode))
     .filter((r) => {
       if (seen.has(r.id)) return false;
       seen.add(r.id);
@@ -61,8 +72,9 @@ export function addRecord(
   book: RecordBook,
   record: RunRecord,
   known: ReadonlySet<string>,
+  mode: ScoreMode = 'race',
 ): RecordBook {
-  if (!validRecord(record, known)) return book;
+  if (!validRecord(record, known, mode)) return book;
   return {
     schema: 1,
     departments: {
@@ -70,15 +82,17 @@ export function addRecord(
       [record.departmentId]: top(
         [...(book.departments[record.departmentId] || []), record],
         DEPARTMENT_RECORD_LIMIT,
+        mode,
       ),
     },
     // Keep this independently: one department can occupy all twenty overall places.
-    overall: top([...book.overall, record], OVERALL_RECORD_LIMIT),
+    overall: top([...book.overall, record], OVERALL_RECORD_LIMIT, mode),
   };
 }
 export function readRecordBook(
   raw: string | null,
   known: ReadonlySet<string>,
+  mode: ScoreMode = 'race',
 ): RecordBook {
   const empty = emptyRecordBook();
   if (!raw || raw.length > MAX_STORAGE_LENGTH) return empty;
@@ -93,19 +107,23 @@ export function readRecordBook(
           book.departments[id] = top(
             list
               .slice(0, 100)
-              .filter((r) => validRecord(r, known) && r.departmentId === id),
+              .filter(
+                (r) => validRecord(r, known, mode) && r.departmentId === id,
+              ),
             DEPARTMENT_RECORD_LIMIT,
+            mode,
           );
       }
     }
     const overall = Array.isArray(value.overall)
       ? value.overall
           .slice(0, 200)
-          .filter((r: unknown) => validRecord(r, known))
+          .filter((r: unknown) => validRecord(r, known, mode))
       : [];
     book.overall = top(
       [...overall, ...Object.values(book.departments).flat()],
       OVERALL_RECORD_LIMIT,
+      mode,
     );
     return book;
   } catch {
@@ -121,17 +139,23 @@ export function saveRecord(
   memory: RecordBook,
   record: RunRecord,
   known: ReadonlySet<string>,
+  mode: ScoreMode = 'race',
 ) {
   let book = memory;
   try {
-    const stored = readRecordBook(storage.getItem(RECORD_STORAGE_KEY), known);
+    const stored = readRecordBook(
+      storage.getItem(recordStorageKey(mode)),
+      known,
+      mode,
+    );
     const departments: Record<string, RunRecord[]> = {};
     for (const id of known) {
       const rows = [
         ...(stored.departments[id] || []),
         ...(memory.departments[id] || []),
       ];
-      if (rows.length) departments[id] = top(rows, DEPARTMENT_RECORD_LIMIT);
+      if (rows.length)
+        departments[id] = top(rows, DEPARTMENT_RECORD_LIMIT, mode);
     }
     book = {
       schema: 1,
@@ -139,6 +163,7 @@ export function saveRecord(
       overall: top(
         [...stored.overall, ...memory.overall],
         OVERALL_RECORD_LIMIT,
+        mode,
       ),
     };
   } catch {
@@ -146,9 +171,9 @@ export function saveRecord(
   }
   const previousBest =
     book.departments[record.departmentId]?.[0]?.timeMs ?? null;
-  book = addRecord(book, record, known);
+  book = addRecord(book, record, known, mode);
   try {
-    storage.setItem(RECORD_STORAGE_KEY, JSON.stringify(book));
+    storage.setItem(recordStorageKey(mode), JSON.stringify(book));
     return { book, persisted: true, previousBest };
   } catch {
     return { book, persisted: false, previousBest };

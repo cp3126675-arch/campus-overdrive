@@ -63,9 +63,15 @@ export function useOnlineScores(score: RunRecord | null) {
     }
   }, [identity, score, configured]);
   useEffect(() => {
-    if (score && identity && configured && attempted.current !== score.id)
+    if (
+      !busy &&
+      score &&
+      identity &&
+      configured &&
+      attempted.current !== score.id
+    )
       void upload();
-  }, [score, identity, configured, upload]);
+  }, [score, identity, configured, upload, busy]);
   const join = async (nickname: string) => {
     if (!nickname.trim() || busy) return;
     setBusy(true);

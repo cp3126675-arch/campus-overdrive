@@ -1,3 +1,5 @@
+import { drawSurvivalZone, drawBadgeBreakShield } from './survival-render';
+import { SurvivalGameModel } from './survival-model';
 import colleges from './colleges.json';
 import { assetUrl } from './asset-url';
 import { GameMusic } from './music';
@@ -42,7 +44,7 @@ interface ToolContext {
   ): void | Promise<void>;
 }
 export class CampusGame {
-  readonly model = new GameModel();
+  model: GameModel = new GameModel();
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
   private emit: (s: Snapshot) => void;
@@ -93,11 +95,14 @@ export class CampusGame {
       progress,
     );
   }
-  async prepareDepartment(id: string) {
+  async prepareDepartment(id: string, variant: 'race' | 'survival' = 'race') {
     this.unlockAudio();
-    return this.loadImages(
-      departmentBooks(id).map((p) => [p.id, `/art/${p.file}`]),
-    );
+    return this.loadImages([
+      ...departmentBooks(id).map((p) => [p.id, `/art/${p.file}`]),
+      ...(variant === 'survival'
+        ? [['campus-map', '/art/tsinghua-campus-map.jpg']]
+        : []),
+    ]);
   }
   private async loadImages(
     defs: string[][],
@@ -127,7 +132,14 @@ export class CampusGame {
       m.chain[i] ? [[m.chain[i].key, `/badges/${m.chain[i].key}.png`]] : [],
     );
     defs.push(['bike-photo', '/art/bike-photo.jpg']);
-    const next = m.bossOrder[m.bossesDefeated];
+    if (m instanceof SurvivalGameModel)
+      defs.push(['campus-map', '/art/tsinghua-campus-map.jpg']);
+    const next =
+      m.bossOrder[
+        m instanceof SurvivalGameModel
+          ? m.bossesDefeated % m.bossOrder.length
+          : m.bossesDefeated
+      ];
     if (next) {
       const photo = BOSS_PHOTOS[next];
       defs.push([`boss-photo-${next}`, `/art/${photo.file}`]);
@@ -199,7 +211,15 @@ export class CampusGame {
       this.emit(this.model.snapshot());
     }
   }
-  start(major: Major, target: string, departmentId?: string) {
+  start(
+    major: Major,
+    target: string,
+    departmentId?: string,
+    variant: 'race' | 'survival' = 'race',
+  ) {
+    if (this.model instanceof SurvivalGameModel !== (variant === 'survival'))
+      this.model =
+        variant === 'survival' ? new SurvivalGameModel() : new GameModel();
     this.unlockAudio();
     this.keys.clear();
     this.move = { x: 0, y: 0 };
@@ -325,9 +345,19 @@ export class CampusGame {
       (this.keys.has('s') || this.keys.has('arrowdown') ? 1 : 0) -
       (this.keys.has('w') || this.keys.has('arrowup') ? 1 : 0) +
       this.move.y;
-    this.model.view = cameraView(this.width, this.height, this.model.player);
+    this.model.view = cameraView(
+      this.width,
+      this.height,
+      this.model.player,
+      this.model.world,
+    );
     this.model.update(dt, x, y);
-    this.model.view = cameraView(this.width, this.height, this.model.player);
+    this.model.view = cameraView(
+      this.width,
+      this.height,
+      this.model.player,
+      this.model.world,
+    );
     if (this.model.mode === 'playing' && !this.model.orientationBlocked) {
       const step = Math.min(dt, 0.05);
       const pace =
@@ -1342,6 +1372,10 @@ export class CampusGame {
   private sceneryAt = -Infinity;
   private sceneryKey = '';
   private cachedScenery(reducedMotion: boolean) {
+    if (this.model instanceof SurvivalGameModel && this.model.mode !== 'menu') {
+      this.drawScenery(reducedMotion);
+      return;
+    }
     const w = this.canvas.width,
       h = this.canvas.height;
     const factor = Math.min(1, Math.sqrt(2_000_000 / Math.max(1, w * h)));
@@ -1381,6 +1415,30 @@ export class CampusGame {
   ) {
     const c = this.ctx;
     const bg = this.assets.get('campus');
+    if (this.model instanceof SurvivalGameModel && this.model.mode !== 'menu') {
+      const map = this.assets.get('campus-map'),
+        v = this.model.view,
+        world = this.model.world;
+      c.save();
+      c.fillStyle = '#253047';
+      c.fillRect(0, 0, w, h);
+      if (map)
+        c.drawImage(
+          map,
+          (v.x / world.width) * map.naturalWidth,
+          (v.y / world.height) * map.naturalHeight,
+          (v.width / world.width) * map.naturalWidth,
+          (v.height / world.height) * map.naturalHeight,
+          0,
+          0,
+          w,
+          h,
+        );
+      c.fillStyle = '#10192c66';
+      c.fillRect(0, 0, w, h);
+      c.restore();
+      return;
+    }
     c.save();
     c.fillStyle = '#172632';
     c.fillRect(0, 0, w, h);
@@ -1472,6 +1530,8 @@ export class CampusGame {
       c.restore();
       return;
     }
+    if (m instanceof SurvivalGameModel)
+      drawSurvivalZone(c, m.zone, view, m.player);
     if (m.skillTime > 0) {
       const d = m.department;
       for (const z of m.skillZones) {
@@ -1580,13 +1640,13 @@ export class CampusGame {
       grad.addColorStop(0.5, m.wallWarn ? '#ff617944' : '#ff3566aa');
       grad.addColorStop(1, '#ff346900');
       c.fillStyle = grad;
-      c.fillRect(x - 30, 0, 60, 800);
+      c.fillRect(x - 30, view.y, 60, view.height);
       c.strokeStyle = m.wallWarn ? '#ffbd8b' : '#ff6189';
       c.lineWidth = m.wallWarn ? 3 : 5;
       c.setLineDash(m.wallWarn ? [12, 12] : []);
       c.beginPath();
       c.moveTo(x, 0);
-      c.lineTo(x, 800);
+      c.lineTo(x, m.world.height);
       c.stroke();
       c.setLineDash([]);
       for (let y = 175; y < 780; y += 110)
@@ -1602,16 +1662,16 @@ export class CampusGame {
       const e = m.exam,
         active = e.time < 0.5;
       c.fillStyle = active ? '#f75a9ccc' : '#e4487930';
-      c.fillRect(e.x - 24, 0, 48, 800);
-      c.fillRect(0, e.y - 24, 1200, 48);
+      c.fillRect(e.x - 24, 0, 48, m.world.height);
+      c.fillRect(0, e.y - 24, m.world.width, 48);
       c.strokeStyle = active ? '#ffc5e5' : '#ee6288';
       c.lineWidth = 3;
       c.setLineDash(active ? [] : [12, 8]);
       c.beginPath();
       c.moveTo(e.x, 0);
-      c.lineTo(e.x, 800);
+      c.lineTo(e.x, m.world.height);
       c.moveTo(0, e.y);
-      c.lineTo(1200, e.y);
+      c.lineTo(m.world.width, e.y);
       c.stroke();
       c.setLineDash([]);
       this.text(
@@ -1771,6 +1831,35 @@ export class CampusGame {
           c.globalAlpha = 0.7;
         this.badge(m.chain[level].key, p.x, p.y, radius, true);
         c.restore();
+        if (m instanceof SurvivalGameModel)
+          drawBadgeBreakShield(
+            c,
+            p.x,
+            p.y,
+            radius,
+            Math.max(m.breakShieldTime, m.invulnerable),
+            reducedMotion,
+          );
+        if (
+          m instanceof SurvivalGameModel &&
+          Math.max(m.breakShieldTime, m.invulnerable) > 0
+        ) {
+          this.text(
+            m.breakShieldTime > 0 ? '无敌护盾' : '战斗无敌',
+            p.x,
+            p.y - radius - 44,
+            23,
+            '#edffff',
+          );
+        }
+        if (m instanceof SurvivalGameModel && m.hurtUntil > m.time)
+          this.text(
+            `−${m.lastHit}`,
+            p.x + 55,
+            p.y - radius - 30 - (0.5 - (m.hurtUntil - m.time)) * 60,
+            34,
+            '#ff6d80',
+          );
         this.text(`Lv.${level + 1}`, p.x, p.y + radius + 19, 15, '#e1ffad');
         this.circle(p.x, p.y, 3, '#ffffff', '#49526b', 1);
       }
@@ -1841,7 +1930,7 @@ export class CampusGame {
     }
     if (m.flash > 0 && !reducedMotion) {
       c.fillStyle = `rgba(220,205,255,${m.flash * 0.6})`;
-      c.fillRect(0, 0, 1200, 800);
+      c.fillRect(view.x, view.y, view.width, view.height);
     }
     if (m.bannerTime > 0) {
       c.save();
@@ -1861,7 +1950,9 @@ export class CampusGame {
     }
     const offscreenBoss = m.enemies.find((e) => e.boss);
     const cue =
-      offscreenBoss && this.touch ? bossEdgeCue(view, offscreenBoss) : null;
+      offscreenBoss && (this.touch || m instanceof SurvivalGameModel)
+        ? bossEdgeCue(view, offscreenBoss)
+        : null;
     if (cue && offscreenBoss?.boss) {
       c.save();
       c.translate(cue.x, cue.y);
@@ -1909,11 +2000,34 @@ export class CampusGame {
         '#beff97',
       );
     if (m.hp < 25) {
-      const grad = c.createRadialGradient(600, 400, 180, 600, 400, 670);
+      const cx = view.x + view.width / 2,
+        cy = view.y + view.height / 2;
+      const grad = c.createRadialGradient(
+        cx,
+        cy,
+        180,
+        cx,
+        cy,
+        Math.max(view.width, view.height) * 0.56,
+      );
       grad.addColorStop(0, '#b4001d00');
       grad.addColorStop(1, '#ca123d80');
       c.fillStyle = grad;
-      c.fillRect(0, 0, 1200, 800);
+      c.fillRect(view.x, view.y, view.width, view.height);
+    }
+    if (m instanceof SurvivalGameModel && m.mode === 'playing') {
+      const impact = Math.max(0, (m.hurtUntil - m.time) / 0.5);
+      const storm = Math.max(0, (m.stormPulseUntil - m.time) / 0.28);
+      if (impact > 0 || storm > 0) {
+        c.save();
+        c.strokeStyle =
+          impact > 0
+            ? `rgba(255,49,87,${0.85 * impact})`
+            : `rgba(255,136,70,${0.6 * storm})`;
+        c.lineWidth = impact > 0 ? 14 : 7;
+        c.strokeRect(view.x + 7, view.y + 7, view.width - 14, view.height - 14);
+        c.restore();
+      }
     }
     c.restore();
   }

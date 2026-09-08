@@ -1,3 +1,4 @@
+import type { ScoreMode } from './records';
 export interface PlayerIdentity {
   playerId: string;
   nickname: string;
@@ -93,12 +94,18 @@ export async function registerPlayer(
 const boards = new Map<string, { at: number; rows: LeaderboardRow[] }>();
 export async function getLeaderboard(
   department: string,
+  mode: ScoreMode = 'race',
 ): Promise<LeaderboardRow[]> {
-  const hit = boards.get(department);
+  const key = `${mode}:${department}`;
+  const hit = boards.get(key);
   if (hit && Date.now() - hit.at < 30_000) return hit.rows;
   const base = await leaderboardEndpoint();
   const data = await fetchJson<{ rows: LeaderboardRow[] }>(
-    base + '/api/leaderboard?department=' + encodeURIComponent(department),
+    base +
+      '/api/leaderboard?department=' +
+      encodeURIComponent(department) +
+      '&mode=' +
+      mode,
   );
   const limit = department === 'all' ? 20 : 10;
   if (!Array.isArray(data.rows)) throw new Error('榜单返回格式异常');
@@ -113,12 +120,17 @@ export async function getLeaderboard(
         Number.isSafeInteger(r.timeMs) &&
         r.timeMs > 0,
     );
-  boards.set(department, { at: Date.now(), rows });
+  boards.set(key, { at: Date.now(), rows });
   return rows;
 }
 export async function submitScore(
   identity: PlayerIdentity,
-  score: { departmentId: string; timeMs: number; version: string },
+  score: {
+    departmentId: string;
+    timeMs: number;
+    version: string;
+    mode?: ScoreMode;
+  },
 ) {
   const base = await leaderboardEndpoint();
   await fetchJson(base + '/api/scores', {
@@ -127,7 +139,12 @@ export async function submitScore(
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + identity.token,
     },
-    body: JSON.stringify({ ...score, won: true }),
+    body: JSON.stringify({
+      ...score,
+      mode: score.mode ?? 'race',
+      won: score.mode !== 'survival',
+      ended: true,
+    }),
   });
   boards.clear();
 }

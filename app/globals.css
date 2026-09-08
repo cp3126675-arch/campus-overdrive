@@ -1954,3 +1954,24 @@ a {
 .online-score-status {
   color: #bbd1e4;
 }
+
+/* Local survival candidate: two modes share the same combat surface. */
+.title-start.survival-start { background: linear-gradient(100deg,#4d264b,#512b32); color:#ffdab7; border-color:#b1786b; }
+.survival-rules-note { font-size:13px; line-height:1.65; color:#f0cab7; max-width:600px; padding:8px 12px; background:#271521b8; border-left:2px solid #bf7d69; margin:0 0 12px; }
+.hp-track { position:relative; }
+.survival-pressure { position:absolute; z-index:3; left:18px; bottom:112px; pointer-events:none; font-size:12px; color:#edd2ab; background:#181726de; padding:7px 10px; border-left:2px solid #b59669; border-radius:4px; }
+.survival-pressure span { display:block; color:#ad9aa6; margin-top:3px; font-size:11px; }.survival-pressure.is-exhausted { border-color:#ff7890; color:#ffabb3; background:#301622e8; }
+.survival-result-note { display:block; color:#e4b9a9; font-size:13px; line-height:1.6; margin:10px 0; }
+.touch-controls .survival-pressure { left:auto; right:18px; bottom:185px; padding:5px 7px; font-size:11px; }
+:where(.challenge[data-height-max-550='true']) .survival-rules-note { font-size:12px; line-height:1.4; padding:5px 8px; margin-bottom:6px; }
+
+:where(.challenge[data-height-max-550='true']) .title-menu { padding-top:32px; }
+:where(.challenge[data-height-max-550='true']) .title-actions .title-start { height:46px; font-size:17px; }
+:where(.challenge[data-height-max-550='true']) .title-actions { gap:5px; }
+
+.hp-panel.is-taking-damage { border-color:#ff506e; box-shadow:0 0 0 3px #ff506eaa,0 0 24px #ff315570; background:#4a1328ed; }
+.hp-panel.is-taking-damage .hp-track i { background:#ff607d; }
+
+.records-dialog { overflow-y:auto; overscroll-behavior:contain; touch-action:pan-y; }
+.records-dialog .records-tabs { flex-shrink:0; flex-wrap:wrap; gap:4px; }
+.records-dialog .records-scroll { flex:1 0 100px; }

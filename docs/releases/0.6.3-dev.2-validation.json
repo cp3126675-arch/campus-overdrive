@@ -1,0 +1,28 @@
+{
+  "version": "0.6.3-dev.2",
+  "status": "local only; not published",
+  "httpFiles": 246,
+  "zipSha256": "7afee8f4ac9b0e23faac33d458c1609d71479e5ec8cad83a031c6367c4837024",
+  "bytes": 10511094,
+  "oldArchivesUnchanged": [
+    "0.6.2",
+    "0.6.3-dev.1"
+  ],
+  "preview": "http://127.0.0.1:3001/",
+  "checks": {
+    "typeLintAssets": true,
+    "raceAndSurvivalRegression": true,
+    "staticExport": true,
+    "productionBuild": true,
+    "visualAndPhoneQA": false
+  },
+  "simulation": {
+    "method": "Deterministic heuristic bot: seek in-zone drops, move toward safety, avoid nearby threats, merge and use skills. Does not predict AoE; not a human balance or FPS test.",
+    "runs": 378,
+    "min": 285.3,
+    "median": 352.7,
+    "max": 521.4,
+    "inTargetWindow": 210,
+    "allEnded": true
+  }
+}

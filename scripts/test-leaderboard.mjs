@@ -200,8 +200,104 @@ try {
     70000,
     'department best retained after another-department win',
   );
+  const raceBefore = JSON.stringify(
+    (await request('/api/leaderboard')).data.rows,
+  );
+  for (let i = 0; i < players.length; i++) {
+    assert.equal(
+      (
+        await request(
+          '/api/scores',
+          {
+            mode: 'survival',
+            departmentId: 'd001',
+            timeMs: 300000 + i * 1000,
+            version: '0.6.3',
+            ended: true,
+            won: false,
+          },
+          players[i].token,
+        )
+      ).status,
+      200,
+    );
+  }
+  const survivalBoard = async (scope = 'all') =>
+    (await request('/api/leaderboard?mode=survival&department=' + scope)).data
+      .rows;
+  let longest = await survivalBoard();
+  assert.equal(longest.length, 20);
+  assert.equal(longest[0].timeMs, 324000);
+  assert.equal((await survivalBoard('d001')).length, 10);
+  for (const bad of [
+    { mode: 'unknown' },
+    { mode: 'survival', ended: false },
+    { mode: 'survival', won: true },
+  ]) {
+    assert.equal(
+      (
+        await request(
+          '/api/scores',
+          {
+            mode: 'survival',
+            departmentId: 'd001',
+            timeMs: 500000,
+            version: '0.6.3',
+            ended: true,
+            won: false,
+            ...bad,
+          },
+          owner.token,
+        )
+      ).status,
+      400,
+    );
+  }
+  assert.equal((await request('/api/leaderboard?mode=unknown')).status, 400);
+  await Promise.all(
+    [400000, 500000, 420000, 450000].map((timeMs) =>
+      request(
+        '/api/scores',
+        {
+          mode: 'survival',
+          departmentId: 'd001',
+          timeMs,
+          version: '0.6.3',
+          ended: true,
+          won: false,
+        },
+        owner.token,
+      ),
+    ),
+  );
+  assert.equal((await survivalBoard())[0].timeMs, 500000);
+  await request(
+    '/api/scores',
+    {
+      mode: 'survival',
+      departmentId: 'd002',
+      timeMs: 510000,
+      version: '0.6.3',
+      ended: true,
+      won: false,
+    },
+    owner.token,
+  );
+  longest = await survivalBoard();
+  assert.equal(longest[0].departmentId, 'd002');
+  assert.equal(
+    longest.filter((row) => row.playerId === owner.playerId).length,
+    1,
+  );
+  assert.equal((await survivalBoard('d001'))[0].timeMs, 500000);
+  assert.equal(
+    JSON.stringify((await request('/api/leaderboard')).data.rows),
+    raceBefore,
+    'survival writes must not touch race scores',
+  );
+  assert(!JSON.stringify(longest).includes('token'));
   console.log(
-    'Leaderboard HTTP + real local D1 passed: 25 players, department top10, global top20, unique player best, concurrent monotonic upserts, CORS, authentication, validation and bounded responses.',
+    'Dual-mode leaderboard HTTP + real local D1 passed: descending survival and ascending race are isolated; 25 players, department top10, global top20, unique player best, concurrent monotonic upserts, CORS, authentication, validation and bounded responses.',
   );
 } finally {
   if (worker && worker.exitCode === null) {

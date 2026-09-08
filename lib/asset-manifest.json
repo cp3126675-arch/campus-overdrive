@@ -1413,6 +1413,13 @@
     "sourceSha256": "52354dd465d07327a69e87779c4721bd765f6335633358c887b3bf1e64ff0648",
     "sha256": "d7eed3691198cab5f635ac0a4e57b7a94b1ff8877b0bc62289f0d88190d43c84"
   },
+  "/art/tsinghua-campus-map.jpg": {
+    "file": "/optimized/b500552af076bc808c12.webp",
+    "bytes": 128740,
+    "originalBytes": 840627,
+    "sourceSha256": "ca87bbe91a1c9a36d983f194f72bdee91365be1c0513b1182bcfe3acc9f35d32",
+    "sha256": "b500552af076bc808c12fc94e3653d001fbc96e4de3a5089f5f563e5b6995c2a"
+  },
   "/art/tsinghua-gate-1280.jpg": {
     "file": "/optimized/ef6e617b86d810007f74.webp",
     "bytes": 200142,

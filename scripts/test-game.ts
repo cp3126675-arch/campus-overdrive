@@ -1982,6 +1982,26 @@ try {
   });
   assert.equal(client.readIdentity(), null);
   assert.equal(client.persistIdentity(clientIdentity), false);
+  const beforeMode = boardRequests;
+  await client.getLeaderboard('all', 'survival');
+  await client.getLeaderboard('all', 'survival');
+  assert.equal(
+    boardRequests,
+    beforeMode + 1,
+    'mode-specific cache, no race cache reuse',
+  );
+  await client.submitScore(clientIdentity, {
+    mode: 'survival',
+    departmentId: 'd001',
+    timeMs: 300000,
+    version: '0.6.3',
+  });
+  assert.equal((postedScore as Record<string, unknown> | null)?.won, false);
+  assert.equal((postedScore as Record<string, unknown> | null)?.ended, true);
+  assert.equal(
+    (postedScore as Record<string, unknown> | null)?.mode,
+    'survival',
+  );
 } finally {
   for (const [name, descriptor] of clientGlobals) {
     if (descriptor) Object.defineProperty(globalThis, name, descriptor);
@@ -1990,4 +2010,70 @@ try {
 }
 console.log(
   'v0.6.2: leaderboard client 10/20 limits, 30-second cache, authenticated score submission, cache invalidation, timeout retry and unavailable identity storage passed.',
+);
+
+// v0.6.3: local survival ranking is descending and stored independently.
+{
+  let survival = emptyRecordBook();
+  for (let i = 1; i <= 30; i++)
+    survival = addRecord(
+      survival,
+      { ...makeRecord(100 + i, i * 1000), mode: 'survival' },
+      recordDepartments,
+      'survival',
+    );
+  assert.equal(survival.departments.d001.length, 10);
+  assert.equal(survival.overall.length, 20);
+  assert.equal(survival.overall[0].timeMs, 30000);
+  assert.equal(survival.overall[19].timeMs, 11000);
+  assert.deepEqual(
+    readRecordBook(JSON.stringify(survival), recordDepartments, 'survival'),
+    survival,
+  );
+  assert.equal(
+    readRecordBook(JSON.stringify(survival), recordDepartments).overall.length,
+    0,
+  );
+  assert.equal(
+    readRecordBook(JSON.stringify(recordBook), recordDepartments, 'survival')
+      .overall.length,
+    0,
+  );
+  const store = new Map<string, string>();
+  const storage = {
+    getItem: (key: string) => store.get(key) ?? null,
+    setItem: (key: string, value: string) => {
+      store.set(key, value);
+    },
+  };
+  saveRecord(
+    storage,
+    emptyRecordBook(),
+    makeRecord(200, 10000),
+    recordDepartments,
+  );
+  saveRecord(
+    storage,
+    emptyRecordBook(),
+    { ...makeRecord(201, 300000), mode: 'survival' },
+    recordDepartments,
+    'survival',
+  );
+  assert.equal(store.size, 2);
+  assert.equal(
+    readRecordBook(store.get('campus-records-v1')!, recordDepartments)
+      .overall[0].timeMs,
+    10000,
+  );
+  assert.equal(
+    readRecordBook(
+      store.get('campus-survival-records-v1')!,
+      recordDepartments,
+      'survival',
+    ).overall[0].timeMs,
+    300000,
+  );
+}
+console.log(
+  'v0.6.3: independent survival storage, descending top10/top20 and race isolation passed.',
 );

@@ -12,6 +12,11 @@ class ApiError extends Error {
     super(message);
   }
 }
+function scoreMode(value: unknown) {
+  if (value === undefined || value === null || value === 'race') return 'race';
+  if (value === 'survival') return 'survival';
+  throw new ApiError(400, '游戏模式无效');
+}
 const json = (value: unknown, status = 200) => Response.json(value, { status });
 async function tokenHash(token: string) {
   return [
@@ -70,7 +75,7 @@ async function player(request: Request, env: Env) {
 export async function route(request: Request, env: Env) {
   const url = new URL(request.url);
   if (request.method === 'GET' && url.pathname === '/api/health')
-    return json({ ok: true });
+    return json({ ok: true, modes: ['race', 'survival'], schema: 2 });
   if (request.method === 'POST' && url.pathname === '/api/player') {
     const data = await body(request);
     const nickname =
@@ -95,6 +100,9 @@ export async function route(request: Request, env: Env) {
     return json({ playerId: id, token, nickname }, 201);
   }
   if (request.method === 'GET' && url.pathname === '/api/leaderboard') {
+    const mode = scoreMode(url.searchParams.get('mode'));
+    const prefix = mode === 'survival' ? 'survival_' : '';
+    const direction = mode === 'survival' ? 'DESC' : 'ASC';
     const department = url.searchParams.get('department') || 'all';
     if (department !== 'all' && !known.has(department))
       throw new ApiError(400, '院系无效');
@@ -104,11 +112,11 @@ export async function route(request: Request, env: Env) {
       department === 'all'
         ? env.DB.prepare(
             select +
-              'overall_best b JOIN players p ON p.id = b.player_id ORDER BY b.time_ms, b.completed_at, b.player_id LIMIT 20',
+              `${prefix}overall_best b JOIN players p ON p.id = b.player_id ORDER BY b.time_ms ${direction}, b.completed_at, b.player_id LIMIT 20`,
           )
         : env.DB.prepare(
             select +
-              'best_runs b JOIN players p ON p.id = b.player_id WHERE b.department_id = ?1 ORDER BY b.time_ms, b.completed_at, b.player_id LIMIT 10',
+              `${prefix}best_runs b JOIN players p ON p.id = b.player_id WHERE b.department_id = ?1 ORDER BY b.time_ms ${direction}, b.completed_at, b.player_id LIMIT 10`,
           ).bind(department);
     const rows = await query.all();
     return json({ rows: rows.results });
@@ -116,21 +124,31 @@ export async function route(request: Request, env: Env) {
   if (request.method === 'POST' && url.pathname === '/api/scores') {
     const owner = await player(request, env);
     const data = await body(request);
+    const mode = scoreMode(data.mode);
+    const prefix = mode === 'survival' ? 'survival_' : '';
+    const comparison = mode === 'survival' ? '>' : '<';
     if (
       !known.has(data.departmentId) ||
       !Number.isSafeInteger(data.timeMs) ||
       data.timeMs < 1000 ||
       data.timeMs > 604800000 ||
-      data.won !== true ||
+      (mode === 'race'
+        ? data.won !== true
+        : data.ended !== true || data.won !== false) ||
       typeof data.version !== 'string' ||
       !/^\d+\.\d+\.\d+$/.test(data.version)
     )
-      throw new ApiError(400, '只接受有效的完整通关成绩');
+      throw new ApiError(
+        400,
+        mode === 'survival'
+          ? '只接受有效的生存结算成绩'
+          : '只接受有效的完整通关成绩',
+      );
     const now = Date.now();
     await env.DB.batch(
-      ['best_runs', 'overall_best'].map((table) =>
+      [`${prefix}best_runs`, `${prefix}overall_best`].map((table) =>
         env.DB.prepare(
-          `INSERT INTO ${table}(player_id, department_id, time_ms, completed_at, version) VALUES (?1, ?2, ?3, ?4, ?5) ON CONFLICT(${table === 'best_runs' ? 'player_id, department_id' : 'player_id'}) DO UPDATE SET department_id=excluded.department_id, time_ms=excluded.time_ms, completed_at=excluded.completed_at, version=excluded.version WHERE excluded.time_ms < ${table}.time_ms`,
+          `INSERT INTO ${table}(player_id, department_id, time_ms, completed_at, version) VALUES (?1, ?2, ?3, ?4, ?5) ON CONFLICT(${table.endsWith('best_runs') ? 'player_id, department_id' : 'player_id'}) DO UPDATE SET department_id=excluded.department_id, time_ms=excluded.time_ms, completed_at=excluded.completed_at, version=excluded.version WHERE excluded.time_ms ${comparison} ${table}.time_ms`,
         ).bind(owner.id, data.departmentId, data.timeMs, now, data.version),
       ),
     );
