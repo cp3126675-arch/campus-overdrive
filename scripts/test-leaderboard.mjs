@@ -296,6 +296,95 @@ try {
     'survival writes must not touch race scores',
   );
   assert(!JSON.stringify(longest).includes('token'));
+  // A nickname belongs to the player, never to a copied score row.
+  const paths = [
+    '/api/leaderboard',
+    '/api/leaderboard?department=d001',
+    '/api/leaderboard?mode=survival',
+    '/api/leaderboard?mode=survival&department=d001',
+  ];
+  const beforeRename = await Promise.all(
+    paths.map(async (path) => (await request(path)).data.rows),
+  );
+  assert.equal(
+    (await request('/api/player/nickname', { nickname: '冒名' })).status,
+    401,
+  );
+  assert.equal(
+    (
+      await request(
+        '/api/player/nickname',
+        { nickname: '冒名' },
+        '0'.repeat(64),
+      )
+    ).status,
+    401,
+  );
+  for (const nickname of ['', ' '.repeat(3), 'a'.repeat(17), '非法\n昵称'])
+    assert.equal(
+      (await request('/api/player/nickname', { nickname }, owner.token)).status,
+      400,
+    );
+  const renamed = await request(
+    '/api/player/nickname',
+    { nickname: '  清人123456  ', playerId: 'someone-else' },
+    owner.token,
+  );
+  assert.equal(renamed.status, 200);
+  assert.deepEqual(renamed.data, {
+    playerId: owner.playerId,
+    nickname: '清人123456',
+  });
+  assert(!JSON.stringify(renamed.data).includes('token'));
+  for (const [i, path] of paths.entries()) {
+    const after = (await request(path)).data.rows;
+    assert.deepEqual(
+      after,
+      beforeRename[i].map((row) =>
+        row.playerId === owner.playerId
+          ? { ...row, nickname: '清人123456' }
+          : row,
+      ),
+    );
+    assert(
+      after.some((row) => row.playerId === owner.playerId),
+      'owner remains ranked',
+    );
+  }
+  assert.equal(
+    (
+      await request(
+        '/api/player/nickname',
+        { nickname: '燕人654321' },
+        owner.token,
+      )
+    ).status,
+    200,
+  );
+  assert.equal(
+    (
+      await request(
+        '/api/player/nickname',
+        { nickname: '燕人654321' },
+        owner.token,
+      )
+    ).status,
+    200,
+    'retry is idempotent with same identity',
+  );
+  assert.equal(
+    (
+      await request(
+        '/api/player/nickname',
+        { nickname: 'e\u0301' },
+        owner.token,
+      )
+    ).data.nickname,
+    'é',
+  );
+  console.log(
+    'Nickname edits passed: authenticated owner only, validation, Unicode normalization, old scores in both modes and scopes keep identity/time/rank and immediately show new name; repeat rename uses original token.',
+  );
   console.log(
     'Dual-mode leaderboard HTTP + real local D1 passed: descending survival and ascending race are isolated; 25 players, department top10, global top20, unique player best, concurrent monotonic upserts, CORS, authentication, validation and bounded responses.',
   );

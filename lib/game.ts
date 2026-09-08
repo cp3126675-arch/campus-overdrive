@@ -45,6 +45,8 @@ interface ToolContext {
 }
 export class CampusGame {
   model: GameModel = new GameModel();
+  nickname = '';
+  editingNickname = false;
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
   private emit: (s: Snapshot) => void;
@@ -285,6 +287,7 @@ export class CampusGame {
     } catch {}
   }
   private keydown = (e: KeyboardEvent) => {
+    if (this.editingNickname) return;
     if (this.model.orientationBlocked) return;
     const tag = (e.target as HTMLElement)?.tagName;
     if (['INPUT', 'TEXTAREA', 'SELECT'].includes(tag)) return;
@@ -1860,6 +1863,21 @@ export class CampusGame {
             34,
             '#ff6d80',
           );
+        if (this.nickname) {
+          c.save();
+          c.font = '600 14px sans-serif';
+          const width = Math.min(240, c.measureText(this.nickname).width + 20);
+          const y = p.y - radius - 18;
+          c.fillStyle = '#111b30d9';
+          c.beginPath();
+          roundRect(c, p.x - width / 2, y - 13, width, 25, 8);
+          c.fill();
+          c.textAlign = 'center';
+          c.textBaseline = 'middle';
+          c.fillStyle = '#ffffff';
+          c.fillText(this.nickname, p.x, y, width - 12);
+          c.restore();
+        }
         this.text(`Lv.${level + 1}`, p.x, p.y + radius + 19, 15, '#e1ffad');
         this.circle(p.x, p.y, 3, '#ffffff', '#49526b', 1);
       }

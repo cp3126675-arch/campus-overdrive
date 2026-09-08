@@ -2014,3 +2014,15 @@ a {
 :where(.challenge[data-layout='portrait']) .records-body { display: flex; flex-direction: column; }
 :where(.challenge[data-layout='portrait']) .records-controls { max-height: 40%; }
 :where(.challenge[data-layout='portrait']) .records-scroll { flex: 1; }
+
+.player-name-button { max-width: 180px; }
+.player-name-button span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.player-name-dialog { width: min(460px, calc(100% - 24px)); max-width: min(460px, calc(100% - 24px)); max-height: calc(var(--game-vh) * 100 - 24px); overflow: auto; touch-action: pan-y; background: #142035; color: #f4f1e8; }
+.player-name-dialog [data-slot='dialog-description'], .player-name-dialog small { color: #b7c5db; }
+.player-name-dialog form { display: flex; flex-direction: column; gap: 10px; }
+.player-name-dialog input { width: 100%; min-height: 44px; padding: 8px 12px; border: 1px solid #72839f; border-radius: 8px; background: #1d2c46; color: white; font-size: 16px; }
+.player-name-actions { display: flex; gap: 10px; }
+.player-name-actions > button { flex: 1; min-height: 42px; }
+.player-name-dialog output { font-size: 13px; }
+:where(.challenge[data-height-max-550='true']) .player-name-dialog { gap: 8px; padding: 12px; }
+:where(.challenge[data-height-max-550='true']) .player-name-button { max-width: 130px; }
