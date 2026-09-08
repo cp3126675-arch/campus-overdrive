@@ -65,6 +65,22 @@ export class SurvivalGameModel extends GameModel {
     this.notify('期末周（生存） · 徽章破碎会降阶 · 合成 +20 精力', 7);
     this.broadcast = '安全区即将收缩。徽章就是你的命，合成才能继续撑下去。';
   }
+  override courseAttackInterval(enemy: Enemy) {
+    const rate = Math.min(
+      1.5,
+      1 + Math.max(0, Math.floor((this.time - 150) / 30)) * 0.125,
+    );
+    return super.courseAttackInterval(enemy) / rate;
+  }
+  override get courseProjectileSpeed() {
+    return (
+      145 + Math.min(115, Math.max(0, Math.floor((this.time - 120) / 30)) * 23)
+    );
+  }
+  override get courseBatchSize() {
+    if (!this.bossSpawned) return super.courseBatchSize;
+    return 1 + Math.min(2, Math.max(0, Math.floor((this.time - 150) / 30)));
+  }
   override get nextBossLevel() {
     return 0;
   }
@@ -89,14 +105,17 @@ export class SurvivalGameModel extends GameModel {
   get breakShieldTime() {
     return Math.max(0, this.shieldUntil - this.time);
   }
-  override damage(amount: number) {
+  override damage(amount: number, source: 'course' | 'boss' = 'course') {
     if (
       this.breakShieldTime > 0 ||
       this.invulnerable > 0 ||
       this.mode !== 'playing'
     )
       return;
-    const scaled = Math.ceil(amount * survivalScaling(this.time).damage);
+    const scaling = survivalScaling(this.time);
+    const scaled = Math.ceil(
+      amount * (source === 'boss' ? scaling.bossDamage : scaling.damage),
+    );
     this.lastHit =
       this.skillTime > 0 && this.department.kind === 'guard'
         ? Math.ceil(scaled * 0.55)
@@ -165,7 +184,9 @@ export class SurvivalGameModel extends GameModel {
       );
       this.bossMax = enemy.maxHp;
     } else
-      enemy.maxHp = Math.round(enemy.maxHp * (1 + this.bossesDefeated * 0.07));
+      enemy.maxHp = Math.round(
+        enemy.maxHp * (1 + this.bossesDefeated * 0.07) * scaling.courseHp,
+      );
     enemy.hp = enemy.maxHp;
     return enemy;
   }

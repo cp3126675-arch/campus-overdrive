@@ -427,6 +427,15 @@ export class GameModel {
   get phase() {
     return this.bossSpawned ? 2 : this.waveTime >= 25 ? 1 : 0;
   }
+  courseAttackInterval(enemy: Enemy): number {
+    return enemy.year === 4 ? 5.8 : 7.2;
+  }
+  get courseProjectileSpeed() {
+    return 145;
+  }
+  get courseBatchSize() {
+    return this.phase === 2 ? 1 : Math.min(4, 1 + this.round);
+  }
   get nextBossLevel(): number | null {
     return BOSS_LEVELS[this.bossesDefeated] ?? null;
   }
@@ -871,7 +880,7 @@ export class GameModel {
     );
     this.events.push('credit');
   }
-  damage(amount: number) {
+  damage(amount: number, _source: 'course' | 'boss' = 'course') {
     if (this.invulnerable > 0 || this.mode !== 'playing') return;
     if (this.skillTime > 0 && this.department.kind === 'guard')
       amount = Math.ceil(amount * 0.55);
@@ -1649,7 +1658,7 @@ export class GameModel {
     }
     this.spawnClock -= dt;
     if (this.spawnClock <= 0 && this.enemies.length < 65) {
-      const count = this.phase === 2 ? 1 : Math.min(4, 1 + this.round);
+      const count = this.courseBatchSize;
       for (let i = 0; i < count; i++)
         this.spawnEnemy(
           this.round > 1 && this.rng() < 0.15 ? 'clock' : 'paper',
@@ -1680,7 +1689,8 @@ export class GameModel {
       e.x += ((this.player.x - e.x) / d) * speed * dt;
       e.y += ((this.player.y - e.y) / d) * speed * dt;
       e.hit = Math.max(0, e.hit - dt);
-      if (d < e.r + 17) this.damage(e.damage);
+      if (d < e.r + 17)
+        this.damage(e.damage, e.kind === 'boss' ? 'boss' : 'course');
       if (e.kind !== 'boss' && e.year >= 3 && d < 390) {
         e.attackClock -= dt;
         if (e.attackClock <= 0) {
@@ -1690,8 +1700,8 @@ export class GameModel {
             this.shots.push({
               x: e.x,
               y: e.y,
-              vx: Math.cos(a) * 145,
-              vy: Math.sin(a) * 145,
+              vx: Math.cos(a) * this.courseProjectileSpeed,
+              vy: Math.sin(a) * this.courseProjectileSpeed,
               life: 2.5,
               damage: e.damage,
               enemy: true,
@@ -1701,7 +1711,7 @@ export class GameModel {
               glyph: e.year === 4 ? '毕' : '考',
             });
           }
-          e.attackClock = e.year === 4 ? 5.8 : 7.2;
+          e.attackClock = this.courseAttackInterval(e);
         }
       }
     }
@@ -1767,7 +1777,7 @@ export class GameModel {
       s.y += s.vy * dt;
       if (s.enemy) {
         if (distance(s, this.player) < 22) {
-          this.damage(s.damage);
+          this.damage(s.damage, s.bossSkin ? 'boss' : 'course');
           s.life = 0;
         }
       } else
@@ -1980,7 +1990,7 @@ export class GameModel {
     for (const h of this.hazards) {
       const old = h.age;
       h.age += dt;
-      if (hazardHits(h, this.player)) this.damage(h.damage);
+      if (hazardHits(h, this.player)) this.damage(h.damage, 'boss');
       if (
         boss?.boss === 'bike' &&
         h.label === '车王冲刺终点' &&
