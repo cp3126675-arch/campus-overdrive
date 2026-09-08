@@ -1,6 +1,6 @@
 # 项目文档导航
 
-**从 [游戏设计与长期开发文档（GDD 1.20）](游戏设计与长期开发文档.md) 开始。** 它是长期项目的统一入口，以已公开 v0.6.8 为当前基线，上一公开版 v0.6.7 可回滚，包含当前玩法、后续计划和完整内容附录。
+**从 [游戏设计与长期开发文档（GDD 1.21）](游戏设计与长期开发文档.md) 开始。** 它是长期项目的统一入口，以已公开 v0.6.9 为当前基线，上一公开版 v0.6.8 可回滚，包含当前玩法、后续计划和完整内容附录。
 
 |资料|用途|维护方式|
 |---|---|---|
@@ -46,3 +46,5 @@
 - [v0.6.7验证](releases/0.6.7-validation.md) · [部署回执](releases/0.6.7-deployment.json) · [生产API验证](releases/0.6.7-api-validation.json) · [全院系模拟](releases/0.6.7-balance-all.json)
 
 - [v0.6.8验证](releases/0.6.8-validation.md) · [部署回执](releases/0.6.8-deployment.json) · [全院系模拟](releases/0.6.8-balance-all.json)
+
+- [v0.6.9验证](releases/0.6.9-validation.md) · [部署回执](releases/0.6.9-deployment.json) · [高清地图校验](releases/0.6.9-map-validation.json)
