@@ -1815,9 +1815,11 @@ a {
 
 /* Records are mounted only when opened, never drawn inside the battle canvas. */
 .records-dialog {
-  width: min(720px, calc(100% - 32px));
-  max-width: min(720px, calc(100% - 32px));
-  max-height: calc(var(--game-vh) * 88);
+  width: min(1080px, calc(100% - 24px));
+  max-width: min(1080px, calc(100% - 24px));
+  height: min(860px, calc(var(--game-vh) * 100 - 24px));
+  max-height: calc(var(--game-vh) * 100 - 24px);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -1850,9 +1852,31 @@ a {
   color: white;
   font-size: 16px;
 }
+.records-body {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 20px;
+  flex: 1;
+  min-height: 0;
+}
+.records-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+}
+.records-controls > * { flex-shrink: 0; }
+.records-controls .records-tabs { flex-direction: column; gap: 4px; }
+.records-controls .records-filter { flex-direction: column; align-items: stretch; }
+.records-controls .records-identity form { flex-direction: column; align-items: stretch; }
+.records-controls .records-footnote { margin-top: auto; }
 .records-scroll {
   overflow: auto;
-  min-height: 40px;
+  min-width: 0;
+  min-height: 0;
   overscroll-behavior: contain;
   touch-action: pan-y;
 }
@@ -1863,7 +1887,8 @@ a {
 }
 .records-scroll th,
 .records-scroll td {
-  padding: 9px 5px;
+  padding: 6px 8px;
+  line-height: 20px;
   text-align: left;
   border-bottom: 1px solid #ffffff18;
 }
@@ -1972,6 +1997,20 @@ a {
 .hp-panel.is-taking-damage { border-color:#ff506e; box-shadow:0 0 0 3px #ff506eaa,0 0 24px #ff315570; background:#4a1328ed; }
 .hp-panel.is-taking-damage .hp-track i { background:#ff607d; }
 
-.records-dialog { overflow-y:auto; overscroll-behavior:contain; touch-action:pan-y; }
-.records-dialog .records-tabs { flex-shrink:0; flex-wrap:wrap; gap:4px; }
-.records-dialog .records-scroll { flex:1 0 100px; }
+/* Use the logical game dimensions so forced landscape gets the same layout. */
+:where(.challenge[data-height-max-550='true']) .records-dialog {
+  width: calc(100% - 16px);
+  max-width: 1080px;
+  height: calc(var(--game-vh) * 100 - 16px);
+  max-height: calc(var(--game-vh) * 100 - 16px);
+  padding: 10px 12px;
+  gap: 6px;
+}
+:where(.challenge[data-height-max-550='true']) .records-body { grid-template-columns: 190px minmax(0, 1fr); gap: 12px; }
+:where(.challenge[data-height-max-550='true']) .records-controls { gap: 8px; }
+:where(.challenge[data-height-max-550='true']) .records-heading h2 { font-size: 17px; }
+:where(.challenge[data-height-max-550='true']) .records-scroll th,
+:where(.challenge[data-height-max-550='true']) .records-scroll td { padding: 5px 6px; }
+:where(.challenge[data-layout='portrait']) .records-body { display: flex; flex-direction: column; }
+:where(.challenge[data-layout='portrait']) .records-controls { max-height: 40%; }
+:where(.challenge[data-layout='portrait']) .records-scroll { flex: 1; }
