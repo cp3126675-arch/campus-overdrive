@@ -1,0 +1,15 @@
+{
+  "version": "0.6.2",
+  "status": "production API validated; frontend release pending",
+  "workerVersionId": "3ab33e2b-d0b9-4161-a893-7009f584fe7b",
+  "databaseName": "campus-overdrive-scores",
+  "databaseId": "d6837603-9c50-46cd-9d4d-b1b9b473a577",
+  "migration": "0001_scores.sql",
+  "frontendReleased": false,
+  "networkObservation": "Initial workers.dev DNS/TLS failed on the current network. Pages Functions API returned HTTP 200 both with the configured connection and direct connection. No phone-specific verification yet.",
+  "initialWorkerUrl": "https://campus-overdrive-leaderboard.campus-overdrive.workers.dev",
+  "serviceUrl": "https://campus-overdrive-scores.pages.dev",
+  "pagesProject": "campus-overdrive-scores",
+  "pagesDeploymentUrl": "https://8d172d87.campus-overdrive-scores.pages.dev",
+  "productionValidation": "0.6.2-api-validation.json"
+}

@@ -72,3 +72,11 @@ npm run build
 ## v0.6.0 资源与配乐维护
 
 [v0.6.0 Release](https://github.com/cp3126675-arch/campus-overdrive/releases/tag/v0.6.0) 已公开，线上 244 个文件与封存包哈希一致；OPPO 微信真机待复验。图片原件在 `public/art`、`public/badges`；`npm run assets:optimize` 生成带内容哈希的 WebP 与清单，`npm run check:assets` 校验原图/压缩图一致和体积预算。静态导出只交付压缩图，源码不删除原图。配乐接入与署名边界见 [PR #1 记录](docs/contributions/PR-1-配乐接入.md)。
+
+## v0.6.1 修复候选
+
+横屏手机和平板摇杆采用统一输入模式，首页与暂停菜单可选择“自动／触控／键鼠”。已完成本地检查与构建，线上仍为 v0.6.0；见 [验证与发布状态](docs/releases/0.6.1-validation.md)。
+
+## v0.6.2 全服排行榜候选
+
+昵称参榜，院系前10名、总榜前20名，每名玩家只按最佳成绩排名；本机历史和个人最佳单独保留。使用独立 Cloudflare Pages Functions + D1，前端继续在 GitHub Pages。生产 API 已部署并验收，GitHub 游戏发布待完成，线上仍为 v0.6.0。[部署说明](docs/全服排行榜部署.md)

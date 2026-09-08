@@ -1,6 +1,3 @@
-export const TOUCH_QUERY = '(pointer: coarse) and (hover: none)';
-export const usesTouchControls = (coarse: boolean, hover: boolean) =>
-  coarse && !hover;
 // Logical coordinates are measured before the optional 90-degree CSS rotation.
 export function stagePoint(
   rect: { left: number; top: number; right: number },
@@ -47,8 +44,8 @@ export function bossEdgeCue(
   );
   return { x, y, angle: Math.atan2(boss.y - y, boss.x - x) };
 }
-export async function requestLandscape() {
-  if (!window.matchMedia(TOUCH_QUERY).matches) return;
+export async function requestLandscape(touchControls: boolean) {
+  if (!touchControls) return;
   try {
     if (
       !document.fullscreenElement &&

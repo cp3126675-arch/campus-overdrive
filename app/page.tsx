@@ -1,6 +1,12 @@
 /* eslint-disable next/no-img-element -- Original badge assets are also served by the standalone static export. */
 'use client';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   Play,
   Pause,
@@ -15,12 +21,18 @@ import {
   ChevronRight,
   BookOpen,
 } from 'lucide-react';
-import { requestLandscape, TOUCH_QUERY } from '@/lib/mobile-display';
+import { requestLandscape } from '@/lib/mobile-display';
+import { useGameInput } from '@/hooks/use-game-input';
+import { type InputMode } from '@/lib/input-mode';
 import release from '@/public/version.json';
 import { assetUrl } from '@/lib/asset-url';
 import { DEPARTMENTS, department, SKILL_RULES } from '@/lib/departments';
 import { YEAR_NAMES } from '@/lib/textbooks';
 import { badgeWeapon } from '@/lib/badge-weapons';
+import { useOnlineScores } from '@/hooks/use-online-scores';
+import { useRecords } from '@/hooks/use-records';
+import { GameRecords } from '@/components/game-records';
+import { formatRecordTime } from '@/lib/records';
 import { GameJoystick } from '@/components/game-joystick';
 import { Button } from '@/components/ui/button';
 import {
@@ -45,13 +57,21 @@ export default function Home() {
   const canvas = useRef<HTMLCanvasElement>(null);
   const game = useRef<CampusGame | null>(null);
   const [snap, setSnap] = useState<Snapshot>(initialSnapshot);
+  const {
+    book: records,
+    result: recordResult,
+    beginRun,
+    latestWin,
+  } = useRecords(snap);
+  const onlineScores = useOnlineScores(latestWin);
+  const [recordsOpen, setRecordsOpen] = useState(false);
   const [departmentId, setDepartmentId] = useState('d041');
   const [query, setQuery] = useState('');
   const [ready, setReady] = useState(false);
   const [assetError, setAssetError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadProgress, setLoadProgress] = useState({ done: 0, total: 0 });
-  const [touchControls, setTouchControls] = useState(false);
+  const { mode: inputMode, touch: touchControls, changeMode } = useGameInput();
   const [launching, setLaunching] = useState(false);
   const [launchError, setLaunchError] = useState(false);
   const launchPending = useRef(false);
@@ -73,16 +93,6 @@ export default function Home() {
     if (!canvas.current) return;
     const g = new CampusGame(canvas.current, setSnap);
     game.current = g;
-    const controls = window.matchMedia(TOUCH_QUERY);
-    const syncControls = () => setTouchControls(controls.matches);
-    syncControls();
-    if (controls.addEventListener)
-      controls.addEventListener('change', syncControls);
-    else {
-      // Legacy embedded browsers expose only the older media-query listener API.
-      // oxlint-disable-next-line typescript/no-deprecated
-      controls.addListener(syncControls);
-    }
     g.load((done, total) => {
       if (game.current === g) setLoadProgress({ done, total });
     })
@@ -99,12 +109,6 @@ export default function Home() {
         }
       });
     return () => {
-      if (controls.removeEventListener)
-        controls.removeEventListener('change', syncControls);
-      else {
-        // oxlint-disable-next-line typescript/no-deprecated
-        controls.removeListener(syncControls);
-      }
       g.destroy();
       game.current = null;
     };
@@ -112,6 +116,23 @@ export default function Home() {
   useEffect(() => {
     if (menu && menuStep === 'major') selectionHeading.current?.focus();
   }, [menu, menuStep]);
+  useLayoutEffect(() => {
+    game.current?.setTouchControls(touchControls);
+  }, [touchControls]);
+  const inputPicker = (id: string) => (
+    <label className="input-mode-picker" htmlFor={id}>
+      操作方式
+      <select
+        id={id}
+        value={inputMode}
+        onChange={(e) => changeMode(e.target.value as InputMode)}
+      >
+        <option value="auto">自动</option>
+        <option value="touch">触控</option>
+        <option value="keyboard">键鼠</option>
+      </select>
+    </label>
+  );
   const movePlayer = useCallback(
     (x: number, y: number) => game.current?.setMove(x, y),
     [],
@@ -123,10 +144,12 @@ export default function Home() {
     setLaunching(true);
     setLaunchError(false);
     setHelpOpen(false);
-    void requestLandscape();
+    setRecordsOpen(false);
+    void requestLandscape(touchControls);
     try {
       const missing = await g.prepareDepartment(selected.id);
       if (game.current !== g) return;
+      beginRun(selected.id);
       g.start(selected.profile, selected.badge, selected.id);
       if (missing.length) g.model.notify('部分图片暂未载入，已启用备用显示', 4);
       setMenuStep('title');
@@ -164,6 +187,7 @@ export default function Home() {
           />
           <div className="title-shade" />
           <div className="title-tools">
+            {inputPicker('title-input-mode')}
             <Button
               size="icon"
               variant="ghost"
@@ -185,7 +209,7 @@ export default function Home() {
                 <Button
                   className="title-start"
                   onClick={() => {
-                    void requestLandscape();
+                    void requestLandscape(touchControls);
                     setMenuStep('major');
                   }}
                 >
@@ -200,6 +224,14 @@ export default function Home() {
                 >
                   <BookOpen size={19} />
                   操作说明
+                </Button>
+                <Button
+                  className="title-help"
+                  variant="ghost"
+                  onClick={() => setRecordsOpen(true)}
+                >
+                  <Trophy size={19} />
+                  通关排行榜
                 </Button>
               </nav>
             </section>
@@ -373,7 +405,7 @@ export default function Home() {
               </p>
               <p className="guide-note">
                 鹅腿和鸭腿由阿姨补给站抛出，8
-                秒后飞走。投放逐渐加快，后期鸭腿更多，可能连续数轮没有鹅腿。补给站本身不回血。手机横屏游玩，竖屏时自动暂停。左手拖动摇杆，右手点击技能，可同时操作。松开摇杆即停，普攻自动瞄准。
+                秒后飞走。投放逐渐加快，后期鸭腿更多，可能连续数轮没有鹅腿。补给站本身不回血。触控模式横屏游玩，手机竖放时画面自动旋转。摇杆未显示时，可在首页或暂停菜单将操作方式切换为“触控”。左手拖动摇杆，右手点击技能，可同时操作。松开摇杆即停，普攻自动瞄准。
               </p>
               <DialogClose render={<Button className="launch-button" />}>
                 返回游戏菜单
@@ -555,6 +587,7 @@ export default function Home() {
             <Pause size={34} />
             <h2>计时暂停</h2>
             <p>徽章和战场都在等你。</p>
+            {inputPicker('pause-input-mode')}
             <Button
               className="launch-button"
               onClick={() => game.current?.togglePause()}
@@ -609,6 +642,19 @@ export default function Home() {
                 ? '挑战目标：下一次，比这次更快。'
                 : snap.endReason}
             </p>
+            {recordResult && snap.mode === 'won' && (
+              <output className="record-celebration">
+                <b>
+                  {recordResult.newBest
+                    ? '新纪录！刷新本院系个人最佳'
+                    : '本院系个人最佳'}
+                </b>
+                <strong>{formatRecordTime(recordResult.bestMs)}</strong>
+                {!recordResult.persisted && (
+                  <small>浏览器未允许保存，本次成绩仅在当前页面保留。</small>
+                )}
+              </output>
+            )}
             <div className="result-stats">
               {snap.forgedAt !== null && (
                 <span>
@@ -625,15 +671,36 @@ export default function Home() {
                 最高连破 <b>{snap.bestCombo}</b>
               </span>
             </div>
+            {snap.mode === 'won' && (
+              <small className="online-score-status">
+                {onlineScores.message ||
+                  (onlineScores.identity
+                    ? '成绩将在联网后提交全服榜'
+                    : '打开排行榜，设置昵称后即可提交全服成绩')}
+              </small>
+            )}
             <Button className="launch-button" onClick={start}>
               <RotateCcw />
               重新计时挑战
+            </Button>
+            <Button variant="ghost" onClick={() => setRecordsOpen(true)}>
+              <Trophy size={16} />
+              查看通关纪录
             </Button>
             <Button variant="ghost" onClick={() => game.current?.toMenu()}>
               重新选择主修
             </Button>
           </section>
         </div>
+      )}
+      {recordsOpen && (
+        <GameRecords
+          book={records}
+          online={onlineScores}
+          open={recordsOpen}
+          onOpenChange={setRecordsOpen}
+          container={stage}
+        />
       )}
     </main>
   );

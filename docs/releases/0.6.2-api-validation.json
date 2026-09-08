@@ -1,0 +1,12 @@
+{
+  "base": "https://campus-overdrive-scores.pages.dev",
+  "checkedAt": "2026-09-08T07:13:09.459Z",
+  "checks": [
+    "Health, production CORS, preflight, authentication and invalid nickname",
+    "25 players: department top10, global top20, sorted order, no token disclosure",
+    "Concurrent/slower submissions preserve best, cross-department global deduplication, identity isolation, wins only",
+    "Test players and scores removed by exact generated player IDs"
+  ],
+  "cleanup": true,
+  "passed": true
+}

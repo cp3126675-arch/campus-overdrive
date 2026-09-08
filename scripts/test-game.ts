@@ -1095,7 +1095,8 @@ console.log(
 const { ImageLoader, loadImageBatch } = await import('../lib/image-loader');
 const { EnemyGrid } = await import('../lib/enemy-grid');
 const { roundRect } = await import('../lib/canvas-compat');
-const { usesTouchControls } = await import('../lib/mobile-display');
+const { resolveTouchControls, parseInputMode, listenMedia } =
+  await import('../lib/input-mode');
 let requestCount = 0;
 let imageMode: 'stall' | 'ok' | 'fail' = 'stall';
 const imageLoader = new ImageLoader(
@@ -1245,10 +1246,128 @@ roundRect(
   2,
 );
 assert(nativeRounded);
-assert.equal(usesTouchControls(false, true), false);
-assert.equal(usesTouchControls(true, false), true);
-assert.equal(usesTouchControls(true, true), false);
-assert.equal(usesTouchControls(false, false), false);
+// v0.6.1: capabilities and explicit preference, independent of viewport size.
+const desktopInput = {
+  coarse: false,
+  fine: true,
+  hover: true,
+  anyCoarse: false,
+  touchPoints: 0,
+  userAgent: 'Windows',
+  platform: 'Win32',
+  touchObserved: false,
+};
+const phoneInput = {
+  ...desktopInput,
+  coarse: true,
+  fine: false,
+  hover: false,
+  anyCoarse: true,
+  touchPoints: 5,
+  userAgent: 'Android; wv',
+};
+for (const [width, height] of [
+  [400, 840],
+  [840, 400],
+  [1366, 1024],
+]) {
+  const device = { ...phoneInput, width, height };
+  assert.equal(resolveTouchControls('auto', device), true);
+}
+assert.equal(
+  resolveTouchControls('auto', {
+    ...phoneInput,
+    coarse: false,
+    anyCoarse: false,
+  }),
+  true,
+  'WebView without coarse pointer still has touch points',
+);
+assert.equal(
+  resolveTouchControls('auto', { ...phoneInput, fine: true, hover: true }),
+  true,
+  'Android with a mouse retains touch access',
+);
+assert.equal(
+  resolveTouchControls('auto', {
+    ...desktopInput,
+    platform: 'MacIntel',
+    touchPoints: 5,
+  }),
+  true,
+  'desktop-UA iPad',
+);
+assert.equal(resolveTouchControls('auto', desktopInput), false);
+assert.equal(
+  resolveTouchControls('auto', {
+    ...desktopInput,
+    touchPoints: 10,
+    anyCoarse: true,
+  }),
+  false,
+  'touch laptop initially retains mouse layout',
+);
+assert.equal(
+  resolveTouchControls('auto', { ...desktopInput, touchObserved: true }),
+  true,
+  'real touch overrides missing capability reports',
+);
+assert.equal(
+  resolveTouchControls('keyboard', { ...phoneInput, touchObserved: true }),
+  false,
+  'explicit keyboard mode beats touch events',
+);
+assert.equal(
+  resolveTouchControls('touch', desktopInput),
+  true,
+  'manual fallback without detectable hardware',
+);
+assert.equal(
+  resolveTouchControls('auto', { ...desktopInput, userAgent: 'Android' }),
+  false,
+  'UA alone is insufficient',
+);
+assert.equal(parseInputMode('corrupted'), 'auto');
+assert.equal(parseInputMode(null), 'auto');
+assert.equal(parseInputMode('touch'), 'touch');
+let listenerCount = 0;
+for (const legacy of [false, true]) {
+  const listeners = new Set<() => void>();
+  const add = (...args: unknown[]) => listeners.add(args.at(-1) as () => void);
+  const remove = (...args: unknown[]) =>
+    listeners.delete(args.at(-1) as () => void);
+  const query = (legacy
+    ? { addListener: add, removeListener: remove }
+    : {
+        addEventListener: add,
+        removeEventListener: remove,
+      }) as unknown as MediaQueryList;
+  const cleanup = listenMedia(query, () => listenerCount++);
+  listeners.forEach((fn) => fn());
+  cleanup();
+  assert.equal(listeners.size, 0, 'unsubscribe on unmount');
+}
+assert.equal(listenerCount, 2);
+const { readFileSync: readInputFile } = await import('node:fs');
+const inputCss = readInputFile('app/globals.css', 'utf8');
+assert(
+  !inputCss.includes('(pointer: coarse)'),
+  'CSS must not independently veto the selected touch mode',
+);
+assert(
+  inputCss.includes('.challenge.touch-controls .movement-stick'),
+  'touch mode supplies visible joystick styles',
+);
+assert(
+  inputCss.includes('@media (orientation: portrait)'),
+  'portrait rotation remains available for manual touch mode',
+);
+const inputPage = readInputFile('app/page.tsx', 'utf8');
+assert(!inputPage.includes('matchMedia'), 'game UI uses shared mode');
+assert(
+  inputPage.includes('title-input-mode') &&
+    inputPage.includes('pause-input-mode'),
+);
 
 // Execute the cached projectile path without a browser; measure expensive sprite builds.
 let spriteBuilds = 0,
@@ -1421,6 +1540,7 @@ Object.defineProperty(globalThis, 'getComputedStyle', {
 try {
   const stageRenderer = Object.assign(Object.create(CampusGame.prototype), {
     canvas: fakeCanvas,
+    touch: true,
     keys: new Set(['w']),
     move: { x: 1, y: 1 },
     syncOrientation: () => {},
@@ -1433,6 +1553,15 @@ try {
   assert.equal(fakeStage.dataset.rotated, 'true');
   assert.equal(stageAttrs['data-layout'], 'landscape');
   assert.deepEqual(stageRenderer.move, { x: 0, y: 0 });
+  stageRenderer.setTouchControls(false);
+  assert.equal(fakeCanvas.width, 1688, 'keyboard mode updates renderer DPR');
+  assert.deepEqual(stageRenderer.move, { x: 0, y: 0 });
+  stageRenderer.setTouchControls(true);
+  assert.equal(
+    fakeCanvas.width,
+    1266,
+    'manual touch mode updates renderer DPR',
+  );
   rotatedStyle = '0';
   stageRenderer.resize();
   assert.equal(
@@ -1606,4 +1735,259 @@ try {
 }
 console.log(
   'v0.6.0: background redraw bound, loaded-photo invalidation, resize and 2-megapixel buffer cap passed.',
+);
+
+// v0.6.2: bounded local records, independent department/overall rankings.
+const {
+  emptyRecordBook,
+  addRecord,
+  readRecordBook,
+  saveRecord,
+  formatRecordTime,
+} = await import('../lib/records');
+const recordDepartments = new Set(['d001', 'd002']);
+const makeRecord = (id: number, timeMs: number, departmentId = 'd001') => ({
+  id: 'run-' + id,
+  departmentId,
+  timeMs,
+  completedAt: 1_780_000_000_000 + id,
+  version: '0.6.2',
+});
+let recordBook = emptyRecordBook();
+for (let i = 30; i > 0; i--)
+  recordBook = addRecord(
+    recordBook,
+    makeRecord(i, i * 1000),
+    recordDepartments,
+  );
+assert.equal(recordBook.departments.d001.length, 10);
+assert.equal(recordBook.overall.length, 20);
+assert.equal(
+  recordBook.overall[19].timeMs,
+  20_000,
+  'same department can occupy ranks 11–20 in overall',
+);
+assert.equal(recordBook.departments.d001[0].timeMs, 1000);
+recordBook = addRecord(
+  recordBook,
+  makeRecord(31, 500, 'd002'),
+  recordDepartments,
+);
+assert.equal(recordBook.overall[0].departmentId, 'd002');
+assert.equal(recordBook.departments.d001.length, 10);
+assert.deepEqual(
+  addRecord(recordBook, makeRecord(31, 500, 'd002'), recordDepartments),
+  recordBook,
+  'repeat callbacks do not duplicate a run',
+);
+assert.deepEqual(
+  readRecordBook(JSON.stringify(recordBook), recordDepartments),
+  recordBook,
+  'refresh preserves both independent leaderboards',
+);
+assert.deepEqual(
+  readRecordBook('{broken', recordDepartments),
+  emptyRecordBook(),
+);
+assert.deepEqual(
+  readRecordBook(JSON.stringify({ schema: 99 }), recordDepartments),
+  emptyRecordBook(),
+);
+assert.deepEqual(
+  readRecordBook('x'.repeat(500001), recordDepartments),
+  emptyRecordBook(),
+);
+for (const bad of [0, -1, Infinity, NaN])
+  assert.deepEqual(
+    addRecord(recordBook, makeRecord(50, bad), recordDepartments),
+    recordBook,
+  );
+assert.deepEqual(
+  addRecord(recordBook, makeRecord(50, 20, 'unknown'), recordDepartments),
+  recordBook,
+);
+const corrupt = JSON.parse(JSON.stringify(recordBook));
+corrupt.departments.d001.push(makeRecord(100, 1, 'd002'), {
+  id: 'bad',
+  timeMs: 1,
+});
+assert.deepEqual(
+  readRecordBook(JSON.stringify(corrupt), recordDepartments),
+  recordBook,
+);
+const blockedStore = {
+  getItem() {
+    throw new Error('denied');
+  },
+  setItem() {
+    throw new Error('denied');
+  },
+};
+const sessionScore = saveRecord(
+  blockedStore,
+  recordBook,
+  makeRecord(100, 300),
+  recordDepartments,
+);
+assert.equal(sessionScore.persisted, false);
+assert.equal(sessionScore.book.departments.d001[0].timeMs, 300);
+assert.equal(sessionScore.previousBest, 1000);
+let savedJson = JSON.stringify(recordBook),
+  recordWrites = 0;
+const scoreStore = {
+  getItem() {
+    return savedJson;
+  },
+  setItem(_key: string, text: string) {
+    recordWrites++;
+    savedJson = text;
+  },
+};
+const olderTab = emptyRecordBook();
+const mergedScore = saveRecord(
+  scoreStore,
+  olderTab,
+  makeRecord(101, 200),
+  recordDepartments,
+);
+assert.equal(mergedScore.persisted, true);
+assert.equal(
+  mergedScore.book.departments.d002[0].id,
+  'run-31',
+  'saving merges the latest persisted scores from another tab',
+);
+assert.equal(recordWrites, 1, 'one storage write per completed run');
+assert.equal(formatRecordTime(61_230), '01:01.23');
+assert.equal(formatRecordTime(600_000), '10:00.00');
+const fullDepartments = new Set(DEPARTMENTS.map((d) => d.id));
+let fullBook = emptyRecordBook();
+let recordId = 500;
+for (const id of fullDepartments)
+  for (let i = 0; i < 15; i++)
+    fullBook = addRecord(
+      fullBook,
+      makeRecord(recordId++, 5000 + i, id),
+      fullDepartments,
+    );
+assert(Object.values(fullBook.departments).every((rows) => rows.length === 10));
+assert.equal(fullBook.overall.length, 20);
+assert(
+  JSON.stringify(fullBook).length < 250_000,
+  '126 department records remain bounded below 250 KB',
+);
+console.log(
+  'v0.6.2: top 10 per department / independent overall 20, deduplication, damaged storage, denied storage, stale-tab merge and bounded 126-department data passed.',
+);
+
+// Leaderboard client: bounded responses, cache, auth, invalidation and failure recovery.
+const clientGlobalNames = [
+  'window',
+  'location',
+  'localStorage',
+  'fetch',
+] as const;
+const clientGlobals = clientGlobalNames.map(
+  (name) => [name, Object.getOwnPropertyDescriptor(globalThis, name)] as const,
+);
+let boardRequests = 0;
+let failBoardRequest = false;
+let postedScore: Record<string, unknown> | null = null;
+const clientIdentity = {
+  playerId: 'test-id',
+  nickname: '测试',
+  token: 'a'.repeat(64),
+};
+const clientStore = new Map<string, string>();
+Object.defineProperty(globalThis, 'window', {
+  configurable: true,
+  value: { setTimeout, clearTimeout },
+});
+Object.defineProperty(globalThis, 'location', {
+  configurable: true,
+  value: { hostname: 'cp3126675-arch.github.io' },
+});
+Object.defineProperty(globalThis, 'localStorage', {
+  configurable: true,
+  value: {
+    getItem: (k: string) => clientStore.get(k) || null,
+    setItem: (k: string, v: string) => clientStore.set(k, v),
+  },
+});
+Object.defineProperty(globalThis, 'fetch', {
+  configurable: true,
+  value: async (url: string, init?: RequestInit) => {
+    if (url === './leaderboard.json')
+      return Response.json({ apiBase: 'https://scores.example.test' });
+    if (url.includes('/api/scores')) {
+      assert.equal(
+        new Headers(init?.headers).get('Authorization'),
+        'Bearer ' + clientIdentity.token,
+      );
+      assert.equal(init?.credentials, 'omit');
+      assert.equal(typeof init?.body, 'string');
+      postedScore = JSON.parse(init!.body as string);
+      return Response.json({ ok: true });
+    }
+    boardRequests++;
+    if (failBoardRequest) throw new DOMException('Timed out', 'AbortError');
+    return Response.json({
+      rows: Array.from({ length: 30 }, (_, i) => ({
+        playerId: 'p' + i,
+        nickname: '玩家' + i,
+        departmentId: 'd001',
+        timeMs: 60000 + i * 100,
+        completedAt: 1780000000000,
+      })),
+    });
+  },
+});
+try {
+  const client = await import('../lib/leaderboard-client');
+  assert.equal(client.readIdentity(), null);
+  assert.equal(client.persistIdentity(clientIdentity), true);
+  assert.deepEqual(client.readIdentity(), clientIdentity);
+  assert.equal((await client.getLeaderboard('all')).length, 20);
+  await client.getLeaderboard('all');
+  assert.equal(
+    boardRequests,
+    1,
+    'reopening within 30 seconds uses the cached bounded board',
+  );
+  assert.equal((await client.getLeaderboard('d001')).length, 10);
+  await client.submitScore(clientIdentity, {
+    departmentId: 'd001',
+    timeMs: 60000,
+    version: '0.6.2',
+  });
+  assert.equal((postedScore as Record<string, unknown> | null)?.won, true);
+  await client.getLeaderboard('all');
+  assert.equal(
+    boardRequests,
+    3,
+    'successful submission invalidates leaderboard cache',
+  );
+  failBoardRequest = true;
+  await assert.rejects(client.getLeaderboard('d002'), /网络较慢/);
+  failBoardRequest = false;
+  assert.equal(
+    (await client.getLeaderboard('d002')).length,
+    10,
+    'failed requests are retryable',
+  );
+  Object.defineProperty(globalThis, 'localStorage', {
+    configurable: true,
+    get() {
+      throw new Error('blocked');
+    },
+  });
+  assert.equal(client.readIdentity(), null);
+  assert.equal(client.persistIdentity(clientIdentity), false);
+} finally {
+  for (const [name, descriptor] of clientGlobals) {
+    if (descriptor) Object.defineProperty(globalThis, name, descriptor);
+    else Reflect.deleteProperty(globalThis, name);
+  }
+}
+console.log(
+  'v0.6.2: leaderboard client 10/20 limits, 30-second cache, authenticated score submission, cache invalidation, timeout retry and unavailable identity storage passed.',
 );

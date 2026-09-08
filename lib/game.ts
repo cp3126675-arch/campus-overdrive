@@ -4,7 +4,7 @@ import { GameMusic } from './music';
 import { needsLandscape } from './battle-rules';
 import { ImageLoader, loadImageBatch } from './image-loader';
 import { roundRect } from './canvas-compat';
-import { bossEdgeCue, TOUCH_QUERY, layoutAttributes } from './mobile-display';
+import { bossEdgeCue, layoutAttributes } from './mobile-display';
 import { textbook, YEAR_NAMES } from './textbooks';
 import { BOSS_PHOTOS, departmentBooks, enemyBookPhoto } from './combat-photos';
 import { badgeWeapon } from './badge-weapons';
@@ -63,7 +63,7 @@ export class CampusGame {
   private abort = new AbortController();
   private width = 900;
   private height = 540;
-  private touch = window.matchMedia(TOUCH_QUERY).matches;
+  private touch = false;
   constructor(c: HTMLCanvasElement, emit: (s: Snapshot) => void) {
     this.canvas = c;
     this.ctx = c.getContext('2d')!;
@@ -157,9 +157,12 @@ export class CampusGame {
         .finally(() => this.resourcePending.delete(key));
     }
   }
+  setTouchControls(touch: boolean) {
+    this.touch = touch;
+    this.resize();
+  }
   private viewportResize = () => this.resize();
   private resize() {
-    this.touch = window.matchMedia(TOUCH_QUERY).matches;
     const r = {
       width: this.canvas.clientWidth,
       height: this.canvas.clientHeight,
@@ -187,11 +190,7 @@ export class CampusGame {
   private syncOrientation() {
     const blocked =
       (this.model.mode === 'playing' || this.model.mode === 'paused') &&
-      needsLandscape(
-        window.matchMedia(TOUCH_QUERY).matches,
-        this.width,
-        this.height,
-      );
+      needsLandscape(this.touch, this.width, this.height);
     if (this.model.orientationBlocked !== blocked) {
       this.model.orientationBlocked = blocked;
       this.keys.clear();
