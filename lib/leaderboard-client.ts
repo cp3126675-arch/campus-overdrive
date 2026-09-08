@@ -91,6 +91,39 @@ export async function registerPlayer(
     body: JSON.stringify({ nickname }),
   });
 }
+export function randomNickname() {
+  const values = crypto.getRandomValues(new Uint32Array(2));
+  return (
+    (values[0] % 2 ? '燕人' : '清人') +
+    String(values[1] % 1_000_000).padStart(6, '0')
+  );
+}
+export async function renamePlayer(
+  identity: PlayerIdentity,
+  nickname: string,
+): Promise<PlayerIdentity> {
+  const base = await leaderboardEndpoint();
+  const next = await fetchJson<{ playerId: string; nickname: string }>(
+    base + '/api/player/nickname',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + identity.token,
+      },
+      body: JSON.stringify({ nickname }),
+    },
+  );
+  if (next.playerId !== identity.playerId || typeof next.nickname !== 'string')
+    throw new Error('昵称返回异常，请重试');
+  invalidateLeaderboards();
+  return { ...identity, nickname: next.nickname };
+}
+let boardRevision = 0;
+export function invalidateLeaderboards() {
+  boardRevision++;
+  boards.clear();
+}
 const boards = new Map<string, { at: number; rows: LeaderboardRow[] }>();
 export async function getLeaderboard(
   department: string,
@@ -100,6 +133,7 @@ export async function getLeaderboard(
   const hit = boards.get(key);
   if (hit && Date.now() - hit.at < 30_000) return hit.rows;
   const base = await leaderboardEndpoint();
+  const revision = boardRevision;
   const data = await fetchJson<{ rows: LeaderboardRow[] }>(
     base +
       '/api/leaderboard?department=' +
@@ -120,7 +154,7 @@ export async function getLeaderboard(
         Number.isSafeInteger(r.timeMs) &&
         r.timeMs > 0,
     );
-  boards.set(key, { at: Date.now(), rows });
+  if (revision === boardRevision) boards.set(key, { at: Date.now(), rows });
   return rows;
 }
 export async function submitScore(
@@ -146,5 +180,5 @@ export async function submitScore(
       ended: true,
     }),
   });
-  boards.clear();
+  invalidateLeaderboards();
 }

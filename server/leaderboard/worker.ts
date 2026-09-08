@@ -72,22 +72,31 @@ async function player(request: Request, env: Env) {
   if (!found) throw new ApiError(401, '参榜身份已失效，请重新设置昵称');
   return found;
 }
+function validNickname(value: unknown) {
+  const nickname =
+    typeof value === 'string' ? value.trim().normalize('NFC') : '';
+  if (
+    !nickname ||
+    Array.from(nickname).length > 16 ||
+    Array.from(nickname).some(
+      (c) => c.charCodeAt(0) < 32 || c.charCodeAt(0) === 127,
+    )
+  )
+    throw new ApiError(400, '昵称需要 1～16 个字符');
+  return nickname;
+}
 export async function route(request: Request, env: Env) {
   const url = new URL(request.url);
   if (request.method === 'GET' && url.pathname === '/api/health')
-    return json({ ok: true, modes: ['race', 'survival'], schema: 2 });
+    return json({
+      ok: true,
+      modes: ['race', 'survival'],
+      schema: 2,
+      nicknameEditing: true,
+    });
   if (request.method === 'POST' && url.pathname === '/api/player') {
     const data = await body(request);
-    const nickname =
-      typeof data.nickname === 'string'
-        ? data.nickname.trim().normalize('NFC')
-        : '';
-    if (
-      !nickname ||
-      [...nickname].length > 16 ||
-      [...nickname].some((c) => c.charCodeAt(0) < 32 || c.charCodeAt(0) === 127)
-    )
-      throw new ApiError(400, '昵称需要 1～16 个字符');
+    const nickname = validNickname(data.nickname);
     const id = crypto.randomUUID();
     const token = [...crypto.getRandomValues(new Uint8Array(32))]
       .map((n) => n.toString(16).padStart(2, '0'))
@@ -98,6 +107,15 @@ export async function route(request: Request, env: Env) {
       .bind(id, await tokenHash(token), nickname, Date.now())
       .run();
     return json({ playerId: id, token, nickname }, 201);
+  }
+  if (request.method === 'POST' && url.pathname === '/api/player/nickname') {
+    const owner = await player(request, env);
+    const data = await body(request);
+    const nickname = validNickname(data.nickname);
+    await env.DB.prepare('UPDATE players SET nickname = ?1 WHERE id = ?2')
+      .bind(nickname, owner.id)
+      .run();
+    return json({ playerId: owner.id, nickname });
   }
   if (request.method === 'GET' && url.pathname === '/api/leaderboard') {
     const mode = scoreMode(url.searchParams.get('mode'));

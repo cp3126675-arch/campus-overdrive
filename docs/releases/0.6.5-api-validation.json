@@ -1,0 +1,14 @@
+{
+  "version": "0.6.5",
+  "api": "https://campus-overdrive-scores.pages.dev",
+  "checks": [
+    "production health advertises nickname editing; CORS verified",
+    "authenticated rename preserves original player id and token",
+    "missing credentials and invalid names rejected",
+    "repeated edits with original token; arbitrary body playerId ignored",
+    "no token returned by rename",
+    "existing two-mode bounded leaderboard queries still work; no test scores submitted"
+  ],
+  "cleanup": true,
+  "scoreWrites": 0
+}

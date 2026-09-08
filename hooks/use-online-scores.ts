@@ -5,6 +5,8 @@ import {
   readIdentity,
   persistIdentity,
   registerPlayer,
+  renamePlayer,
+  invalidateLeaderboards,
   submitScore,
   type PlayerIdentity,
 } from '@/lib/leaderboard-client';
@@ -34,6 +36,15 @@ export function useOnlineScores(score: RunRecord | null) {
     return () => {
       active = false;
     };
+  }, []);
+  useEffect(() => {
+    const sync = (event: StorageEvent) => {
+      if (event.key !== 'campus-player-v1' && event.key !== null) return;
+      invalidateLeaderboards();
+      setIdentity(readIdentity());
+    };
+    window.addEventListener('storage', sync);
+    return () => window.removeEventListener('storage', sync);
   }, []);
   const upload = useCallback(async () => {
     if (
@@ -73,16 +84,25 @@ export function useOnlineScores(score: RunRecord | null) {
       void upload();
   }, [score, identity, configured, upload, busy]);
   const join = async (nickname: string) => {
-    if (!nickname.trim() || busy) return;
+    if (!nickname.trim() || inFlight.current) return false;
+    inFlight.current = true;
     setBusy(true);
     try {
-      const next = await registerPlayer(nickname.trim());
+      setMessage('正在保存昵称…');
+      const next = identity
+        ? await renamePlayer(identity, nickname.trim())
+        : await registerPlayer(nickname.trim());
+      setConfigured(true);
+      setConfigError('');
       setIdentitySaved(persistIdentity(next));
       setIdentity(next);
-      setMessage('昵称已设置');
+      setMessage(identity ? '昵称已修改，排行榜已同步' : '昵称已设置');
+      return true;
     } catch (error) {
       setMessage(error instanceof Error ? error.message : '昵称设置失败');
+      return false;
     } finally {
+      inFlight.current = false;
       setBusy(false);
     }
   };

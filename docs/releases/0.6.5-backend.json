@@ -1,0 +1,11 @@
+{
+  "version": "0.6.5",
+  "status": "production verified",
+  "api": "https://campus-overdrive-scores.pages.dev",
+  "deploymentUrl": "https://20adf4f0.campus-overdrive-scores.pages.dev",
+  "sourceCommit": "0171775e5e08efbcb12aa128896a8f2785cd71f5",
+  "migration": "none",
+  "previousDeploymentUrl": "https://9d78f687.campus-overdrive-scores.pages.dev",
+  "testPlayerCleaned": true,
+  "productionScoreWrites": 0
+}

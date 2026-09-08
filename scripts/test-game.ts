@@ -1918,6 +1918,17 @@ Object.defineProperty(globalThis, 'fetch', {
   value: async (url: string, init?: RequestInit) => {
     if (url === './leaderboard.json')
       return Response.json({ apiBase: 'https://scores.example.test' });
+    if (url.includes('/api/player/nickname')) {
+      assert.equal(init?.method, 'POST');
+      assert.equal(
+        new Headers(init?.headers).get('Authorization'),
+        'Bearer ' + clientIdentity.token,
+      );
+      return Response.json({
+        playerId: clientIdentity.playerId,
+        nickname: JSON.parse(init!.body as string).nickname,
+      });
+    }
     if (url.includes('/api/scores')) {
       assert.equal(
         new Headers(init?.headers).get('Authorization'),
@@ -1966,6 +1977,26 @@ try {
     3,
     'successful submission invalidates leaderboard cache',
   );
+  const beforeRenameRequests = boardRequests;
+  const renamedIdentity = await client.renamePlayer(
+    clientIdentity,
+    '清人123456',
+  );
+  assert.deepEqual(
+    renamedIdentity,
+    { ...clientIdentity, nickname: '清人123456' },
+    'rename preserves player id and credential',
+  );
+  assert.equal(client.persistIdentity(renamedIdentity), true);
+  assert.deepEqual(client.readIdentity(), renamedIdentity);
+  await client.getLeaderboard('all');
+  assert.equal(
+    boardRequests,
+    beforeRenameRequests + 1,
+    'rename invalidates previously cached names',
+  );
+  for (let i = 0; i < 100; i++)
+    assert.match(client.randomNickname(), /^(清人|燕人)\d{6}$/);
   failBoardRequest = true;
   await assert.rejects(client.getLeaderboard('d002'), /网络较慢/);
   failBoardRequest = false;

@@ -24,7 +24,9 @@ export function GameRecords({
   open,
   onOpenChange,
   container,
+  onEditNickname,
 }: {
+  onEditNickname: () => void;
   books: Record<ScoreMode, RecordBook>;
   initialMode: ScoreMode;
   online: ReturnType<typeof useOnlineScores>;
@@ -42,7 +44,6 @@ export function GameRecords({
     error: string;
   }>({ key: '', rows: [], error: '' });
   const [retry, setRetry] = useState(0);
-  const [nickname, setNickname] = useState('');
   const available = useMemo(
     () =>
       view === 'online'
@@ -52,7 +53,7 @@ export function GameRecords({
   );
   const localRows =
     scope === 'all' ? book.overall : book.departments[scope] || [];
-  const requestKey = `${mode}:${scope}:${retry}:${online.message}`;
+  const requestKey = `${mode}:${scope}:${retry}:${online.message}:${online.identity?.nickname}`;
   const loading = online.configured && response.key !== requestKey;
   const rows = response.key === requestKey ? response.rows : [];
   const error = response.key === requestKey ? response.error : '';
@@ -142,29 +143,11 @@ export function GameRecords({
                     <small> · 身份保存在此浏览器</small>
                   </span>
                 ) : (
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      void online.join(nickname);
-                    }}
-                  >
-                    <label htmlFor="score-nickname">参榜昵称</label>
-                    <input
-                      id="score-nickname"
-                      value={nickname}
-                      onChange={(e) => setNickname(e.target.value)}
-                      maxLength={32}
-                      placeholder="1～16个字符"
-                      autoComplete="off"
-                    />
-                    <Button
-                      type="submit"
-                      disabled={online.busy || !nickname.trim()}
-                    >
-                      加入排行榜
-                    </Button>
-                  </form>
+                  <span>设置昵称后，你的成绩也会出现在这里。</span>
                 )}
+                <Button variant="ghost" onClick={onEditNickname}>
+                  {online.identity ? '修改昵称' : '设置昵称'}
+                </Button>
                 {!!online.message && <output>{online.message}</output>}
                 {!online.identitySaved && (
                   <small>浏览器不允许保存身份，刷新后需要重新设置昵称。</small>
@@ -229,7 +212,9 @@ export function GameRecords({
                       >
                         <td>{i === 0 ? '🏆' : i + 1}</td>
                         <td>
-                          {r.nickname}
+                          {r.playerId === online.identity?.playerId
+                            ? online.identity.nickname
+                            : r.nickname}
                           {r.playerId === online.identity?.playerId
                             ? '（我）'
                             : ''}

@@ -20,6 +20,7 @@ import {
   ArrowLeft,
   ChevronRight,
   BookOpen,
+  UserRound,
 } from 'lucide-react';
 import { requestLandscape } from '@/lib/mobile-display';
 import { useGameInput } from '@/hooks/use-game-input';
@@ -31,6 +32,7 @@ import { YEAR_NAMES } from '@/lib/textbooks';
 import { badgeWeapon } from '@/lib/badge-weapons';
 import { useOnlineScores } from '@/hooks/use-online-scores';
 import { useRecords } from '@/hooks/use-records';
+import { PlayerNameDialog } from '@/components/player-name-dialog';
 import { GameRecords } from '@/components/game-records';
 import { formatRecordTime } from '@/lib/records';
 import { GameJoystick } from '@/components/game-joystick';
@@ -65,6 +67,8 @@ export default function Home() {
   } = useRecords(snap);
   const onlineScores = useOnlineScores(latestScore);
   const [recordsOpen, setRecordsOpen] = useState(false);
+  const [nameOpen, setNameOpen] = useState(false);
+  const [chooseMajorAfterName, setChooseMajorAfterName] = useState(false);
   const [variant, setVariant] = useState<'race' | 'survival'>('race');
   const [departmentId, setDepartmentId] = useState('d041');
   const [query, setQuery] = useState('');
@@ -121,6 +125,30 @@ export default function Home() {
   useLayoutEffect(() => {
     game.current?.setTouchControls(touchControls);
   }, [touchControls]);
+  useEffect(() => {
+    if (game.current)
+      game.current.nickname = onlineScores.identity?.nickname || '';
+  }, [onlineScores.identity]);
+  useEffect(() => {
+    if (game.current) game.current.editingNickname = nameOpen;
+    return () => {
+      if (game.current) game.current.editingNickname = false;
+    };
+  }, [nameOpen]);
+  const editNickname = () => {
+    if (game.current?.model.mode === 'playing') game.current.togglePause();
+    setRecordsOpen(false);
+    setChooseMajorAfterName(false);
+    setNameOpen(true);
+  };
+  const enterMode = (mode: 'race' | 'survival') => {
+    setVariant(mode);
+    void requestLandscape(touchControls);
+    if (!onlineScores.identity) {
+      setChooseMajorAfterName(true);
+      setNameOpen(true);
+    } else setMenuStep('major');
+  };
   const inputPicker = (id: string) => (
     <label className="input-mode-picker" htmlFor={id}>
       操作方式
@@ -142,6 +170,12 @@ export default function Home() {
   const start = async () => {
     const g = game.current;
     if (!g || !ready || launchPending.current) return;
+    if (!onlineScores.identity) {
+      setChooseMajorAfterName(true);
+      setNameOpen(true);
+      return;
+    }
+    g.nickname = onlineScores.identity.nickname;
     launchPending.current = true;
     setLaunching(true);
     setLaunchError(false);
@@ -189,6 +223,15 @@ export default function Home() {
           />
           <div className="title-shade" />
           <div className="title-tools">
+            <Button
+              className="player-name-button"
+              variant="ghost"
+              onClick={editNickname}
+              title="设置或修改昵称"
+            >
+              <UserRound size={16} />
+              <span>{onlineScores.identity?.nickname || '设置昵称'}</span>
+            </Button>
             {inputPicker('title-input-mode')}
             <Button
               size="icon"
@@ -210,11 +253,7 @@ export default function Home() {
               <nav className="title-actions" aria-label="游戏菜单">
                 <Button
                   className="title-start"
-                  onClick={() => {
-                    setVariant('race');
-                    void requestLandscape(touchControls);
-                    setMenuStep('major');
-                  }}
+                  onClick={() => enterMode('race')}
                 >
                   <Play size={21} fill="currentColor" />
                   竞速模式
@@ -222,11 +261,7 @@ export default function Home() {
                 </Button>
                 <Button
                   className="title-start survival-start"
-                  onClick={() => {
-                    setVariant('survival');
-                    void requestLandscape(touchControls);
-                    setMenuStep('major');
-                  }}
+                  onClick={() => enterMode('survival')}
                 >
                   <Sparkles size={21} />
                   生存模式
@@ -647,6 +682,10 @@ export default function Home() {
             <h2>计时暂停</h2>
             <p>徽章和战场都在等你。</p>
             {inputPicker('pause-input-mode')}
+            <Button variant="ghost" onClick={editNickname}>
+              <UserRound size={16} />
+              修改昵称
+            </Button>
             <Button
               className="launch-button"
               onClick={() => game.current?.togglePause()}
@@ -760,6 +799,10 @@ export default function Home() {
               <RotateCcw />
               {survival ? '再撑久一点' : '重新计时挑战'}
             </Button>
+            <Button variant="ghost" onClick={editNickname}>
+              <UserRound size={16} />
+              修改昵称
+            </Button>
             <Button variant="ghost" onClick={() => setRecordsOpen(true)}>
               <Trophy size={16} />
               {survival ? '查看生存排行' : '查看竞速排行'}
@@ -770,6 +813,20 @@ export default function Home() {
           </section>
         </div>
       )}
+      {nameOpen && (
+        <PlayerNameDialog
+          online={onlineScores}
+          container={stage}
+          onClose={() => setNameOpen(false)}
+          onSaved={() => {
+            setNameOpen(false);
+            if (chooseMajorAfterName) {
+              game.current?.toMenu();
+              setMenuStep('major');
+            }
+          }}
+        />
+      )}
       {recordsOpen && (
         <GameRecords
           books={records}
@@ -778,6 +835,7 @@ export default function Home() {
           open={recordsOpen}
           onOpenChange={setRecordsOpen}
           container={stage}
+          onEditNickname={editNickname}
         />
       )}
     </main>
