@@ -3,7 +3,7 @@
 院系和书院背景参考：合成大院系 https://synthesis-college.netlify.app/
 30 枚原版院系、书院与清华大学徽章保留原图，来源为上述网站的 assets/img/round/。
 徽章用于用户要求的非官方概念 Demo；本作品不代表相关学校或院系。
-校园地图、学生与怪物美术为本 Demo 生成的原创视觉资产。
+早期 Demo 的示意校园、学生与练习题美术为生成的原创视觉资产；当前实景照片及生存校园地图以以下各自来源记录为准。
 游戏实现、战斗规则与界面为本项目重新编写，未复制参考网站的游戏脚本。
 
 2026-09-07 meme-atlas.png: original AI-generated fictional student cyclist, vendor and goose/duck leg game sprites, generated with OpenAI imagegen. No real-person likeness.
@@ -632,3 +632,5 @@ Boss reuse: coder-pity.png is the user-provided image; bike-photo.jpg and tsingh
 
 [2026-09-08] art/tsinghua-campus-map.jpg
 User-supplied campus map attachment; original creator and source URL not supplied. Used as survival-mode background; original bytes preserved, WebP delivery copy generated. License: NOASSERTION; not covered by the original-code MIT license.
+
+[v0.6.9 · 2026-09-08] art/tsinghua-campus-map.jpg updated from the user's higher-resolution attachment (5050 × 5769, 1,867,248 bytes). The supplied original is preserved exactly; delivery is WebP at 2689 × 3072 / quality 90. The earlier map remains in archived releases. Original creator/source URL still unspecified; NOASSERTION remains unchanged.
