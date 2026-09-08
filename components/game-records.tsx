@@ -9,23 +9,31 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { DEPARTMENTS } from '@/lib/departments';
-import { formatRecordTime, type RecordBook } from '@/lib/records';
+import {
+  formatRecordTime,
+  type RecordBook,
+  type ScoreMode,
+} from '@/lib/records';
 import { getLeaderboard, type LeaderboardRow } from '@/lib/leaderboard-client';
 import type { useOnlineScores } from '@/hooks/use-online-scores';
 const names = new Map(DEPARTMENTS.map((d) => [d.id, d.name]));
 export function GameRecords({
-  book,
+  books,
+  initialMode,
   online,
   open,
   onOpenChange,
   container,
 }: {
-  book: RecordBook;
+  books: Record<ScoreMode, RecordBook>;
+  initialMode: ScoreMode;
   online: ReturnType<typeof useOnlineScores>;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   container: RefObject<HTMLElement | null>;
 }) {
+  const [mode, setMode] = useState<ScoreMode>(initialMode);
+  const book = books[mode];
   const [scope, setScope] = useState('all');
   const [view, setView] = useState<'online' | 'local'>('online');
   const [response, setResponse] = useState<{
@@ -44,14 +52,14 @@ export function GameRecords({
   );
   const localRows =
     scope === 'all' ? book.overall : book.departments[scope] || [];
-  const requestKey = `${scope}:${retry}:${online.message}`;
+  const requestKey = `${mode}:${scope}:${retry}:${online.message}`;
   const loading = online.configured && response.key !== requestKey;
   const rows = response.key === requestKey ? response.rows : [];
   const error = response.key === requestKey ? response.error : '';
   useEffect(() => {
     if (!open || view !== 'online' || !online.configured) return;
     let active = true;
-    void getLeaderboard(scope)
+    void getLeaderboard(scope, mode)
       .then((rows) => {
         if (active) setResponse({ key: requestKey, rows, error: '' });
       })
@@ -62,7 +70,7 @@ export function GameRecords({
     return () => {
       active = false;
     };
-  }, [open, view, scope, requestKey, online.configured]);
+  }, [open, view, scope, mode, requestKey, online.configured]);
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
@@ -71,7 +79,11 @@ export function GameRecords({
         showCloseButton={false}
       >
         <div className="records-heading">
-          <DialogTitle>通关排行榜</DialogTitle>
+          <DialogTitle>
+            {mode === 'survival'
+              ? '生存排行榜 · 越久越强'
+              : '竞速排行榜 · 越快越强'}
+          </DialogTitle>
           <DialogClose render={<Button variant="ghost" size="sm" />}>
             关闭
           </DialogClose>
@@ -79,8 +91,23 @@ export function GameRecords({
         <DialogDescription>
           {view === 'online'
             ? '每人只取最佳成绩 · 院系前10名 / 总榜前20名'
-            : '本机通关历史 · 挑战个人最佳'}
+            : '本机挑战历史 · 竞速与生存分别记录'}
         </DialogDescription>
+        <div className="records-tabs" aria-label="排行榜模式">
+          {(['race', 'survival'] as const).map((value) => (
+            <Button
+              key={value}
+              variant={mode === value ? 'default' : 'ghost'}
+              aria-pressed={mode === value}
+              onClick={() => {
+                setMode(value);
+                setScope('all');
+              }}
+            >
+              {value === 'survival' ? '生存 · 最长时间' : '竞速 · 最短时间'}
+            </Button>
+          ))}
+        </div>
         <div className="records-tabs">
           <Button
             variant={view === 'online' ? 'default' : 'ghost'}
@@ -179,7 +206,7 @@ export function GameRecords({
                   <tr>
                     <th>排名</th>
                     <th>玩家</th>
-                    <th>用时</th>
+                    <th>{mode === 'survival' ? '存活时间' : '通关用时'}</th>
                     <th>主修</th>
                   </tr>
                 </thead>
@@ -205,7 +232,7 @@ export function GameRecords({
             ) : (
               <p className="records-empty">
                 {online.configured
-                  ? '还没有参榜成绩，成为第一个通关的人！'
+                  ? '还没有参榜成绩，留下你的第一条纪录！'
                   : '全服榜开通后将在这里显示玩家成绩。'}
               </p>
             )
@@ -214,7 +241,7 @@ export function GameRecords({
               <thead>
                 <tr>
                   <th>排名</th>
-                  <th>用时</th>
+                  <th>{mode === 'survival' ? '存活时间' : '通关用时'}</th>
                   <th>主修</th>
                   <th>日期</th>
                 </tr>
@@ -240,7 +267,9 @@ export function GameRecords({
             </table>
           ) : (
             <p className="records-empty">
-              还没有通关纪录。击败最终 Boss，留下你的第一个成绩！
+              {mode === 'survival'
+                ? '还没有生存纪录。完成一次生存挑战，留下你的成绩！'
+                : '还没有通关纪录。击败最终 Boss，留下你的第一个成绩！'}
             </p>
           )}
         </div>

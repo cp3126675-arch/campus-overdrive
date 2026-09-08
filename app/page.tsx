@@ -58,13 +58,14 @@ export default function Home() {
   const game = useRef<CampusGame | null>(null);
   const [snap, setSnap] = useState<Snapshot>(initialSnapshot);
   const {
-    book: records,
+    books: records,
     result: recordResult,
     beginRun,
-    latestWin,
+    latestScore,
   } = useRecords(snap);
-  const onlineScores = useOnlineScores(latestWin);
+  const onlineScores = useOnlineScores(latestScore);
   const [recordsOpen, setRecordsOpen] = useState(false);
+  const [variant, setVariant] = useState<'race' | 'survival'>('race');
   const [departmentId, setDepartmentId] = useState('d041');
   const [query, setQuery] = useState('');
   const [ready, setReady] = useState(false);
@@ -86,6 +87,7 @@ export default function Home() {
       .includes(query.trim().toLowerCase()),
   );
   const menu = snap.mode === 'menu';
+  const survival = snap.survival;
   const ended = snap.mode === 'won' || snap.mode === 'lost';
   const centralLevel = Math.max(0, ...snap.inventory);
   const central = snap.chain[centralLevel];
@@ -147,10 +149,10 @@ export default function Home() {
     setRecordsOpen(false);
     void requestLandscape(touchControls);
     try {
-      const missing = await g.prepareDepartment(selected.id);
+      const missing = await g.prepareDepartment(selected.id, variant);
       if (game.current !== g) return;
-      beginRun(selected.id);
-      g.start(selected.profile, selected.badge, selected.id);
+      beginRun(selected.id, variant);
+      g.start(selected.profile, selected.badge, selected.id, variant);
       if (missing.length) g.model.notify('部分图片暂未载入，已启用备用显示', 4);
       setMenuStep('title');
     } catch {
@@ -200,7 +202,7 @@ export default function Home() {
           </div>
           {menuStep === 'title' ? (
             <section className="title-menu" aria-label="主菜单">
-              <span className="title-mode">徽章合成 · 竞速模式</span>
+              <span className="title-mode">徽章合成 · 竞速 / 生存</span>
               <h1>
                 合成<span>清华</span>
               </h1>
@@ -209,12 +211,25 @@ export default function Home() {
                 <Button
                   className="title-start"
                   onClick={() => {
+                    setVariant('race');
                     void requestLandscape(touchControls);
                     setMenuStep('major');
                   }}
                 >
                   <Play size={21} fill="currentColor" />
-                  开始游戏
+                  竞速模式
+                  <ChevronRight className="menu-arrow" size={21} />
+                </Button>
+                <Button
+                  className="title-start survival-start"
+                  onClick={() => {
+                    setVariant('survival');
+                    void requestLandscape(touchControls);
+                    setMenuStep('major');
+                  }}
+                >
+                  <Sparkles size={21} />
+                  生存模式
                   <ChevronRight className="menu-arrow" size={21} />
                 </Button>
                 <Button
@@ -249,7 +264,17 @@ export default function Home() {
               <h2 ref={selectionHeading} tabIndex={-1}>
                 选择主修
               </h2>
-              <p className="selection-subtitle">选择你的初始徽章与战斗方式</p>
+              <p className="selection-subtitle">
+                {variant === 'survival'
+                  ? '生存模式 · 循环 Boss，挑战更久存活'
+                  : '竞速模式 · 合成清华，挑战更短通关'}
+              </p>
+              {variant === 'survival' && (
+                <p className="survival-rules-note">
+                  徽章血量耗尽降一级、清空僚机，并获得 1.2 秒护盾。合成回血
+                  +20；90秒后全场圈外扣血，最低保留1血，且仅合成可回血。生存成绩独立排行。
+                </p>
+              )}
               <div className="department-picker">
                 <label htmlFor="department-search">查找院系 / 书院</label>
                 <input
@@ -351,7 +376,12 @@ export default function Home() {
             </section>
           )}
           <footer className="title-footer">
-            <span>非官方校园游戏 · v{release.version}</span>
+            <span>
+              {release.version.includes('-')
+                ? '本地候选 · 未发布'
+                : '非官方校园游戏'}{' '}
+              · v{release.version}
+            </span>
             <span className="photo-credit">
               <a
                 href="https://commons.wikimedia.org/wiki/File:2019年二校門.jpg"
@@ -370,7 +400,7 @@ export default function Home() {
             >
               <DialogTitle className="guide-title">操作说明</DialogTitle>
               <DialogDescription className="guide-goal">
-                合成清华校徽，再击破最终 Boss。完整通关用时越短越好。
+                竞速模式比谁通关更快；生存模式比谁坚持更久。
               </DialogDescription>
               <dl className="guide-keys">
                 <div>
@@ -397,7 +427,10 @@ export default function Home() {
               <p className="guide-note">
                 中央徽章融合主修自动攻击，周围徽章也会独立开火。拾取两枚相同徽章即可合成。小怪与
                 Boss 按合成进度依次出现；合出最终校徽后，击败最终 Boss
-                才通关。暂停期间不计时。
+                才通关。生存模式循环出现
+                Boss，安全区不断收缩；血量耗尽时徽章降一级、 僚机清空，获得 1.2
+                秒护盾与新一条血量。合成回血 +20，最低级徽章破碎才结束。
+                圈外伤害无视普通冲刺无敌，破碎护盾可抵挡。安全区消失后，仅合成可回血，鹅腿保留火力加成。两种模式暂停期间均不计时。
               </p>
               <p className="guide-food">
                 <span>鹅腿 +24 生命</span>
@@ -416,9 +449,14 @@ export default function Home() {
       ) : (
         <>
           <div className="battle-hud">
-            <div className="hp-panel">
+            <div
+              className={`hp-panel ${survival?.hurtTime ? 'is-taking-damage' : ''}`}
+            >
               <div>
-                <b>生命 {Math.ceil(snap.hp)}</b>
+                <b>
+                  生命 {Math.ceil(snap.hp)}
+                  {survival ? ` / ${Math.ceil(survival.maxHp)}` : ''}
+                </b>
                 <span>
                   {central?.short} Lv.{centralLevel + 1}
                 </span>
@@ -428,19 +466,25 @@ export default function Home() {
               </div>
             </div>
             <div className="race-clock">
-              <small>通关用时</small>
+              <small>{survival ? '存活时间' : '通关用时'}</small>
               <strong>{fmt(snap.time)}</strong>
             </div>
             <div className="wave-hud">
               <b>
                 {snap.bossHp > 0
                   ? snap.bossName
-                  : `${YEAR_NAMES[snap.year]} · 合成 ${snap.mergeProgress}%`}
+                  : survival
+                    ? `生存第 ${snap.bossesDefeated + 1} 战 · 徽章 ${snap.mergeProgress}%`
+                    : `${YEAR_NAMES[snap.year]} · 合成 ${snap.mergeProgress}%`}
               </b>
               <span>
-                {snap.bossHp > 0
-                  ? `Boss ${snap.bossesDefeated + 1}/${snap.totalBosses}`
-                  : `下一 Boss ${snap.nextBossProgress}% · 已过 ${snap.bossesDefeated}/${snap.totalBosses}`}
+                {survival
+                  ? snap.bossHp > 0
+                    ? `循环 ${survival.cycle} · Boss #${snap.bossesDefeated + 1}`
+                    : `${Math.ceil(survival.nextBossIn)} 秒后 Boss · 已击破 ${snap.bossesDefeated}`
+                  : snap.bossHp > 0
+                    ? `Boss ${snap.bossesDefeated + 1}/${snap.totalBosses}`
+                    : `下一 Boss ${snap.nextBossProgress}% · 已过 ${snap.bossesDefeated}/${snap.totalBosses}`}
               </span>
               <div className="boss-track">
                 <i
@@ -473,6 +517,21 @@ export default function Home() {
               </Button>
             </div>
           </div>
+          {survival && (
+            <div
+              className={`survival-pressure ${survival.outsideZone ? 'is-exhausted' : ''}`}
+            >
+              {survival.zone.radius <= 0
+                ? `无安全区 · 每秒 −${survival.zone.damagePerSecond} 生命`
+                : survival.outsideZone
+                  ? `圈外！每秒 −${survival.zone.damagePerSecond} · 跟随箭头进圈`
+                  : `安全区内 · ${Math.ceil(survival.zone.nextRoundIn)} 秒后下一轮`}
+              <span>
+                第 {survival.zone.round} 轮 · 圈伤保留1血 · 合成 +20
+                {survival.invincibleTime > 0 ? ' · 无敌中' : ''}
+              </span>
+            </div>
+          )}
           <div className="quest-hud">
             <span>
               {snap.questTitle} · {snap.questText}
@@ -632,9 +691,19 @@ export default function Home() {
             ) : (
               <Trophy size={42} />
             )}
-            <h2>{snap.mode === 'won' ? '毕业审核通过！' : '这次差一点。'}</h2>
+            <h2>
+              {survival
+                ? '生存挑战结束'
+                : snap.mode === 'won'
+                  ? '毕业审核通过！'
+                  : '这次差一点。'}
+            </h2>
             <small>
-              {snap.mode === 'won' ? '完整通关用时' : '本次挑战用时'}
+              {survival
+                ? '本次存活时间 · 越久越好'
+                : snap.mode === 'won'
+                  ? '完整通关用时'
+                  : '本次挑战用时'}
             </small>
             <strong className="result-time">{fmt(snap.time)}</strong>
             <p>
@@ -642,7 +711,7 @@ export default function Home() {
                 ? '挑战目标：下一次，比这次更快。'
                 : snap.endReason}
             </p>
-            {recordResult && snap.mode === 'won' && (
+            {recordResult && (snap.mode === 'won' || !!survival) && (
               <output className="record-celebration">
                 <b>
                   {recordResult.newBest
@@ -671,7 +740,7 @@ export default function Home() {
                 最高连破 <b>{snap.bestCombo}</b>
               </span>
             </div>
-            {snap.mode === 'won' && (
+            {(snap.mode === 'won' || !!survival) && (
               <small className="online-score-status">
                 {onlineScores.message ||
                   (onlineScores.identity
@@ -679,13 +748,21 @@ export default function Home() {
                     : '打开排行榜，设置昵称后即可提交全服成绩')}
               </small>
             )}
+            {survival && (
+              <small className="survival-result-note">
+                累计掉阶 {survival.downgradeCount} 次 · 到达循环{' '}
+                {survival.cycle}
+                <br />
+                生存榜按存活时间排名，越久越强。
+              </small>
+            )}
             <Button className="launch-button" onClick={start}>
               <RotateCcw />
-              重新计时挑战
+              {survival ? '再撑久一点' : '重新计时挑战'}
             </Button>
             <Button variant="ghost" onClick={() => setRecordsOpen(true)}>
               <Trophy size={16} />
-              查看通关纪录
+              {survival ? '查看生存排行' : '查看竞速排行'}
             </Button>
             <Button variant="ghost" onClick={() => game.current?.toMenu()}>
               重新选择主修
@@ -695,7 +772,8 @@ export default function Home() {
       )}
       {recordsOpen && (
         <GameRecords
-          book={records}
+          books={records}
+          initialMode={variant}
           online={onlineScores}
           open={recordsOpen}
           onOpenChange={setRecordsOpen}

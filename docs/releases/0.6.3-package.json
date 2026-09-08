@@ -1,0 +1,9 @@
+{
+  "version": "0.6.3",
+  "status": "validated release candidate; public deployment pending",
+  "httpFiles": 247,
+  "archiveSha256": "e4784d610b2cbb91a6b44c040dc3794db144cb0259b724d19d99570a0c1b6a4f",
+  "bytes": 10641690,
+  "oldArchivesUnchanged": true,
+  "phoneAndVisualQA": false
+}

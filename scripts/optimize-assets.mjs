@@ -20,9 +20,11 @@ async function walk(dir) {
     const atlas = file.includes('atlas');
     const size = file.startsWith('badges/')
       ? 128
-      : /xuetang-road|tsinghua-gate/.test(file)
-        ? 1280
-        : 512;
+      : /tsinghua-campus-map/.test(file)
+        ? 1468
+        : /xuetang-road|tsinghua-gate/.test(file)
+          ? 1280
+          : 512;
     let pipeline = sharp(bytes);
     if (!atlas)
       pipeline = pipeline.resize(size, size, {

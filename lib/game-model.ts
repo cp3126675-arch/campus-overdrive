@@ -1,3 +1,4 @@
+import type { SurvivalSnapshot } from './survival-rules';
 import { EnemyGrid } from './enemy-grid';
 import colleges from './colleges.json';
 import {
@@ -20,6 +21,7 @@ export type Major = 'math' | 'cs' | 'arch';
 export type Mode = 'menu' | 'playing' | 'paused' | 'won' | 'lost';
 export type College = (typeof colleges)[number];
 export type Snapshot = {
+  survival?: SurvivalSnapshot;
   mode: Mode;
   endProgress: number;
   hp: number;
@@ -209,6 +211,7 @@ export function cameraView(
   width: number,
   height: number,
   player: { x: number; y: number },
+  world = WORLD,
 ) {
   const scale = Math.max(
     Math.max(1, width) / WORLD.width,
@@ -217,8 +220,8 @@ export function cameraView(
   const w = Math.min(WORLD.width, Math.max(1, width) / scale),
     h = Math.min(WORLD.height, Math.max(1, height) / scale);
   return {
-    x: clamp(player.x - w / 2, 0, WORLD.width - w),
-    y: clamp(player.y - h / 2, 0, WORLD.height - h),
+    x: clamp(player.x - w / 2, 0, world.width - w),
+    y: clamp(player.y - h / 2, 0, world.height - h),
     width: w,
     height: h,
   };
@@ -348,7 +351,10 @@ export class GameModel {
   flash = 0;
   banner = '';
   bannerTime = 0;
-  private rng: () => number;
+  protected rng: () => number;
+  get world() {
+    return WORLD;
+  }
   constructor(rng: () => number = Math.random) {
     this.rng = rng;
   }
@@ -417,7 +423,7 @@ export class GameModel {
   get phase() {
     return this.bossSpawned ? 2 : this.waveTime >= 25 ? 1 : 0;
   }
-  get nextBossLevel() {
+  get nextBossLevel(): number | null {
     return BOSS_LEVELS[this.bossesDefeated] ?? null;
   }
   get isFinalBoss() {
@@ -486,10 +492,14 @@ export class GameModel {
 
     return true;
   }
+  heal(amount: number, _fromMerge = false) {
+    this.hp = Math.min(100, this.hp + amount);
+    return true;
+  }
   eatFood(kind: 'goose' | 'duck') {
     if (this.mode !== 'playing') return;
     if (kind === 'goose') {
-      this.hp = Math.min(100, this.hp + 24);
+      this.heal(24);
       this.feastTime = 5;
       this.chargeSkill(8);
       this.events.push('goose');
@@ -562,6 +572,9 @@ export class GameModel {
     this.onMerge(lv, this.player.x, this.player.y);
     return true;
   }
+  get graduationHeal() {
+    return 20;
+  }
   onMerge(level: number, x: number, y: number) {
     if (this.mode !== 'playing') return;
     this.merges++;
@@ -595,7 +608,7 @@ export class GameModel {
       this.fireBadge(level, this.player);
       this.effect(x, y - 60, 'text', '#f4d8ff', 0, 1.7, '二校门毕业炮');
       this.forgedAt = this.time;
-      this.hp = Math.min(100, this.hp + 20);
+      this.heal(this.graduationHeal, true);
       this.invulnerable = Math.max(this.invulnerable, 1.5);
       this.drops = this.drops.filter((d) => d.kind !== 'badge');
     }
@@ -605,11 +618,11 @@ export class GameModel {
         e.hp -= 40 + level * 20;
         e.hit = 0.18;
         const scale = 55 / Math.max(d, 1);
-        e.x = clamp(e.x + (e.x - x) * scale, 25, 1175);
-        e.y = clamp(e.y + (e.y - y) * scale, 30, 770);
+        e.x = clamp(e.x + (e.x - x) * scale, 25, this.world.width - 25);
+        e.y = clamp(e.y + (e.y - y) * scale, 30, this.world.height - 30);
       }
     }
-    this.hp = Math.min(100, this.hp + 1);
+    this.heal(1, true);
     this.invulnerable = Math.max(this.invulnerable, 0.35);
     this.checkKills();
   }
@@ -687,6 +700,9 @@ export class GameModel {
     enemy.credit = credit;
     this.enemies.push(enemy);
   }
+  get dropLevel() {
+    return this.highest;
+  }
   spawnDrop(
     x: number,
     y: number,
@@ -697,7 +713,7 @@ export class GameModel {
       this.spawnFood(kind);
       return;
     }
-    if (kind === 'badge' && this.highest >= 14) return;
+    if (kind === 'badge' && this.dropLevel >= 14) return;
     const badges = this.drops.filter((d) => d.kind === 'badge');
     if (badges.length >= MAX_GROUND_BADGES) {
       if (level === undefined) return;
@@ -705,7 +721,7 @@ export class GameModel {
       const oldest = badges.reduce((a, b) => (a.age > b.age ? a : b));
       this.drops = this.drops.filter((d) => d.id !== oldest.id);
     }
-    const cap = Math.min(Math.max(0, this.highest - 1), 12);
+    const cap = Math.min(Math.max(0, this.dropLevel - 1), 12);
     const chosen = level ?? Math.max(0, cap - (this.rng() < 0.3 ? 1 : 0));
     this.drops.push({
       id: ++this.id,
@@ -789,8 +805,8 @@ export class GameModel {
     this.enemies.push(
       this.makeEnemy(
         'boss',
-        clamp(this.player.x, 240, 960),
-        clamp(this.player.y - 260, 140, 650),
+        clamp(this.player.x, 240, this.world.width - 240),
+        clamp(this.player.y - 260, 140, this.world.height - 150),
       ),
     );
     this.exam = null;
@@ -813,11 +829,15 @@ export class GameModel {
     this.bossesDefeated++;
     this.bossDead = true;
     this.credits += 4;
-    this.hp = Math.min(100, this.hp + 18);
-    this.spawnDrop(clamp(x - 45, 80, 1120), clamp(y, 90, 710), this.highest);
+    this.heal(18);
     this.spawnDrop(
-      clamp(x + 45, 80, 1120),
-      clamp(y, 90, 710),
+      clamp(x - 45, 80, this.world.width - 80),
+      clamp(y, 90, this.world.height - 90),
+      this.highest,
+    );
+    this.spawnDrop(
+      clamp(x + 45, 80, this.world.width - 80),
+      clamp(y, 90, this.world.height - 90),
       Math.max(0, this.highest - 1),
     );
     this.round++;
@@ -1042,8 +1062,8 @@ export class GameModel {
         if (i !== gap)
           this.addHazard(
             'circle',
-            clamp(p.x + (i % 2 ? 90 : -90), 70, 1130),
-            clamp(p.y + (i < 2 ? -75 : 75), 70, 730),
+            clamp(p.x + (i % 2 ? 90 : -90), 70, this.world.width - 70),
+            clamp(p.y + (i < 2 ? -75 : 75), 70, this.world.height - 70),
             '毕业终审',
             color,
             { radius: 62, warn: 1.5, duration: 0.7, damage: 32 },
@@ -1069,8 +1089,8 @@ export class GameModel {
       for (let i = 0; i < 6; i++)
         this.addHazard(
           'circle',
-          clamp(p.x - 180 + i * 72, 65, 1135),
-          clamp(p.y + Math.sin(i * 1.2 + n) * 75, 65, 735),
+          clamp(p.x - 180 + i * 72, 65, this.world.width - 65),
+          clamp(p.y + Math.sin(i * 1.2 + n) * 75, 65, this.world.height - 65),
           'Chinese Snake · 蛇身封路',
           color,
           { radius: 37, warn: 1.25 + i * 0.2, damage: 25 },
@@ -1121,8 +1141,8 @@ export class GameModel {
         );
       this.addHazard(
         'circle',
-        clamp(p.x + p.dx * 160, 95, 1105),
-        clamp(p.y + p.dy * 160, 95, 705),
+        clamp(p.x + p.dx * 160, 95, this.world.width - 95),
+        clamp(p.y + p.dy * 160, 95, this.world.height - 95),
         '车王冲刺终点',
         color,
         { radius: 48, warn: 1.65, duration: 0.35, damage: 29 },
@@ -1138,8 +1158,8 @@ export class GameModel {
       for (const side of [-1, 1])
         this.addHazard(
           'circle',
-          clamp(p.x + side * 105, 65, 1135),
-          clamp(p.y - 85, 65, 735),
+          clamp(p.x + side * 105, 65, this.world.width - 65),
+          clamp(p.y - 85, 65, this.world.height - 65),
           '馒头引理',
           color,
           { radius: 55, warn: 2.25, damage: 27 },
@@ -1311,9 +1331,14 @@ export class GameModel {
       this.questDone = true;
       this.passed++;
       this.credits += 2;
-      this.hp = Math.min(100, this.hp + 12);
+      const healed = this.heal(12);
       this.events.push('credit');
-      this.notify('作业已提交！+2 学分 · 生命恢复', 4);
+      this.notify(
+        healed
+          ? '作业已提交！+2 学分 · 生命恢复'
+          : '作业已提交！+2 学分 · 圈尽后仅合成回血',
+        4,
+      );
       this.effect(
         this.player.x,
         this.player.y - 50,
@@ -1446,9 +1471,18 @@ export class GameModel {
           ? 340
           : 215;
     const prev = { x: this.player.x, y: this.player.y };
-    this.player.x = clamp(this.player.x + moveX * speed * dt, 55, 1145);
-    this.player.y = clamp(this.player.y + moveY * speed * dt, 65, 735);
+    this.player.x = clamp(
+      this.player.x + moveX * speed * dt,
+      55,
+      this.world.width - 55,
+    );
+    this.player.y = clamp(
+      this.player.y + moveY * speed * dt,
+      65,
+      this.world.height - 65,
+    );
     if (
+      this.world === WORLD &&
       (this.player.x < 170 || this.player.x > 1030) &&
       (this.player.y < 145 || this.player.y > 690)
     ) {
@@ -1541,7 +1575,7 @@ export class GameModel {
                 );
             }
         }
-        if (d.kind === 'heal') this.hp = Math.min(100, this.hp + 1.2);
+        if (d.kind === 'heal') this.heal(1.2);
         this.checkKills();
         if (this.mode !== 'playing') return;
       }
@@ -1598,8 +1632,8 @@ export class GameModel {
     if (this.bonusSpawn <= 0) {
       if (this.drops.filter((d) => d.kind === 'badge').length < 3)
         this.spawnDrop(
-          clamp(this.player.x + 100, 100, 1100),
-          clamp(this.player.y + 70, 110, 690),
+          clamp(this.player.x + 100, 100, this.world.width - 100),
+          clamp(this.player.y + 70, 110, this.world.height - 110),
         );
       this.bonusSpawn = 10;
     }
@@ -1770,7 +1804,12 @@ export class GameModel {
     if (this.mode !== 'playing') return;
     this.shots.push(...children);
     this.shots = this.shots.filter(
-      (s) => s.life > 0 && s.x > -30 && s.x < 1230 && s.y > -30 && s.y < 830,
+      (s) =>
+        s.life > 0 &&
+        s.x > -30 &&
+        s.x < this.world.width + 30 &&
+        s.y > -30 &&
+        s.y < this.world.height + 30,
     );
     for (const d of this.drops) {
       if (this.mode !== 'playing') return;
@@ -1785,8 +1824,8 @@ export class GameModel {
           (f.endY - f.startY) * progress +
           Math.sin(progress * Math.PI * 2) * f.bend;
       } else {
-        d.x = clamp(d.x + d.vx * dt, 70, 1130);
-        d.y = clamp(d.y + d.vy * dt, 80, 720);
+        d.x = clamp(d.x + d.vx * dt, 70, this.world.width - 70);
+        d.y = clamp(d.y + d.vy * dt, 80, this.world.height - 80);
         d.vx *= Math.exp(-dt * 5);
         d.vy *= Math.exp(-dt * 5);
       }
@@ -1817,7 +1856,7 @@ export class GameModel {
           this.eatFood(d.kind);
           if (this.mode !== 'playing') return;
         } else if (d.kind === 'heal') {
-          this.hp = Math.min(100, this.hp + 8);
+          const healed = this.heal(8);
           d.age = 999;
           this.effect(
             this.player.x,
@@ -1826,7 +1865,7 @@ export class GameModel {
             '#a4f3c3',
             0,
             0.8,
-            '+8',
+            healed ? '+8' : '仅合成可回血',
           );
         } else if (this.inventory.length < 5) {
           this.inventory.push(d.level);

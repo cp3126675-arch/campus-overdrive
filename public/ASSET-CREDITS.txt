@@ -629,3 +629,6 @@ New textbook covers are publisher-provided originals / display thumbnails, sourc
   https://www.thepaper.cn/newsDetail_forward_33966429
   https://imgpai.thepaper.cn/pphimage/20260828/fd50541a-14a9-4db8-b30a-7b67b187756e.jpg
 Boss reuse: coder-pity.png is the user-provided image; bike-photo.jpg and tsinghua-gate-1280.jpg retain earlier source / license records above.
+
+[2026-09-08] art/tsinghua-campus-map.jpg
+User-supplied campus map attachment; original creator and source URL not supplied. Used as survival-mode background; original bytes preserved, WebP delivery copy generated. License: NOASSERTION; not covered by the original-code MIT license.
