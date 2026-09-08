@@ -2,7 +2,7 @@
 
 非官方清北校园题材的 2D 徽章合成动作竞速游戏。操控中央徽章，击败教材怪、躲避 Boss、抢鹅腿，合成清华并击败最终 Boss。
 
-[在线试玩 v0.6.0](https://cp3126675-arch.github.io/campus-overdrive/?v=0.6.0) · [贡献指南](CONTRIBUTING.md) · [配乐投稿](public/audio/README.md) · [游戏总纲](docs/游戏设计与长期开发文档.md) · [版本记录](RELEASES.md)
+[在线试玩 v0.6.2](https://cp3126675-arch.github.io/campus-overdrive/?v=0.6.2) · [贡献指南](CONTRIBUTING.md) · [配乐投稿](public/audio/README.md) · [游戏总纲](docs/游戏设计与长期开发文档.md) · [版本记录](RELEASES.md)
 
 ## 下载与运行
 
@@ -63,7 +63,7 @@ npm run build
 
 ## 发布与回滚
 
-当前可玩版本为 **v0.6.0**，四场景配乐与图片、渲染优化已发布并核验。完整源码已通过 PR #2 公开，更新通过 PR #3 合并；普通 PR 只运行检查。v0.5.2 原始包和 GitHub Release 历史继续保留，可作为回滚目标。[版本与回滚说明](docs/版本管理与回滚.md)
+当前可玩版本为 **v0.6.2**，全服排行榜与横屏摇杆修复通过 PR #4 发布，CI、Pages 和线上 245/245 文件哈希已核验。普通 PR 只运行检查。上一公开版 v0.6.0 原始包和 GitHub Release 历史保留，可作为回滚目标。[版本与回滚说明](docs/版本管理与回滚.md)
 
 ## 许可证
 
@@ -73,10 +73,10 @@ npm run build
 
 [v0.6.0 Release](https://github.com/cp3126675-arch/campus-overdrive/releases/tag/v0.6.0) 已公开，线上 244 个文件与封存包哈希一致；OPPO 微信真机待复验。图片原件在 `public/art`、`public/badges`；`npm run assets:optimize` 生成带内容哈希的 WebP 与清单，`npm run check:assets` 校验原图/压缩图一致和体积预算。静态导出只交付压缩图，源码不删除原图。配乐接入与署名边界见 [PR #1 记录](docs/contributions/PR-1-配乐接入.md)。
 
-## v0.6.1 修复候选
+## 横屏触控修复（已随 v0.6.2 发布）
 
-横屏手机和平板摇杆采用统一输入模式，首页与暂停菜单可选择“自动／触控／键鼠”。已完成本地检查与构建，线上仍为 v0.6.0；见 [验证与发布状态](docs/releases/0.6.1-validation.md)。
+横屏手机和平板摇杆采用统一输入模式，首页与暂停菜单可选择“自动／触控／键鼠”。已通过本地回归和 GitHub CI，OPPO 微信真机待复验；见 [验证与发布状态](docs/releases/0.6.2-validation.md)。
 
-## v0.6.2 全服排行榜候选
+## v0.6.2 全服排行榜
 
-昵称参榜，院系前10名、总榜前20名，每名玩家只按最佳成绩排名；本机历史和个人最佳单独保留。使用独立 Cloudflare Pages Functions + D1，前端继续在 GitHub Pages。生产 API 已部署并验收，GitHub 游戏发布待完成，线上仍为 v0.6.0。[部署说明](docs/全服排行榜部署.md)
+昵称参榜，院系前10名、总榜前20名，每名玩家只按最佳成绩排名；本机历史和个人最佳单独保留。使用独立 Cloudflare Pages Functions + D1，前端继续在 GitHub Pages。生产 API 已部署并验收，GitHub 游戏 v0.6.2 已发布。[部署说明](docs/全服排行榜部署.md)
