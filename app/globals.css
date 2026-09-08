@@ -976,215 +976,235 @@ a {
   -webkit-user-select: none;
   user-select: none;
 }
-@media (pointer: coarse) and (hover: none) {
-  .battle-hud {
-    top: max(12px, var(--game-safe-top));
-    left: max(10px, var(--game-safe-left));
-    right: max(10px, var(--game-safe-right));
-  }
-  .battle-options button {
-    width: 44px;
-    height: 44px;
-  }
-  .battle-options {
-    gap: 2px;
-  }
-  .hp-panel {
-    width: 96px;
-  }
-  .race-clock {
-    left: 52%;
-    padding: 7px 9px;
-  }
-  .race-clock strong {
-    font-size: 21px;
-  }
-  .battle-bottom {
-    left: max(14px, var(--game-safe-left));
-    right: max(14px, var(--game-safe-right));
-    bottom: max(20px, var(--game-safe-bottom));
-    height: 148px;
-    gap: 10px;
-  }
-  .movement-stick {
-    display: grid;
-    place-items: center;
-    position: relative;
-    flex: 0 0 124px;
-    width: 124px;
-    height: 124px;
-    margin-bottom: 8px;
-    border: 2px solid #bedaff70;
-    border-radius: 50%;
-    background: radial-gradient(circle, #314d6a9e, #0e1b31b8);
-    box-shadow: inset 0 0 0 14px #d3e9ff0d;
-    touch-action: none;
-    pointer-events: auto;
-  }
-  .stick-cross {
-    position: absolute;
-    inset: 22px;
-    border: 1px dashed #bad7ff33;
-    border-radius: 50%;
-    pointer-events: none;
-  }
-  .stick-thumb {
-    width: 54px;
-    height: 54px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 28%, #d8e9fd, #6d99c0);
-    border: 2px solid #e0f1ffba;
-    box-shadow: 0 5px 15px #07122588;
-    pointer-events: none;
-    will-change: transform;
-  }
-  .stick-label {
-    position: absolute;
-    bottom: -20px;
-    color: #d4e3f5;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    pointer-events: none;
-  }
-  .battle-skills {
-    display: grid;
-    grid-template-columns: 64px 72px;
-    grid-template-rows: 64px 72px;
-    gap: 8px;
-    align-items: center;
-    justify-items: center;
-  }
-  .battle-skills button {
-    width: 64px;
-    height: 64px;
-    min-width: 44px;
-    min-height: 44px;
-    border-radius: 50%;
-    touch-action: none;
-    box-shadow: 0 4px 16px #08122670;
-  }
-  .battle-skills button:first-child {
-    grid-column: 2;
-    grid-row: 1;
-  }
-  .battle-skills button:nth-child(2) {
-    grid-column: 2;
-    grid-row: 2;
-    width: 72px;
-    height: 72px;
-  }
-  .battle-skills button:nth-child(3) {
-    grid-column: 1;
-    grid-row: 2;
-  }
-  .battle-skills button:active:not(:disabled) {
-    transform: scale(0.93);
-    border-color: #fff;
-  }
-  .battle-skills svg {
-    width: 22px;
-    height: 22px;
-  }
-  .battle-skills b {
-    font-size: 12px;
-  }
-  .battle-skills kbd {
-    display: none;
-  }
-  .held-badges {
-    position: absolute;
-    bottom: 162px;
-    left: 50%;
-    transform: translateX(-50%);
-    gap: 5px;
-    padding: 5px 7px;
-  }
-  .held-badges img {
-    width: 25px;
-    height: 25px;
-  }
-  .held-badges .largest img {
-    width: 31px;
-    height: 31px;
-  }
-  .battle-toast {
-    bottom: calc(max(20px, var(--game-safe-bottom)) + 207px);
-    max-width: 86%;
-    font-size: 12px;
-  }
-  .wave-hud {
-    top: calc(max(12px, var(--game-safe-top)) + 90px);
-  }
-  .quest-hud {
-    top: calc(max(12px, var(--game-safe-top)) + 151px);
-  }
-  .title-sound {
-    top: max(18px, var(--game-safe-top));
-    right: max(18px, var(--game-safe-right));
-  }
+.challenge.touch-controls .battle-hud {
+  top: max(12px, var(--game-safe-top));
+  left: max(10px, var(--game-safe-left));
+  right: max(10px, var(--game-safe-right));
 }
-@media (pointer: coarse) and (hover: none) {
-  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
-    .battle-options {
-    flex-direction: row;
-  }
-  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
-    .battle-bottom {
-    height: 122px;
-    bottom: max(10px, var(--game-safe-bottom));
-  }
-  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
-    .movement-stick {
-    width: 100px;
-    height: 100px;
-    flex-basis: 100px;
-  }
-  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
-    .stick-thumb {
-    width: 44px;
-    height: 44px;
-  }
-  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
-    .stick-label {
-    display: none;
-  }
-  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
-    .battle-skills {
-    grid-template-columns: 56px 62px;
-    grid-template-rows: 56px 62px;
-    gap: 4px;
-  }
-  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
-    .battle-skills
-    button {
-    width: 56px;
-    height: 56px;
-  }
-  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
-    .battle-skills
-    button:nth-child(2) {
-    width: 62px;
-    height: 62px;
-  }
-  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
-    .held-badges {
-    bottom: 0;
-  }
-  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
-    .wave-hud {
-    top: calc(max(8px, var(--game-safe-top)) + 58px);
-    padding: 5px 12px;
-  }
-  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
-    .quest-hud {
-    display: none;
-  }
-  :where(.challenge[data-height-max-550='true'][data-layout='landscape'])
-    .battle-toast {
-    bottom: 57px;
-    max-width: 45%;
-    padding: 6px 10px;
-  }
+.challenge.touch-controls .battle-options button {
+  width: 44px;
+  height: 44px;
+}
+.challenge.touch-controls .battle-options {
+  gap: 2px;
+}
+.challenge.touch-controls .hp-panel {
+  width: 96px;
+}
+.challenge.touch-controls .race-clock {
+  left: 52%;
+  padding: 7px 9px;
+}
+.challenge.touch-controls .race-clock strong {
+  font-size: 21px;
+}
+.challenge.touch-controls .battle-bottom {
+  left: max(14px, var(--game-safe-left));
+  right: max(14px, var(--game-safe-right));
+  bottom: max(20px, var(--game-safe-bottom));
+  height: 148px;
+  gap: 10px;
+}
+.challenge.touch-controls .movement-stick {
+  display: grid;
+  place-items: center;
+  position: relative;
+  flex: 0 0 124px;
+  width: 124px;
+  height: 124px;
+  margin-bottom: 8px;
+  border: 2px solid #bedaff70;
+  border-radius: 50%;
+  background: radial-gradient(circle, #314d6a9e, #0e1b31b8);
+  box-shadow: inset 0 0 0 14px #d3e9ff0d;
+  touch-action: none;
+  pointer-events: auto;
+}
+.challenge.touch-controls .stick-cross {
+  position: absolute;
+  inset: 22px;
+  border: 1px dashed #bad7ff33;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.challenge.touch-controls .stick-thumb {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, #d8e9fd, #6d99c0);
+  border: 2px solid #e0f1ffba;
+  box-shadow: 0 5px 15px #07122588;
+  pointer-events: none;
+  will-change: transform;
+}
+.challenge.touch-controls .stick-label {
+  position: absolute;
+  bottom: -20px;
+  color: #d4e3f5;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  pointer-events: none;
+}
+.challenge.touch-controls .battle-skills {
+  display: grid;
+  grid-template-columns: 64px 72px;
+  grid-template-rows: 64px 72px;
+  gap: 8px;
+  align-items: center;
+  justify-items: center;
+}
+.challenge.touch-controls .battle-skills button {
+  width: 64px;
+  height: 64px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 50%;
+  touch-action: none;
+  box-shadow: 0 4px 16px #08122670;
+}
+.challenge.touch-controls .battle-skills button:first-child {
+  grid-column: 2;
+  grid-row: 1;
+}
+.challenge.touch-controls .battle-skills button:nth-child(2) {
+  grid-column: 2;
+  grid-row: 2;
+  width: 72px;
+  height: 72px;
+}
+.challenge.touch-controls .battle-skills button:nth-child(3) {
+  grid-column: 1;
+  grid-row: 2;
+}
+.challenge.touch-controls .battle-skills button:active:not(:disabled) {
+  transform: scale(0.93);
+  border-color: #fff;
+}
+.challenge.touch-controls .battle-skills svg {
+  width: 22px;
+  height: 22px;
+}
+.challenge.touch-controls .battle-skills b {
+  font-size: 12px;
+}
+.challenge.touch-controls .battle-skills kbd {
+  display: none;
+}
+.challenge.touch-controls .held-badges {
+  position: absolute;
+  bottom: 162px;
+  left: 50%;
+  transform: translateX(-50%);
+  gap: 5px;
+  padding: 5px 7px;
+}
+.challenge.touch-controls .held-badges img {
+  width: 25px;
+  height: 25px;
+}
+.challenge.touch-controls .held-badges .largest img {
+  width: 31px;
+  height: 31px;
+}
+.challenge.touch-controls .battle-toast {
+  bottom: calc(max(20px, var(--game-safe-bottom)) + 207px);
+  max-width: 86%;
+  font-size: 12px;
+}
+.challenge.touch-controls .wave-hud {
+  top: calc(max(12px, var(--game-safe-top)) + 90px);
+}
+.challenge.touch-controls .quest-hud {
+  top: calc(max(12px, var(--game-safe-top)) + 151px);
+}
+.challenge.touch-controls .title-sound {
+  top: max(18px, var(--game-safe-top));
+  right: max(18px, var(--game-safe-right));
+}
+:where(
+    .challenge.touch-controls[data-height-max-550='true'][data-layout='landscape']
+  )
+  .battle-options {
+  flex-direction: row;
+}
+:where(
+    .challenge.touch-controls[data-height-max-550='true'][data-layout='landscape']
+  )
+  .battle-bottom {
+  height: 122px;
+  bottom: max(10px, var(--game-safe-bottom));
+}
+:where(
+    .challenge.touch-controls[data-height-max-550='true'][data-layout='landscape']
+  )
+  .movement-stick {
+  width: 100px;
+  height: 100px;
+  flex-basis: 100px;
+}
+:where(
+    .challenge.touch-controls[data-height-max-550='true'][data-layout='landscape']
+  )
+  .stick-thumb {
+  width: 44px;
+  height: 44px;
+}
+:where(
+    .challenge.touch-controls[data-height-max-550='true'][data-layout='landscape']
+  )
+  .stick-label {
+  display: none;
+}
+:where(
+    .challenge.touch-controls[data-height-max-550='true'][data-layout='landscape']
+  )
+  .battle-skills {
+  grid-template-columns: 56px 62px;
+  grid-template-rows: 56px 62px;
+  gap: 4px;
+}
+:where(
+    .challenge.touch-controls[data-height-max-550='true'][data-layout='landscape']
+  )
+  .battle-skills
+  button {
+  width: 56px;
+  height: 56px;
+}
+:where(
+    .challenge.touch-controls[data-height-max-550='true'][data-layout='landscape']
+  )
+  .battle-skills
+  button:nth-child(2) {
+  width: 62px;
+  height: 62px;
+}
+:where(
+    .challenge.touch-controls[data-height-max-550='true'][data-layout='landscape']
+  )
+  .held-badges {
+  bottom: 0;
+}
+:where(
+    .challenge.touch-controls[data-height-max-550='true'][data-layout='landscape']
+  )
+  .wave-hud {
+  top: calc(max(8px, var(--game-safe-top)) + 58px);
+  padding: 5px 12px;
+}
+:where(
+    .challenge.touch-controls[data-height-max-550='true'][data-layout='landscape']
+  )
+  .quest-hud {
+  display: none;
+}
+:where(
+    .challenge.touch-controls[data-height-max-550='true'][data-layout='landscape']
+  )
+  .battle-toast {
+  bottom: 57px;
+  max-width: 45%;
+  padding: 6px 10px;
 }
 
 .main-weapon-label {
@@ -1200,15 +1220,12 @@ a {
 :where(.challenge[data-width-max-600='true']) .title-actions {
   gap: 8px;
 }
-@media (pointer: coarse) and (hover: none) {
-  .quest-hud {
-    top: calc(max(12px, var(--game-safe-top)) + 187px);
-  }
+.challenge.touch-controls .quest-hud {
+  top: calc(max(12px, var(--game-safe-top)) + 187px);
 }
-@media (pointer: coarse) and (hover: none) {
-  :where(.challenge[data-height-max-550='true']) .main-weapon-label {
-    display: none;
-  }
+:where(.challenge.touch-controls[data-height-max-550='true'])
+  .main-weapon-label {
+  display: none;
 }
 
 /* A single edge-mounted HUD keeps the center of the road clear. */
@@ -1325,45 +1342,43 @@ a {
 :where(.challenge[data-width-max-900='true']) .quest-hud {
   display: none;
 }
-@media (pointer: coarse) and (hover: none) {
-  .battle-hud {
-    grid-template-columns: 106px 92px minmax(120px, 1fr) 92px;
-    gap: 9px;
-    left: max(10px, var(--game-safe-left));
-    right: max(10px, var(--game-safe-right));
-  }
-  .battle-hud .hp-panel {
-    width: 106px;
-    padding: 7px;
-  }
-  .battle-hud .hp-panel > div:first-child {
-    display: block;
-    font-size: 12px;
-  }
-  .battle-hud .hp-panel span {
-    display: none;
-  }
-  .battle-hud .race-clock strong {
-    font-size: 24px;
-  }
-  .battle-hud .wave-hud {
-    padding: 5px 8px;
-    max-width: 245px;
-    border-radius: 8px;
-  }
-  .wave-hud b {
-    font-size: 12px;
-  }
-  .wave-hud span {
-    font-size: 11px;
-  }
-  .wave-hud .boss-track {
-    margin-top: 4px;
-    height: 4px;
-  }
-  .quest-hud {
-    display: none;
-  }
+.challenge.touch-controls .battle-hud {
+  grid-template-columns: 106px 92px minmax(120px, 1fr) 92px;
+  gap: 9px;
+  left: max(10px, var(--game-safe-left));
+  right: max(10px, var(--game-safe-right));
+}
+.challenge.touch-controls .battle-hud .hp-panel {
+  width: 106px;
+  padding: 7px;
+}
+.challenge.touch-controls .battle-hud .hp-panel > div:first-child {
+  display: block;
+  font-size: 12px;
+}
+.challenge.touch-controls .battle-hud .hp-panel span {
+  display: none;
+}
+.challenge.touch-controls .battle-hud .race-clock strong {
+  font-size: 24px;
+}
+.challenge.touch-controls .battle-hud .wave-hud {
+  padding: 5px 8px;
+  max-width: 245px;
+  border-radius: 8px;
+}
+.challenge.touch-controls .wave-hud b {
+  font-size: 12px;
+}
+.challenge.touch-controls .wave-hud span {
+  font-size: 11px;
+}
+.challenge.touch-controls .wave-hud .boss-track {
+  margin-top: 4px;
+  height: 4px;
+}
+.challenge.touch-controls .quest-hud {
+  display: none;
 }
 
 /* v0.4 searchable department loadout: compact on landscape phones. */
@@ -1502,151 +1517,153 @@ a {
 .department-picker select {
   font-size: 16px;
 }
-@media (pointer: coarse) and (hover: none) {
-  .battle-hud {
-    top: max(6px, var(--game-safe-top));
-    gap: 6px;
-  }
-  .battle-hud .wave-hud {
-    max-width: 320px;
-    background: #101827c7;
-  }
-  .battle-hud .wave-hud b {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .battle-hud .race-clock {
-    padding: 4px 5px;
-  }
-  .battle-hud .race-clock small {
-    font-size: 9px;
-  }
-  .battle-hud .race-clock strong {
-    font-size: 21px;
-  }
-  .battle-bottom {
-    height: 154px;
-    left: max(12px, var(--game-safe-left));
-    right: max(12px, var(--game-safe-right));
-    bottom: max(8px, var(--game-safe-bottom));
-  }
-  .movement-stick {
-    width: 164px;
-    height: 142px;
-    flex-basis: 164px;
-    border: 0;
-    border-radius: 18px;
-    background: transparent;
-    box-shadow: none;
-    margin: 0;
-    overflow: visible;
-  }
-  .stick-thumb {
-    width: 48px;
-    height: 48px;
-    opacity: 0.78;
-  }
-  .stick-cross {
-    inset: 12px;
-  }
-  .is-dragging .stick-origin {
-    border-color: #e4f9ff;
-  }
-  .is-dragging .stick-thumb {
-    opacity: 1;
-  }
-  .stick-label {
-    display: none;
-  }
-  .held-badges {
-    position: absolute;
-    bottom: 0;
-    left: 176px;
-    gap: 4px;
-    padding: 4px;
-    opacity: 0.8;
-  }
-  .held-badges img,
-  .held-badges .largest img {
-    width: 24px;
-    height: 24px;
-  }
-  .held-badges small {
-    font-size: 9px;
-  }
-  .battle-skills {
-    grid-template-columns: 66px 76px;
-    grid-template-rows: 66px 76px;
-    gap: 10px;
-    flex-shrink: 0;
-  }
-  .battle-skills button {
-    width: 66px;
-    height: 66px;
-    background-color: #152139bc;
-  }
-  .battle-skills button:first-child {
-    width: 76px;
-    height: 76px;
-    grid-row: 2;
-    grid-column: 2;
-  }
-  .battle-skills button:nth-child(2) {
-    width: 66px;
-    height: 66px;
-    grid-row: 2;
-    grid-column: 1;
-  }
-  .battle-skills button:nth-child(3) {
-    width: 66px;
-    height: 66px;
-    grid-row: 1;
-    grid-column: 2;
-  }
-  .battle-skills button .skill-tooltip {
-    display: none;
-  }
-  .battle-skills b {
-    font-size: 12px;
-  }
-  .battle-toast {
-    bottom: auto;
-    top: 66px;
-    max-width: calc(100% - 230px);
-    padding: 4px 10px;
-    font-size: 11px;
-    background: #11182780;
-  }
+.challenge.touch-controls .battle-hud {
+  top: max(6px, var(--game-safe-top));
+  gap: 6px;
 }
-@media (pointer: coarse) and (hover: none) {
-  :where(.challenge[data-width-max-680='true']) .battle-hud {
-    grid-template-columns: 84px 76px minmax(110px, 1fr) 92px;
-  }
-  :where(.challenge[data-width-max-680='true']) .battle-hud .hp-panel {
-    width: 84px;
-  }
-  :where(.challenge[data-width-max-680='true']) .battle-hud .wave-hud span {
-    font-size: 10px;
-  }
-  :where(.challenge[data-width-max-680='true']) .held-badges {
-    left: 158px;
-    gap: 2px;
-  }
-  :where(.challenge[data-width-max-680='true']) .held-badges img,
-  :where(.challenge[data-width-max-680='true']) .held-badges .largest img {
-    width: 21px;
-    height: 21px;
-  }
-  :where(.challenge[data-width-max-680='true']) .movement-stick {
-    width: 146px;
-    flex-basis: 146px;
-  }
+.challenge.touch-controls .battle-hud .wave-hud {
+  max-width: 320px;
+  background: #101827c7;
 }
-@media (pointer: coarse) and (hover: none) {
-  .held-badges {
-    transform: none;
-  }
+.challenge.touch-controls .battle-hud .wave-hud b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.challenge.touch-controls .battle-hud .race-clock {
+  padding: 4px 5px;
+}
+.challenge.touch-controls .battle-hud .race-clock small {
+  font-size: 9px;
+}
+.challenge.touch-controls .battle-hud .race-clock strong {
+  font-size: 21px;
+}
+.challenge.touch-controls .battle-bottom {
+  height: 154px;
+  left: max(12px, var(--game-safe-left));
+  right: max(12px, var(--game-safe-right));
+  bottom: max(8px, var(--game-safe-bottom));
+}
+.challenge.touch-controls .movement-stick {
+  width: 164px;
+  height: 142px;
+  flex-basis: 164px;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  box-shadow: none;
+  margin: 0;
+  overflow: visible;
+}
+.challenge.touch-controls .stick-thumb {
+  width: 48px;
+  height: 48px;
+  opacity: 0.78;
+}
+.challenge.touch-controls .stick-cross {
+  inset: 12px;
+}
+.challenge.touch-controls .is-dragging .stick-origin {
+  border-color: #e4f9ff;
+}
+.challenge.touch-controls .is-dragging .stick-thumb {
+  opacity: 1;
+}
+.challenge.touch-controls .stick-label {
+  display: none;
+}
+.challenge.touch-controls .held-badges {
+  position: absolute;
+  bottom: 0;
+  left: 176px;
+  gap: 4px;
+  padding: 4px;
+  opacity: 0.8;
+}
+.challenge.touch-controls .held-badges img,
+.challenge.touch-controls .held-badges .largest img {
+  width: 24px;
+  height: 24px;
+}
+.challenge.touch-controls .held-badges small {
+  font-size: 9px;
+}
+.challenge.touch-controls .battle-skills {
+  grid-template-columns: 66px 76px;
+  grid-template-rows: 66px 76px;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.challenge.touch-controls .battle-skills button {
+  width: 66px;
+  height: 66px;
+  background-color: #152139bc;
+}
+.challenge.touch-controls .battle-skills button:first-child {
+  width: 76px;
+  height: 76px;
+  grid-row: 2;
+  grid-column: 2;
+}
+.challenge.touch-controls .battle-skills button:nth-child(2) {
+  width: 66px;
+  height: 66px;
+  grid-row: 2;
+  grid-column: 1;
+}
+.challenge.touch-controls .battle-skills button:nth-child(3) {
+  width: 66px;
+  height: 66px;
+  grid-row: 1;
+  grid-column: 2;
+}
+.challenge.touch-controls .battle-skills button .skill-tooltip {
+  display: none;
+}
+.challenge.touch-controls .battle-skills b {
+  font-size: 12px;
+}
+.challenge.touch-controls .battle-toast {
+  bottom: auto;
+  top: 66px;
+  max-width: calc(100% - 230px);
+  padding: 4px 10px;
+  font-size: 11px;
+  background: #11182780;
+}
+:where(.challenge.touch-controls[data-width-max-680='true']) .battle-hud {
+  grid-template-columns: 84px 76px minmax(110px, 1fr) 92px;
+}
+:where(.challenge.touch-controls[data-width-max-680='true'])
+  .battle-hud
+  .hp-panel {
+  width: 84px;
+}
+:where(.challenge.touch-controls[data-width-max-680='true'])
+  .battle-hud
+  .wave-hud
+  span {
+  font-size: 10px;
+}
+:where(.challenge.touch-controls[data-width-max-680='true']) .held-badges {
+  left: 158px;
+  gap: 2px;
+}
+:where(.challenge.touch-controls[data-width-max-680='true']) .held-badges img,
+:where(.challenge.touch-controls[data-width-max-680='true'])
+  .held-badges
+  .largest
+  img {
+  width: 21px;
+  height: 21px;
+}
+:where(.challenge.touch-controls[data-width-max-680='true']) .movement-stick {
+  width: 146px;
+  flex-basis: 146px;
+}
+.challenge.touch-controls .held-badges {
+  transform: none;
 }
 /* v0.5.1 input mode follows the primary pointer, never viewport width alone. */
 .desktop-controls .movement-stick {
@@ -1747,8 +1764,8 @@ a {
     --game-vh: 1dvh;
   }
 }
-@media (pointer: coarse) and (hover: none) and (orientation: portrait) {
-  .challenge {
+@media (orientation: portrait) {
+  .challenge.touch-controls {
     --game-vw: 1vh;
     --game-vh: 1vw;
     --game-rotated: 1;
@@ -1764,8 +1781,176 @@ a {
     transform: rotate(90deg);
   }
   @supports (height: 100dvh) {
-    .challenge {
+    .challenge.touch-controls {
       --game-vw: 1dvh;
     }
   }
+}
+
+/* v0.6.1: layout follows the selected input mode, including WebView fallback. */
+.title-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.input-mode-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #f4f1e8;
+}
+.input-mode-picker select {
+  min-height: 40px;
+  padding: 6px;
+  border: 1px solid #f6efde66;
+  border-radius: 8px;
+  background: #122032;
+  color: #fff;
+  font-size: 16px;
+}
+.game-modal .input-mode-picker {
+  margin: 12px 0;
+}
+
+/* Records are mounted only when opened, never drawn inside the battle canvas. */
+.records-dialog {
+  width: min(720px, calc(100% - 32px));
+  max-width: min(720px, calc(100% - 32px));
+  max-height: calc(var(--game-vh) * 88);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  color: #f4f1e8;
+  background: #142035;
+}
+.records-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.records-heading h2 {
+  font-size: 20px;
+}
+.records-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+.records-filter select {
+  flex: 1;
+  min-width: 0;
+  padding: 7px;
+  border: 1px solid #72839f;
+  border-radius: 8px;
+  background: #1d2c46;
+  color: white;
+  font-size: 16px;
+}
+.records-scroll {
+  overflow: auto;
+  min-height: 40px;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+}
+.records-scroll table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.records-scroll th,
+.records-scroll td {
+  padding: 9px 5px;
+  text-align: left;
+  border-bottom: 1px solid #ffffff18;
+}
+.records-scroll td:nth-child(2) {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+.records-scroll th {
+  position: sticky;
+  top: 0;
+  background: #142035;
+}
+.record-first {
+  color: #f5d890;
+}
+.records-empty {
+  padding: 20px 4px;
+  line-height: 1.7;
+}
+.records-footnote {
+  font-size: 11px;
+  color: #b7c5db;
+}
+.record-celebration {
+  display: block;
+  margin: 8px 0;
+  padding: 9px;
+  border: 1px solid #e7c57466;
+  border-radius: 10px;
+  background: #dfb33a12;
+  color: #f5d890;
+}
+.record-celebration b,
+.record-celebration strong,
+.record-celebration small {
+  display: block;
+}
+.record-celebration strong {
+  font-size: 23px;
+  font-variant-numeric: tabular-nums;
+}
+
+.result-reveal {
+  align-items: start;
+}
+.result-reveal > section {
+  margin-block: auto;
+}
+.records-dialog [data-slot='dialog-description'] {
+  color: #b7c5db;
+}
+
+.records-tabs {
+  display: flex;
+  gap: 8px;
+}
+.records-identity {
+  font-size: 12px;
+  padding: 8px;
+  background: #ffffff09;
+  border-radius: 8px;
+}
+.records-identity form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.records-identity input {
+  flex: 1;
+  min-width: 100px;
+  background: #1d2c46;
+  color: white;
+  border: 1px solid #72839f;
+  padding: 7px;
+  border-radius: 7px;
+  font-size: 16px;
+}
+.records-identity output,
+.records-identity > small {
+  display: block;
+  margin-top: 5px;
+}
+.records-scroll td {
+  overflow-wrap: anywhere;
+}
+.online-score-status {
+  color: #bbd1e4;
 }

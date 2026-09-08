@@ -27,5 +27,6 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm test
+      - run: npm run test:leaderboard
       - run: npm run build:pages
       - run: npm run build

@@ -1,0 +1,13 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "campus-overdrive-leaderboard",
+  "main": "worker.ts",
+  "compatibility_date": "2026-05-22",
+  "vars": { "ALLOWED_ORIGINS": "https://cp3126675-arch.github.io" },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "campus-overdrive-scores",
+    "database_id": "d6837603-9c50-46cd-9d4d-b1b9b473a577",
+    "migrations_dir": "migrations"
+  }]
+}
