@@ -1,0 +1,16 @@
+{
+  "version": "0.6.7",
+  "api": "https://campus-overdrive-scores.pages.dev",
+  "checks": [
+    "production health advertises nickname editing; CORS verified",
+    "authenticated rename preserves original player id and token",
+    "missing credentials and invalid names rejected",
+    "repeated edits with original token; arbitrary body playerId ignored",
+    "no token returned by rename",
+    "new production score tables accept highest score and shortest tied time; both scopes verified",
+    "new score board nickname reflects authenticated rename",
+    "legacy time/race queries remain available and isolated"
+  ],
+  "cleanup": true,
+  "scoreWrites": 4
+}

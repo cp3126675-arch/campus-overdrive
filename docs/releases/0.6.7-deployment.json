@@ -1,0 +1,22 @@
+{
+  "version": "0.6.7",
+  "status": "published and verified",
+  "sourceCommit": "165297517c4c59c54aaa0c817d0d9026706c5964",
+  "publicSourceCommit": "b729f4a6682869917f75bf29b0c65f3928d68f31",
+  "deploymentCommit": "b49334927312553a19145661fee4cbe422396b22",
+  "archiveSha256": "19d0181881a528b959dc65142418e5a76d750155f44c372ce552c54282d4f3a5",
+  "pr": 9,
+  "ciRun": 34238010464,
+  "pagesRun": 34238253540,
+  "liveFilesMatched": 246,
+  "backendDeployment": "https://d95ca8eb.campus-overdrive-scores.pages.dev",
+  "backendMigration": "0003_survival_score.sql",
+  "productionApi": "passed; temporary data removed",
+  "release": "https://github.com/cp3126675-arch/campus-overdrive/releases/tag/v0.6.7",
+  "rollback": {
+    "version": "0.6.6",
+    "deploymentCommit": "faa7930459a2888aff13e2777d39536b2bf5c831",
+    "archiveSha256": "e04f1acdfbcbce37f06ec1a874430410d700ee320754049f56a6fbfacaa14291"
+  },
+  "physicalPhoneQa": false
+}
