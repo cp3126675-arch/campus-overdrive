@@ -2031,3 +2031,5 @@ a {
 .hp-panel.is-critical b { color:#ffb2c0; }
 .hp-panel.is-taking-damage { border-color:#fff0f2; box-shadow:0 0 0 5px #ff3155cc,0 0 46px #ff164faa; background:#771c32f2; }
 .hp-panel.is-taking-damage b { color:#fff; }
+
+.records-scroll .record-score { color: #ffe0a3; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }

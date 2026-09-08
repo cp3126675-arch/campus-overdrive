@@ -1,0 +1,150 @@
+{
+  "method": "Each isolated maximum-density Boss round, 32 constant-direction walking paths for 5.5 seconds; no dash, no skill, no damage immunity. Does not prove all overlapping rounds or edge positions.",
+  "allHavePath": true,
+  "results": [
+    {
+      "boss": "coder",
+      "phase": 0,
+      "cleanPaths": 8,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "coder",
+      "phase": 1,
+      "cleanPaths": 19,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "coder",
+      "phase": 2,
+      "cleanPaths": 10,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "snake",
+      "phase": 0,
+      "cleanPaths": 10,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "snake",
+      "phase": 1,
+      "cleanPaths": 22,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "snake",
+      "phase": 2,
+      "cleanPaths": 12,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "goosequeue",
+      "phase": 0,
+      "cleanPaths": 8,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "goosequeue",
+      "phase": 1,
+      "cleanPaths": 4,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "goosequeue",
+      "phase": 2,
+      "cleanPaths": 4,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "bike",
+      "phase": 0,
+      "cleanPaths": 9,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "bike",
+      "phase": 1,
+      "cleanPaths": 22,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "bike",
+      "phase": 2,
+      "cleanPaths": 12,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "weishen",
+      "phase": 0,
+      "cleanPaths": 10,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "weishen",
+      "phase": 1,
+      "cleanPaths": 20,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "weishen",
+      "phase": 2,
+      "cleanPaths": 11,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "swim",
+      "phase": 0,
+      "cleanPaths": 8,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "swim",
+      "phase": 1,
+      "cleanPaths": 8,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "swim",
+      "phase": 2,
+      "cleanPaths": 7,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "hotsearch",
+      "phase": 0,
+      "cleanPaths": 11,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "hotsearch",
+      "phase": 1,
+      "cleanPaths": 23,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "hotsearch",
+      "phase": 2,
+      "cleanPaths": 8,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "final",
+      "phase": 0,
+      "cleanPaths": 10,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "final",
+      "phase": 1,
+      "cleanPaths": 21,
+      "sampledPaths": 32
+    },
+    {
+      "boss": "final",
+      "phase": 2,
+      "cleanPaths": 12,
+      "sampledPaths": 32
+    }
+  ]
+}

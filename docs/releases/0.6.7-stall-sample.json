@@ -1,0 +1,82 @@
+{
+  "method": "Deterministic heuristic bot: seek in-zone drops, move toward safety, avoid nearby threats, merge and use skills. Does not predict AoE; not a human balance or FPS test.",
+  "runs": 1,
+  "checkpoints": [
+    {
+      "seconds": 0,
+      "score": 60,
+      "passed": 0,
+      "practiceRemaining": 280
+    },
+    {
+      "seconds": 99.99999999999646,
+      "score": 6973,
+      "passed": 2,
+      "practiceRemaining": 0
+    },
+    {
+      "seconds": 200.00000000001123,
+      "score": 14710,
+      "passed": 5,
+      "practiceRemaining": 0
+    },
+    {
+      "seconds": 300.00000000003394,
+      "score": 20026,
+      "passed": 7,
+      "practiceRemaining": 0
+    },
+    {
+      "seconds": 400.0000000000567,
+      "score": 22944,
+      "passed": 8,
+      "practiceRemaining": 0
+    },
+    {
+      "seconds": 500.0000000000794,
+      "score": 22944,
+      "passed": 8,
+      "practiceRemaining": 0
+    },
+    {
+      "seconds": 600.000000000002,
+      "score": 22944,
+      "passed": 8,
+      "practiceRemaining": 0
+    },
+    {
+      "seconds": 699.9999999999111,
+      "score": 22944,
+      "passed": 8,
+      "practiceRemaining": 0
+    },
+    {
+      "seconds": 799.9999999998201,
+      "score": 22944,
+      "passed": 8,
+      "practiceRemaining": 0
+    }
+  ],
+  "min": 804.6,
+  "median": 804.6,
+  "max": 804.6,
+  "inTargetWindow": 0,
+  "allEnded": true,
+  "results": [
+    {
+      "department": "软件学院",
+      "kind": "drones",
+      "seed": 27,
+      "seconds": 804.6,
+      "bosses": 8,
+      "score": 22944,
+      "practiceRemaining": 0,
+      "examsTaken": 17,
+      "highest": 14,
+      "downgrades": 152,
+      "mode": "lost",
+      "maxEnemies": 32,
+      "maxShots": 196
+    }
+  ]
+}

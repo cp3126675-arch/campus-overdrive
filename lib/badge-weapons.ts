@@ -18,7 +18,7 @@ export type BadgeWeapon = {
 export const BADGE_WEAPONS: Record<string, BadgeWeapon> = {
   xinya: {
     name: '通识嘴炮',
-    joke: '聊着聊着，从柏拉图聊到你掉血。',
+    joke: '聊着聊着，从柏拉图聊到你精神内耗。',
     glyph: '哲',
     pattern: 'fan',
     color: '#eab7db',
@@ -46,7 +46,7 @@ export const BADGE_WEAPONS: Record<string, BadgeWeapon> = {
   },
   xingjian: {
     name: '行健健身环',
-    joke: '体育课没下课，只是把跑圈改成打怪。',
+    joke: '体育课没下课，只是把跑圈改成刷题。',
     glyph: '杠',
     pattern: 'return',
     color: '#9aafff',
@@ -74,14 +74,14 @@ export const BADGE_WEAPONS: Record<string, BadgeWeapon> = {
   },
   xiuzhong: {
     name: '碳中和回旋镖',
-    joke: '伤害排放超标？回收再打一次。',
+    joke: '草稿排放超标？回收再算一次。',
     glyph: '碳',
     pattern: 'return',
     color: '#8ceac4',
   },
   dushi: {
     name: '实干大铁锤',
-    joke: '理论先放着，先把这块血条敲平。',
+    joke: '理论先放着，先把这道难题敲定。',
     glyph: '锤',
     pattern: 'burst',
     color: '#82d4ff',
@@ -151,21 +151,21 @@ export const BADGE_WEAPONS: Record<string, BadgeWeapon> = {
   },
   shuxue: {
     name: '显然穿透',
-    joke: '剩下的血条留作习题。',
+    joke: '剩下的证明留作习题。',
     glyph: '∫',
     pattern: 'lance',
     color: '#e7ff91',
   },
   shengke: {
     name: '细胞有丝分裂',
-    joke: '实验没结果，怪物先裂成两份。',
+    joke: '实验没结果，作业先裂成两份。',
     glyph: '胞',
     pattern: 'split',
     color: '#9aebb2',
   },
   gongwu: {
     name: '可控小太阳',
-    joke: '报告老师，这次点亮的是血条。',
+    joke: '报告老师，这次点亮的是绩点。',
     glyph: '☢',
     pattern: 'burst',
     color: '#ffcd75',
@@ -193,14 +193,14 @@ export const BADGE_WEAPONS: Record<string, BadgeWeapon> = {
   },
   yixue: {
     name: '手术刀点名',
-    joke: '同学别动，正在精准切除你的血条。',
+    joke: '同学别动，正在精准切除你的错题。',
     glyph: '✚',
     pattern: 'homing',
     color: '#ffb3ce',
   },
   jingguan: {
-    name: '做空血条',
-    joke: '现金流为正，怪物血量为负。',
+    name: '做空难度',
+    joke: '现金流为正，作业存量为负。',
     glyph: '¥',
     pattern: 'chain',
     color: '#f5dc8a',

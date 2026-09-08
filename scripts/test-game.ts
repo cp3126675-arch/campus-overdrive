@@ -1775,6 +1775,7 @@ const makeRecord = (id: number, timeMs: number, departmentId = 'd001') => ({
   id: 'run-' + id,
   departmentId,
   timeMs,
+  score: timeMs,
   completedAt: 1_780_000_000_000 + id,
   version: '0.6.2',
 });
@@ -1970,6 +1971,7 @@ Object.defineProperty(globalThis, 'fetch', {
       rows: Array.from({ length: 30 }, (_, i) => ({
         playerId: 'p' + i,
         nickname: '玩家' + i,
+        score: i * 100,
         departmentId: 'd001',
         timeMs: 60000 + i * 100,
         completedAt: 1780000000000,
@@ -2123,7 +2125,7 @@ console.log(
   );
   assert.equal(
     readRecordBook(
-      store.get('campus-survival-records-v1')!,
+      store.get('campus-survival-score-records-v1')!,
       recordDepartments,
       'survival',
     ).overall[0].timeMs,
@@ -2133,3 +2135,29 @@ console.log(
 console.log(
   'v0.6.3: independent survival storage, descending top10/top20 and race isolation passed.',
 );
+
+// v0.6.7: score order must not accidentally follow survival duration.
+{
+  let b = emptyRecordBook();
+  for (const [id, score, timeMs] of [
+    [71, 100, 900000],
+    [72, 200, 400000],
+    [73, 200, 300000],
+  ])
+    b = addRecord(
+      b,
+      { ...makeRecord(id, timeMs), mode: 'survival', score },
+      recordDepartments,
+      'survival',
+    );
+  assert.deepEqual(
+    b.overall.map((r) => r.id),
+    ['run-73', 'run-72', 'run-71'],
+  );
+  const old = {
+    ...makeRecord(74, 999999),
+    mode: 'survival' as const,
+    score: undefined,
+  };
+  assert.deepEqual(addRecord(b, old, recordDepartments, 'survival'), b);
+}

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { DEPARTMENTS } from '@/lib/departments';
 import {
   emptyRecordBook,
+  compareRecords,
   readRecordBook,
   saveRecord,
   recordStorageKey,
@@ -34,6 +35,7 @@ export function useRecords(snapshot: Snapshot) {
   const [result, setResult] = useState<{
     newBest: boolean;
     bestMs: number;
+    bestScore: number;
     persisted: boolean;
   } | null>(null);
   useEffect(() => {
@@ -91,6 +93,7 @@ export function useRecords(snapshot: Snapshot) {
     const record: RunRecord = {
       ...run,
       timeMs,
+      ...(mode === 'survival' ? { score: snapshot.survival!.score } : {}),
       completedAt: Date.now(),
       version: release.version,
     };
@@ -106,10 +109,9 @@ export function useRecords(snapshot: Snapshot) {
     setBooks(current.current);
     setResult({
       newBest:
-        next.previousBest === null ||
-        (mode === 'survival'
-          ? timeMs > next.previousBest
-          : timeMs < next.previousBest),
+        next.previousRecord === null ||
+        compareRecords(record, next.previousRecord, mode) < 0,
+      bestScore: next.book.departments[run.departmentId][0].score ?? 0,
       bestMs: next.book.departments[run.departmentId][0].timeMs,
       persisted: next.persisted,
     });

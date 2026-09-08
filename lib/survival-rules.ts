@@ -74,6 +74,13 @@ export function survivalScaling(seconds: number) {
   };
 }
 export type SurvivalSnapshot = {
+  score: number;
+  practiceScore: number;
+  examScore: number;
+  badgeScore: number;
+  practiceRemaining: number;
+  examRemaining: number;
+  examsTaken: number;
   dashVolleysRemaining: number;
   maxHp: number;
   nextBossIn: number;
