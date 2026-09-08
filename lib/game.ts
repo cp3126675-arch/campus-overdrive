@@ -1,4 +1,8 @@
-import { drawSurvivalZone, drawBadgeBreakShield } from './survival-render';
+import {
+  drawSurvivalZone,
+  drawBadgeBreakShield,
+  drawDamagePressure,
+} from './survival-render';
 import { SurvivalGameModel } from './survival-model';
 import colleges from './colleges.json';
 import { assetUrl } from './asset-url';
@@ -978,11 +982,27 @@ export class CampusGame {
           : h.radius;
         c.lineWidth = active ? h.width * 2 : 2;
         c.beginPath();
-        c.arc(0, 0, Math.max(1, radius), 0, Math.PI * 2);
+        c.arc(
+          0,
+          0,
+          Math.max(1, radius),
+          (h.gapAngle ?? 0) + (h.gapHalfAngle ?? 0),
+          (h.gapAngle ?? 0) + Math.PI * 2 - (h.gapHalfAngle ?? 0),
+        );
         c.stroke();
         if (h.motif === 'echo') {
           for (let i = 0; i < 4; i++) {
             const a = (i * Math.PI) / 2 + m.time * 0.2;
+            if (
+              h.gapHalfAngle &&
+              Math.abs(
+                Math.atan2(
+                  Math.sin(a - (h.gapAngle ?? 0)),
+                  Math.cos(a - (h.gapAngle ?? 0)),
+                ),
+              ) < h.gapHalfAngle
+            )
+              continue;
             this.text(
               '妈妈？',
               Math.cos(a) * radius,
@@ -1045,6 +1065,16 @@ export class CampusGame {
             : h.radius;
           for (let i = 0; i < 6; i++) {
             const a = (i * Math.PI) / 3;
+            if (
+              h.gapHalfAngle &&
+              Math.abs(
+                Math.atan2(
+                  Math.sin(a - (h.gapAngle ?? 0)),
+                  Math.cos(a - (h.gapAngle ?? 0)),
+                ),
+              ) < h.gapHalfAngle
+            )
+              continue;
             this.text(
               mark,
               Math.cos(a) * radius,
@@ -1855,14 +1885,47 @@ export class CampusGame {
             '#edffff',
           );
         }
-        if (m instanceof SurvivalGameModel && m.hurtUntil > m.time)
+        if (m.hurtUntil > m.time)
           this.text(
             `−${m.lastHit}`,
             p.x + 55,
-            p.y - radius - 30 - (0.5 - (m.hurtUntil - m.time)) * 60,
-            34,
-            '#ff6d80',
+            p.y - radius - 30 - (0.9 - (m.hurtUntil - m.time)) * 48,
+            48,
+            '#ffe8e9',
           );
+        if (m.hurtUntil > m.time) {
+          const impact = Math.min(1, (m.hurtUntil - m.time) / 0.9);
+          c.save();
+          c.globalAlpha = impact;
+          this.circle(
+            p.x,
+            p.y,
+            radius + 12 + (1 - impact) * 40,
+            '#ff17351a',
+            '#ff3558',
+            7,
+          );
+          c.strokeStyle = '#fff0ed';
+          c.lineWidth = 3;
+          for (let i = 0; i < 6; i++) {
+            const a = (i * Math.PI) / 3;
+            c.beginPath();
+            c.moveTo(
+              p.x + Math.cos(a) * (radius + 12),
+              p.y + Math.sin(a) * (radius + 12),
+            );
+            c.lineTo(
+              p.x + Math.cos(a + 0.1) * (radius + 30),
+              p.y + Math.sin(a + 0.1) * (radius + 30),
+            );
+            c.lineTo(
+              p.x + Math.cos(a) * (radius + 45),
+              p.y + Math.sin(a) * (radius + 45),
+            );
+            c.stroke();
+          }
+          c.restore();
+        }
         if (this.nickname) {
           c.save();
           c.font = '600 14px sans-serif';
@@ -2017,36 +2080,18 @@ export class CampusGame {
         17,
         '#beff97',
       );
-    if (m.hp < 25) {
-      const cx = view.x + view.width / 2,
-        cy = view.y + view.height / 2;
-      const grad = c.createRadialGradient(
-        cx,
-        cy,
-        180,
-        cx,
-        cy,
-        Math.max(view.width, view.height) * 0.56,
-      );
-      grad.addColorStop(0, '#b4001d00');
-      grad.addColorStop(1, '#ca123d80');
-      c.fillStyle = grad;
-      c.fillRect(view.x, view.y, view.width, view.height);
-    }
-    if (m instanceof SurvivalGameModel && m.mode === 'playing') {
-      const impact = Math.max(0, (m.hurtUntil - m.time) / 0.5);
-      const storm = Math.max(0, (m.stormPulseUntil - m.time) / 0.28);
-      if (impact > 0 || storm > 0) {
-        c.save();
-        c.strokeStyle =
-          impact > 0
-            ? `rgba(255,49,87,${0.85 * impact})`
-            : `rgba(255,136,70,${0.6 * storm})`;
-        c.lineWidth = impact > 0 ? 14 : 7;
-        c.strokeRect(view.x + 7, view.y + 7, view.width - 14, view.height - 14);
-        c.restore();
-      }
-    }
+    drawDamagePressure(
+      c,
+      view,
+      m.hp,
+      Math.max(0, m.hurtUntil - m.time),
+      m instanceof SurvivalGameModel
+        ? Math.max(0, m.stormPulseUntil - m.time)
+        : 0,
+      m.time,
+      reducedMotion,
+    );
+
     c.restore();
   }
   private zone(

@@ -11,11 +11,11 @@ export const SURVIVAL = {
   shrinkSeconds: 25,
   stormDamageCap: 8,
   attackRateCap: 1.65,
-  densityCap: 1.8,
+  densityCap: 1.35,
   maxEnemies: 48,
   maxProjectiles: 360,
-  maxHostileProjectiles: 120,
-  maxHazards: 24,
+  maxHostileProjectiles: 90,
+  maxHazards: 18,
 };
 const RADII = [
   Math.hypot(SURVIVAL_WORLD.width / 2, SURVIVAL_WORLD.height / 2),
@@ -74,6 +74,7 @@ export function survivalScaling(seconds: number) {
   };
 }
 export type SurvivalSnapshot = {
+  dashVolleysRemaining: number;
   maxHp: number;
   nextBossIn: number;
   cycle: number;

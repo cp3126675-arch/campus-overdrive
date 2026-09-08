@@ -485,7 +485,7 @@ export default function Home() {
         <>
           <div className="battle-hud">
             <div
-              className={`hp-panel ${survival?.hurtTime ? 'is-taking-damage' : ''}`}
+              className={`hp-panel ${snap.hurtTime ? 'is-taking-damage' : ''} ${snap.hp <= 35 ? 'is-critical' : ''}`}
             >
               <div>
                 <b>
@@ -618,9 +618,11 @@ export default function Home() {
               >
                 <Bike />
                 <b>
-                  {snap.dashCooldown > 0
-                    ? `${snap.dashCooldown.toFixed(1)}s`
-                    : '车神'}
+                  {survival?.dashVolleysRemaining
+                    ? `再躲${survival.dashVolleysRemaining}轮`
+                    : snap.dashCooldown > 0
+                      ? `${snap.dashCooldown.toFixed(1)}s`
+                      : '车神'}
                 </b>
                 <kbd>SPACE</kbd>
               </button>

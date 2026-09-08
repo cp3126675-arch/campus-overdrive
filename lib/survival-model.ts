@@ -23,9 +23,8 @@ export class SurvivalGameModel extends GameModel {
   private shieldUntil = 0;
   private announcedRound = 1;
   private stormFeedback = 0;
-  hurtUntil = 0;
+  dashVolleysRemaining = 0;
   stormPulseUntil = 0;
-  lastHit = 0;
   override get world() {
     return SURVIVAL_WORLD;
   }
@@ -35,6 +34,7 @@ export class SurvivalGameModel extends GameModel {
     this.shieldUntil = 0;
     this.announcedRound = 1;
     this.stormFeedback = 0;
+    this.dashVolleysRemaining = 0;
     this.hurtUntil = this.stormPulseUntil = 0;
     this.lastHit = 0;
     super.start(major, target, departmentId);
@@ -86,7 +86,7 @@ export class SurvivalGameModel extends GameModel {
       this.skillTime > 0 && this.department.kind === 'guard'
         ? Math.ceil(scaled * 0.55)
         : scaled;
-    this.hurtUntil = this.time + 0.5;
+    this.hurtUntil = this.time + 0.9;
     super.damage(scaled);
   }
   override heal(amount: number, fromMerge = false) {
@@ -114,7 +114,7 @@ export class SurvivalGameModel extends GameModel {
     if (kind === 'duck' && this.breakShieldTime > 0) return;
     if (kind === 'duck') {
       this.lastHit = 12;
-      this.hurtUntil = this.time + 0.5;
+      this.hurtUntil = this.time + 0.9;
     }
     super.eatFood(kind);
   }
@@ -141,7 +141,9 @@ export class SurvivalGameModel extends GameModel {
     enemy.speed *= scaling.speed;
     if (kind === 'boss') {
       enemy.boss = this.bossOrder[this.bossesDefeated % this.bossOrder.length];
-      enemy.maxHp = Math.round((1800 + this.centralLevel * 420) * scaling.hp);
+      enemy.maxHp = Math.round(
+        1.25 * (1800 + this.centralLevel * 420) * scaling.hp,
+      );
       this.bossMax = enemy.maxHp;
     } else
       enemy.maxHp = Math.round(enemy.maxHp * (1 + this.bossesDefeated * 0.07));
@@ -198,6 +200,7 @@ export class SurvivalGameModel extends GameModel {
   }
   override completeBoss(x: number, y: number) {
     // No finite checkpoint completion or win path in survival.
+    this.dashVolleysRemaining = 0;
     this.bossesDefeated++;
     this.bossDead = true;
     this.credits += 4;
@@ -248,17 +251,37 @@ export class SurvivalGameModel extends GameModel {
     }
     super.finish(false, reason);
   }
+  override dash() {
+    if (this.dashVolleysRemaining > 0) return false;
+    const used = super.dash();
+    const boss = this.enemies.find((e) => e.kind === 'boss');
+    if (
+      used &&
+      this.dashTime > 0 &&
+      boss &&
+      survivalScaling(this.time).attackRate >= SURVIVAL.attackRateCap
+    ) {
+      this.dashVolleysRemaining = 3;
+      this.dashCooldown = Math.max(
+        4,
+        this.bossAttack / SURVIVAL.attackRateCap +
+          (2 * this.bossAttackInterval(boss)) / SURVIVAL.attackRateCap,
+      );
+    }
+    return used;
+  }
   override bossVolley(boss: Enemy) {
+    this.dashVolleysRemaining = Math.max(0, this.dashVolleysRemaining - 1);
     const first = this.shots.length;
     super.bossVolley(boss);
     const originals = this.shots.slice(first);
     const extra = Math.floor(
       originals.length * (survivalScaling(this.time).density - 1),
     );
-    // Add short neighbouring lanes, preserving the Boss's motifs and large escape gaps.
+    // Cluster limited extra bullets beside original lanes without filling the authored openings.
     for (let i = 0; i < extra; i++) {
       const source = originals[Math.floor((i * originals.length) / extra)];
-      const offset = i % 2 ? -0.035 : 0.035;
+      const offset = i % 2 ? -0.022 : 0.022;
       const angle = Math.atan2(source.vy, source.vx) + offset;
       const speed = Math.hypot(source.vx, source.vy);
       this.shots.push({
@@ -315,7 +338,6 @@ export class SurvivalGameModel extends GameModel {
     if (this.bossSpawned && this.hitstop <= 0) {
       const extra = Math.min(dt, 0.05) * (scaling.attackRate - 1);
       this.bossAttack -= extra;
-      this.bossRing -= extra;
     }
     // Strength increases even if a player stalls the same Boss through later pressure rounds.
     for (const enemy of this.enemies) {
@@ -324,6 +346,17 @@ export class SurvivalGameModel extends GameModel {
       enemy.hp *= after / scaling.hp;
       enemy.maxHp *= after / scaling.hp;
       this.bossMax = enemy.maxHp;
+    }
+    const activeBoss = this.enemies.find((e) => e.kind === 'boss');
+    if (!activeBoss) this.dashVolleysRemaining = 0;
+    if (activeBoss && this.dashVolleysRemaining > 0) {
+      this.dashCooldown = Math.max(
+        this.dashCooldown,
+        Math.max(0, this.bossAttack) / scaling.attackRate +
+          ((this.dashVolleysRemaining - 1) *
+            this.bossAttackInterval(activeBoss)) /
+            scaling.attackRate,
+      );
     }
     super.update(dt, moveX, moveY);
     this.view.x = clamp(
@@ -374,6 +407,7 @@ export class SurvivalGameModel extends GameModel {
       ...super.snapshot(),
       mergeProgress: mergePercent(this.centralLevel),
       survival: {
+        dashVolleysRemaining: this.dashVolleysRemaining,
         maxHp: this.maxHp,
         nextBossIn: Math.max(0, this.nextBossAt - this.time),
         cycle:

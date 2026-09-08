@@ -22,6 +22,7 @@ export type Mode = 'menu' | 'playing' | 'paused' | 'won' | 'lost';
 export type College = (typeof colleges)[number];
 export type Snapshot = {
   survival?: SurvivalSnapshot;
+  hurtTime: number;
   mode: Mode;
   endProgress: number;
   hp: number;
@@ -64,6 +65,7 @@ export type Snapshot = {
 };
 export const initialSnapshot: Snapshot = {
   mode: 'menu',
+  hurtTime: 0,
   endProgress: 0,
   hp: 100,
   credits: 0,
@@ -294,6 +296,8 @@ export class GameModel {
   private enemyGrid = new EnemyGrid<Enemy>();
   drops: Drop[] = [];
   fx: FX[] = [];
+  hurtUntil = 0;
+  lastHit = 0;
   dashCooldown = 0;
   dashTime = 0;
   invulnerable = 0;
@@ -517,6 +521,9 @@ export class GameModel {
     } else {
       // Eating is a choice of pickup; combat invulnerability does not cancel its HP cost.
       this.hp = Math.max(0, this.hp - 12);
+      this.lastHit = 12;
+      this.hurtUntil = this.time + 0.9;
+      this.shake = Math.max(this.shake, 10);
       this.shake = 6;
       this.events.push('hurt');
       this.notify('吃成鸭腿了！生命 -12', 3);
@@ -792,9 +799,12 @@ export class GameModel {
     )
       return false;
     this.bossSpawned = true;
-    this.bossMax = this.isFinalBoss
-      ? 18000
-      : 2000 + this.bossesDefeated * 880 + this.highest * 205;
+    this.bossMax = Math.round(
+      1.25 *
+        (this.isFinalBoss
+          ? 18000
+          : 2000 + this.bossesDefeated * 880 + this.highest * 205),
+    );
     this.invulnerable = Math.max(this.invulnerable, 1);
     this.bossCast = 0;
     this.bossVolleyCount = 0;
@@ -865,9 +875,12 @@ export class GameModel {
     if (this.invulnerable > 0 || this.mode !== 'playing') return;
     if (this.skillTime > 0 && this.department.kind === 'guard')
       amount = Math.ceil(amount * 0.55);
+    this.lastHit = Math.ceil(amount);
+    this.hurtUntil = this.time + 0.9;
     this.hp = Math.max(0, this.hp - amount);
     this.invulnerable = 0.8;
-    this.shake = 5;
+    this.shake = Math.max(this.shake, 10);
+    this.hitstop = Math.max(this.hitstop, 0.035);
     this.events.push('hurt');
     this.effect(
       this.player.x,
@@ -962,6 +975,15 @@ export class GameModel {
     color: string,
     extra: Partial<BossHazard> = {},
   ) {
+    if (shape === 'ring') {
+      extra = {
+        gapAngle:
+          Math.atan2(this.player.y - y, this.player.x - x) +
+          (this.bossCast % 2 ? 0.32 : -0.32),
+        gapHalfAngle: 0.23,
+        ...extra,
+      };
+    }
     this.hazards.push({
       id: ++this.id,
       shape,
@@ -1195,6 +1217,9 @@ export class GameModel {
     for (const h of this.hazards.slice(hazardStart)) h.motif ??= boss.boss;
   }
 
+  bossAttackInterval(boss: Enemy) {
+    return boss.hp < boss.maxHp * 0.5 ? 2.5 : 3.8;
+  }
   bossVolley(boss: Enemy) {
     const id = boss.boss!,
       spec = bossSpec(id),
@@ -1226,16 +1251,18 @@ export class GameModel {
         baseSpeed: speed,
       });
     };
-    if (id === 'coder')
+    if (id === 'coder') {
       for (let i = -3; i <= 3; i++)
-        emit(aim + i * 0.16, 170, ['That’s', 'pity', '404'][(i + 3) % 3]);
-    else if (id === 'snake')
+        if (i !== (n % 2 ? -1 : 1))
+          emit(aim + i * 0.2, 170, ['That’s', 'pity', '404'][(i + 3) % 3]);
+    } else if (id === 'snake') {
       for (let i = 0; i < 10; i++)
         emit((i * Math.PI) / 5 + n * 0.22, 155, '蛇', 0, 'serpent');
-    else if (id === 'goosequeue')
+    } else if (id === 'goosequeue') {
       for (let i = -3; i <= 3; i++)
-        emit(aim + i * 0.12, 150 + Math.abs(i) * 18, `${996 + i}号`, i * 8);
-    else if (id === 'bike')
+        if (i !== (n % 2 ? -1 : 1))
+          emit(aim + i * 0.18, 150 + Math.abs(i) * 18, `${996 + i}号`, i * 8);
+    } else if (id === 'bike') {
       for (const lane of [-1, 1])
         for (let i = 0; i < 3; i++)
           emit(
@@ -1245,7 +1272,7 @@ export class GameModel {
             lane * (34 + i * 9),
             'wheel',
           );
-    else if (id === 'weishen') {
+    } else if (id === 'weishen') {
       for (let axis = 0; axis < 4; axis++)
         for (const side of [-1, 1])
           emit(
@@ -1254,17 +1281,20 @@ export class GameModel {
             axis % 2 ? '∫' : '显然',
           );
       for (const side of [-1, 1]) emit(aim + side * 0.4, 125, '馒头');
-    } else if (id === 'swim')
+    } else if (id === 'swim') {
       for (let i = -4; i <= 4; i++)
-        emit(aim + i * 0.17, 140 + (4 - Math.abs(i)) * 15, '50m', i * 14);
-    else if (id === 'hotsearch')
+        if (i !== (n % 2 ? -1 : 1))
+          emit(aim + i * 0.17, 140 + (4 - Math.abs(i)) * 15, '50m', i * 14);
+    } else if (id === 'hotsearch') {
       for (let i = -3; i <= 3; i++)
-        emit(aim + i * 0.21, 165, i % 2 ? '热搜' : '锉');
-    else
+        if (i !== (n % 2 ? -1 : 1))
+          emit(aim + i * 0.21, 165, i % 2 ? '热搜' : '锉');
+    } else {
       for (let i = 0; i < 16; i++) {
-        if (i === n % 16 || i === (n + 1) % 16) continue;
+        if (i === n % 16) continue;
         emit((i * Math.PI) / 8, 155, ['德', '智', '体', '美'][i % 4]);
       }
+    }
   }
 
   checkKills() {
@@ -1941,14 +1971,10 @@ export class GameModel {
     const boss = this.enemies.find((e) => e.kind === 'boss');
     if (boss) {
       this.bossAttack -= dt;
-      this.bossRing -= dt;
       if (this.bossAttack <= 0) {
         this.castBoss(boss);
-        this.bossAttack = boss.hp < boss.maxHp * 0.5 ? 3.3 : 4.7;
-      }
-      if (this.bossRing <= 0) {
         this.bossVolley(boss);
-        this.bossRing = boss.hp < boss.maxHp * 0.5 ? 2.5 : 3.8;
+        this.bossAttack = this.bossAttackInterval(boss);
       }
     }
     for (const h of this.hazards) {
@@ -2014,6 +2040,7 @@ export class GameModel {
       chain: this.chain,
       canMerge: this.canMerge,
       dashCooldown: this.dashCooldown,
+      hurtTime: Math.max(0, this.hurtUntil - this.time),
       merges: this.merges,
       gpa: Math.min(
         4,
