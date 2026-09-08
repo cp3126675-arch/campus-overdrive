@@ -311,6 +311,58 @@ function advance(g: GameModel, seconds: number) {
   g.damage(100000);
   assert.equal(g.mode, 'lost', 'enemy damage can finish the last badge');
 }
+// At maximum attack rate, using dash requires three actual Boss volleys, not merely a timer.
+{
+  for (const healthRatio of [1, 0.4]) {
+    const g = fresh();
+    quiet(g);
+    g.time = 400;
+    g.beginBoss();
+    const boss = g.enemies.find((e) => e.kind === 'boss')!;
+    boss.hp = boss.maxHp * healthRatio;
+    g.invulnerable = 999;
+    const uses: number[] = [];
+    for (let i = 0; i < 4000; i++) {
+      if (g.dash()) uses.push(g.bossVolleyCount);
+      g.update(0.01, 0, 0);
+    }
+    assert(uses.length >= 4, 'dash still has regular opportunities');
+    for (let i = 1; i < uses.length; i++)
+      assert.equal(
+        uses[i] - uses[i - 1],
+        3,
+        'exactly three volleys between dash uses',
+      );
+    const remaining = g.dashVolleysRemaining;
+    g.togglePause();
+    advance(g, 3);
+    assert.equal(
+      g.dashVolleysRemaining,
+      remaining,
+      'pausing cannot recharge an attack round',
+    );
+  }
+}
+// Feedback applies to both modes and does not invent damage while invincible.
+{
+  const g = new GameModel(() => 0.4);
+  g.start('math', 'shuxue');
+  quiet(g);
+  g.invulnerable = 0;
+  g.damage(20);
+  assert.equal(g.hp, 80);
+  assert.equal(g.lastHit, 20);
+  assert.equal(g.snapshot().hurtTime, 0.9);
+  const until = g.hurtUntil;
+  g.damage(30);
+  assert.equal(g.hurtUntil, until);
+  assert.equal(g.lastHit, 20);
+  g.start('math', 'shuxue');
+  assert.equal(g.hurtUntil, 0, 'new runs reset hit feedback');
+  g.eatFood('duck');
+  assert.equal(g.lastHit, 12);
+  assert(g.snapshot().hurtTime > 0);
+}
 // Drawing contracts without browser/visual QA: shield absent at expiry, circle absent at zero.
 {
   const calls: { name: string; args: unknown[] }[] = [];

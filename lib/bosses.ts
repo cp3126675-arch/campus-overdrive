@@ -112,6 +112,8 @@ export type BossHazard = {
   x: number;
   y: number;
   shape: 'circle' | 'line' | 'ring';
+  gapAngle?: number;
+  gapHalfAngle?: number;
   radius: number;
   angle: number;
   length: number;
@@ -130,6 +132,19 @@ export function hazardHits(h: BossHazard, p: { x: number; y: number }) {
     dy = p.y - h.y;
   if (h.shape === 'circle') return Math.hypot(dx, dy) < h.radius + 12;
   if (h.shape === 'ring') {
+    const angle = Math.atan2(dy, dx);
+    const delta = Math.atan2(
+      Math.sin(angle - (h.gapAngle ?? 0)),
+      Math.cos(angle - (h.gapAngle ?? 0)),
+    );
+    // Leave a 12px collision margin at each visible arc endpoint.
+    if (
+      h.gapHalfAngle &&
+      Math.abs(delta) +
+        Math.asin(Math.min(1, 12 / Math.max(1, Math.hypot(dx, dy)))) <
+        h.gapHalfAngle
+    )
+      return false;
     const radius = (h.radius * (h.age - h.warn)) / h.duration;
     return Math.abs(Math.hypot(dx, dy) - radius) < h.width + 12;
   }

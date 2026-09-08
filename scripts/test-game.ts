@@ -905,9 +905,34 @@ for (const spec of BOSSES) {
   g.castBoss(b);
   assert(g.hazards.every((h) => h.motif && h.warn >= 1.1));
   if (spec.id === 'final') {
-    assert.equal(g.shots.length, 14);
+    assert.equal(g.shots.length, 15);
     assert(!g.shots.some((s) => Math.abs(Math.atan2(s.vy, s.vx)) < 0.001));
   }
+}
+// Visible ring arcs and collision share a narrow, fixed opening, including endpoint clearance.
+{
+  const g = fresh();
+  quiet(g);
+  g.addHazard('ring', 500, 400, '测试波环', '#fff', {
+    radius: 400,
+    width: 12,
+    warn: 1,
+    duration: 2,
+  });
+  const h = g.hazards[0];
+  h.age = 2;
+  const gap = h.gapAngle!;
+  assert.equal(h.gapHalfAngle, 0.23);
+  const point = (a: number) => ({
+    x: h.x + Math.cos(a) * 200,
+    y: h.y + Math.sin(a) * 200,
+  });
+  assert(!hazardHits(h, point(gap)));
+  assert(
+    hazardHits(h, point(gap + 0.22)),
+    'visible opening endpoint still requires player-body clearance',
+  );
+  assert(hazardHits(h, point(gap + 0.5)));
 }
 assert.equal(rangedSignatures.size, 8);
 const rangedHit = fresh();

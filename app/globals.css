@@ -2026,3 +2026,8 @@ a {
 .player-name-dialog output { font-size: 13px; }
 :where(.challenge[data-height-max-550='true']) .player-name-dialog { gap: 8px; padding: 12px; }
 :where(.challenge[data-height-max-550='true']) .player-name-button { max-width: 130px; }
+
+.hp-panel.is-critical { border-color:#ff3058; background:#4b1024ed; box-shadow:0 0 0 2px #ff2e5577,0 0 30px #cf093d55; }
+.hp-panel.is-critical b { color:#ffb2c0; }
+.hp-panel.is-taking-damage { border-color:#fff0f2; box-shadow:0 0 0 5px #ff3155cc,0 0 46px #ff164faa; background:#771c32f2; }
+.hp-panel.is-taking-damage b { color:#fff; }

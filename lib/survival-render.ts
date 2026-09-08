@@ -88,3 +88,49 @@ export function drawBadgeBreakShield(
   c.stroke();
   c.restore();
 }
+
+// Full-screen edge pressure keeps the central battlefield transparent; no extra particles.
+export function drawDamagePressure(
+  c: CanvasRenderingContext2D,
+  view: { x: number; y: number; width: number; height: number },
+  hp: number,
+  hurtTime: number,
+  stormPulse: number,
+  time: number,
+  reducedMotion: boolean,
+) {
+  const impact = Math.min(1, Math.max(0, hurtTime / 0.9));
+  const critical = Math.max(0, (35 - hp) / 35);
+  const beat = reducedMotion
+    ? 0.75
+    : 0.55 + 0.45 * ((1 + Math.cos(time * Math.PI * 2)) / 2) ** 3;
+  const pressure = Math.min(
+    0.82,
+    impact * 0.72 + critical * (0.36 + beat * 0.26),
+  );
+  if (pressure <= 0 && stormPulse <= 0) return;
+  c.save();
+  c.translate(view.x + view.width / 2, view.y + view.height / 2);
+  c.scale(view.width / 2, view.height / 2);
+  const gradient = c.createRadialGradient(0, 0, 0.25, 0, 0, 1.2);
+  gradient.addColorStop(0, 'rgba(100,0,20,0)');
+  gradient.addColorStop(0.45, 'rgba(100,0,20,0)');
+  gradient.addColorStop(0.75, `rgba(165,0,32,${pressure * 0.45})`);
+  gradient.addColorStop(1, `rgba(100,0,18,${pressure})`);
+  c.fillStyle = gradient;
+  c.fillRect(-1, -1, 2, 2);
+  c.restore();
+  c.save();
+  c.strokeStyle =
+    impact > 0
+      ? `rgba(255,49,75,${impact * 0.92})`
+      : `rgba(221,24,58,${critical * beat * 0.75})`;
+  c.lineWidth = 12 + impact * 24;
+  c.strokeRect(view.x + 6, view.y + 6, view.width - 12, view.height - 12);
+  if (stormPulse > 0) {
+    c.strokeStyle = `rgba(255,119,36,${Math.min(0.65, stormPulse * 2)})`;
+    c.lineWidth = 12;
+    c.strokeRect(view.x + 18, view.y + 18, view.width - 36, view.height - 36);
+  }
+  c.restore();
+}
