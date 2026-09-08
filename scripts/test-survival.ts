@@ -423,6 +423,119 @@ function advance(g: GameModel, seconds: number) {
   assert.equal(g.score, 0);
   assert.equal(g.examsTaken, 0);
 }
+// v0.6.8: full energy absorbs a normal exam hit; one energy still breaks a tier.
+{
+  for (const seconds of [240, 300, 360])
+    for (const amount of [18, 25, 30, 32]) {
+      const g = fresh();
+      quiet(g);
+      g.time = seconds;
+      g.inventory = [4];
+      g.invulnerable = 0;
+      g.hp = 100;
+      g.damage(amount, 'boss');
+      assert.equal(g.centralLevel, 4);
+      assert(g.hp > 0 && g.hp < 100);
+      assert.equal(
+        g.lastHit,
+        100 - g.hp,
+        'feedback shows applied exam pressure',
+      );
+      const before = g.hp;
+      g.damage(amount, 'boss');
+      assert.equal(
+        g.hp,
+        before,
+        'post-hit immunity still protects against overlapping questions',
+      );
+      const low = fresh();
+      quiet(low);
+      low.time = seconds;
+      low.inventory = [4];
+      low.hp = 1;
+      low.invulnerable = 0;
+      low.damage(amount, 'boss');
+      assert.equal(low.centralLevel, 3);
+      assert(Math.abs(low.breakShieldTime - 1.2) < 1e-9);
+    }
+  const race = new GameModel(() => 0.4);
+  race.start('math', 'shuxue');
+  race.time = 360;
+  race.invulnerable = 0;
+  race.damage(25, 'boss');
+  assert.equal(race.hp, 75, 'race damage is unchanged');
+  const g = fresh();
+  quiet(g);
+  g.time = 300;
+  g.invulnerable = 0;
+  g.damage(32, 'course');
+  assert.equal(g.lastHit, 294, 'course damage retains its existing curve');
+  assert(survivalScaling(4000).bossDamage > survivalScaling(2000).bossDamage);
+  assert(survivalScaling(4000).courseHp > survivalScaling(2000).courseHp);
+}
+// All three actual exam collision paths carry their source, including projectiles after examiner departure.
+for (const kind of ['contact', 'projectile', 'area'] as const) {
+  const g = fresh();
+  quiet(g);
+  g.nextBossAt = 99999;
+  const received: string[] = [];
+  g.damage = (_amount, source) => {
+    received.push(source ?? 'course');
+  };
+  if (kind === 'contact')
+    g.enemies.push(g.makeEnemy('boss', g.player.x, g.player.y));
+  if (kind === 'projectile') {
+    const b = g.makeEnemy('boss', g.player.x, g.player.y - 260);
+    b.boss = 'coder';
+    g.bossVolley(b);
+    const shot = g.shots[0];
+    g.shots = [shot];
+    shot.x = g.player.x;
+    shot.y = g.player.y;
+    shot.vx = shot.vy = 0;
+  }
+  if (kind === 'area')
+    g.addHazard('circle', g.player.x, g.player.y, '测试大考', '#fff', {
+      warn: 0,
+    });
+  g.bossAttack = 99999;
+  g.update(0.01, 0, 0);
+  assert.deepEqual(received, ['boss'], kind + ' uses the exam damage curve');
+}
+// Late coursework pressure has a bounded batch, with existing budgets and no early-game changes.
+{
+  const g = fresh();
+  g.bossSpawned = true;
+  for (const [time, count] of [
+    [0, 1],
+    [150, 1],
+    [179, 1],
+    [180, 2],
+    [210, 3],
+    [2000, 3],
+  ]) {
+    g.time = time;
+    assert.equal(g.courseBatchSize, count);
+  }
+  g.bossSpawned = false;
+  assert(g.courseBatchSize <= 4);
+  assert.equal(survivalScaling(120).courseHp, 1);
+  const sample = g.makeEnemy('paper', g.player.x, g.player.y);
+  sample.year = 4;
+  g.time = 0;
+  assert.equal(g.courseProjectileSpeed, 145);
+  assert.equal(g.courseAttackInterval(sample), 5.8);
+  g.time = 300;
+  assert.equal(g.courseProjectileSpeed, 260);
+  assert(Math.abs(g.courseAttackInterval(sample) - 5.8 / 1.5) < 1e-9);
+  g.time = 4000;
+  assert.equal(g.courseProjectileSpeed, 260);
+  assert(g.courseAttackInterval(sample) >= 5.8 / 1.5);
+  g.time = 300;
+  g.enemies = [];
+  for (let i = 0; i < 100; i++) g.spawnEnemy();
+  assert.equal(g.enemies.length, SURVIVAL.maxEnemies);
+}
 // Drawing contracts without browser/visual QA: shield absent at expiry, circle absent at zero.
 {
   const calls: { name: string; args: unknown[] }[] = [];

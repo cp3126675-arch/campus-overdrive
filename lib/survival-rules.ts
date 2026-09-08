@@ -68,6 +68,9 @@ export function survivalScaling(seconds: number) {
   return {
     hp: 1 + round * 0.22 + Math.max(0, round - 3) ** 2 * 0.35,
     damage: 0.65 * (1 + round * 0.25 + Math.max(0, round - 3) ** 2 * 0.85),
+    courseHp: 1 + Math.max(0, Math.floor((seconds - 120) / 30)) * 2.2,
+    // Full energy should absorb multiple exam hits in typical runs; no late-game cap.
+    bossDamage: 0.65 * (1 + round * 0.25 + Math.max(0, round - 3) ** 2 * 0.06),
     speed: Math.min(1.4, 1 + round * 0.025),
     attackRate: Math.min(SURVIVAL.attackRateCap, 1 + round * 0.09),
     density: Math.min(SURVIVAL.densityCap, 1 + round * 0.12),
