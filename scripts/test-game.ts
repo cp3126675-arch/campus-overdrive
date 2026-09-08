@@ -611,6 +611,57 @@ for (const def of BOSSES) {
   assert(!a.shots.some((s) => s.enemy));
 }
 assert.equal(signatures.size, BOSSES.length);
+// Running exam: frozen checkpoints, aligned openings and adjacent safe lane.
+const runner = fresh();
+quiet(runner);
+runner.highest = BOSS_LEVELS[0];
+runner.beginBoss();
+const runningBoss = runner.enemies.find((e) => e.kind === 'boss')!;
+runningBoss.boss = 'sunshine';
+assert.equal(runner.bossOrder.filter((id) => id === 'sunshine').length, 1);
+for (let cast = 0; cast < 6; cast++) {
+  runner.player.x = 600;
+  runner.player.y = 400;
+  runner.view = { x: 0, y: 0, width: 1200, height: 800 };
+  runner.hazards = [];
+  runner.shots = [];
+  runner.castBoss(runningBoss);
+  runner.bossVolley(runningBoss);
+  assert(runner.hazards.every((h) => h.motif === 'sunshine' && h.warn >= 1.4));
+  assert(runner.shots.every((s) => s.bossSkin === 'sunshine'));
+  if (cast % 3 === 0) {
+    assert.equal(runner.hazards.length, 3);
+    assert(runner.hazards[0].warn < runner.hazards[1].warn);
+    assert(runner.hazards[1].warn < runner.hazards[2].warn);
+    const first = runner.hazards[0],
+      x = first.x;
+    runner.player.x += 200;
+    assert.equal(first.x, x);
+    first.age = first.warn + 0.1;
+    assert(hazardHits(first, { x, y: first.y }));
+  } else if (cast % 3 === 1) {
+    assert.equal(runner.hazards.length, 2);
+    assert.equal(runner.hazards[0].gapAngle, runner.hazards[1].gapAngle);
+    for (const h of runner.hazards) {
+      h.age = h.warn + h.duration / 2;
+      const a = h.gapAngle!,
+        r = h.radius / 2;
+      assert(
+        !hazardHits(h, { x: h.x + r * Math.cos(a), y: h.y + r * Math.sin(a) }),
+      );
+      assert(
+        hazardHits(h, { x: h.x - r * Math.cos(a), y: h.y - r * Math.sin(a) }),
+      );
+    }
+  } else {
+    assert.equal(runner.hazards.length, 3);
+    for (const h of runner.hazards) {
+      h.age = h.warn + 0.1;
+      assert(!hazardHits(h, { x: 1050, y: 400 }));
+      assert(hazardHits(h, { x: h.x, y: h.y }));
+    }
+  }
+}
 // Sun meme machine is the penultimate checkpoint, with three independently avoidable phases.
 assert.equal(fresh().bossOrder.at(-2), 'hotsearch');
 assert.equal(BOSSES.length, BOSS_LEVELS.length);
@@ -934,7 +985,7 @@ for (const spec of BOSSES) {
   );
   assert(hazardHits(h, point(gap + 0.5)));
 }
-assert.equal(rangedSignatures.size, 8);
+assert.equal(rangedSignatures.size, BOSSES.length);
 const rangedHit = fresh();
 quiet(rangedHit);
 const terminal = rangedHit.makeEnemy('boss', 500, 470);

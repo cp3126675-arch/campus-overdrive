@@ -634,3 +634,9 @@ Boss reuse: coder-pity.png is the user-provided image; bike-photo.jpg and tsingh
 User-supplied campus map attachment; original creator and source URL not supplied. Used as survival-mode background; original bytes preserved, WebP delivery copy generated. License: NOASSERTION; not covered by the original-code MIT license.
 
 [v0.6.9 · 2026-09-08] art/tsinghua-campus-map.jpg updated from the user's higher-resolution attachment (5050 × 5769, 1,867,248 bytes). The supplied original is preserved exactly; delivery is WebP at 2689 × 3072 / quality 90. The earlier map remains in archived releases. Original creator/source URL still unspecified; NOASSERTION remains unchanged.
+
+[v0.6.10 阳光长跑]
+art/photos/boss-sunshine.jpg: 清华新闻网《陈旭看望参加“阳光长跑”学生 检查场地设施》，2013-04-26，研通社记者王涵摄。
+来源：https://www.tsinghua.edu.cn/info/1181/55101.htm
+原图：https://www.tsinghua.edu.cn/_mediafile/qh2021b/publish/news/4205/20130426153858343369655/4a.jpg
+许可NOASSERTION，不适用项目代码MIT。保留全图与水印；跑者只用于呈现场景，游戏考官为原创打卡机。

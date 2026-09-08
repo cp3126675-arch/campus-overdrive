@@ -1224,6 +1224,13 @@
     "sourceSha256": "ba7742a19a5539f53b8dc3b05ccce23bd7036fbee7e705f0b45c020c4786100b",
     "sha256": "61af4fbca7ee45d7bac26abb3d2f1bc443c98aed9fb3e8b7ba55b4feade02b9d"
   },
+  "/art/photos/boss-sunshine.jpg": {
+    "file": "/optimized/9dba0c12567c02b93c28.webp",
+    "bytes": 21840,
+    "originalBytes": 133819,
+    "sourceSha256": "8c2a8dc183961c4fc9f57343e644f514f0b4c73656882ba8d453f409f92bf5c9",
+    "sha256": "9dba0c12567c02b93c28dc7ffef0fe41f7c832b8aa40f1198f5b86013fd219c6"
+  },
   "/art/photos/boss-swim.jpg": {
     "file": "/optimized/03c017e12894de69ef7c.webp",
     "bytes": 48922,
