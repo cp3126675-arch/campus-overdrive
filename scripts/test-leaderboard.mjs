@@ -296,8 +296,76 @@ try {
     'survival writes must not touch race scores',
   );
   assert(!JSON.stringify(longest).includes('token'));
+  // Score-season boards are independent of legacy duration boards.
+  const legacyBefore = JSON.stringify(await survivalBoard());
+  const scored = async (scope = 'all') =>
+    (
+      await request(
+        '/api/leaderboard?mode=survival&ranking=score&department=' + scope,
+      )
+    ).data.rows;
+  const postScore = (token, score, timeMs, departmentId = 'd001') =>
+    request(
+      '/api/scores',
+      {
+        mode: 'survival',
+        ranking: 'score',
+        score,
+        timeMs,
+        departmentId,
+        version: '0.6.7',
+        ended: true,
+        won: false,
+      },
+      token,
+    );
+  for (let i = 0; i < players.length; i++)
+    assert.equal(
+      (await postScore(players[i].token, i * 100, 400000 - i * 1000)).status,
+      200,
+    );
+  assert.equal((await scored()).length, 20);
+  assert.equal((await scored('d001')).length, 10);
+  assert.equal((await scored())[0].score, 2400);
+  await Promise.all(
+    [
+      [5000, 400000],
+      [4900, 200000],
+      [5000, 300000],
+      [4800, 900000],
+    ].map(([score, time]) => postScore(owner.token, score, time)),
+  );
+  assert.equal((await scored())[0].score, 5000);
+  assert.equal((await scored())[0].timeMs, 300000);
+  await postScore(owner.token, 5000, 290000, 'd002');
+  assert.equal((await scored())[0].departmentId, 'd002');
+  assert.equal((await scored('d001'))[0].timeMs, 300000);
+  assert.equal(
+    (await scored()).filter((r) => r.playerId === owner.playerId).length,
+    1,
+  );
+  for (const score of [-1, 1.5, 1000000001, '5000', null])
+    assert.equal((await postScore(owner.token, score, 300000)).status, 400);
+  assert.equal(
+    (await request('/api/leaderboard?mode=race&ranking=score')).status,
+    400,
+  );
+  assert.equal(
+    (await request('/api/leaderboard?mode=survival&ranking=invalid')).status,
+    400,
+  );
+  assert.equal(JSON.stringify(await survivalBoard()), legacyBefore);
+  assert.equal(
+    JSON.stringify((await request('/api/leaderboard')).data.rows),
+    raceBefore,
+  );
+  console.log(
+    'Score season: highest score, shorter equal-score run, 10/20 limits, concurrent upserts, department separation, validation and legacy isolation passed.',
+  );
   // A nickname belongs to the player, never to a copied score row.
   const paths = [
+    '/api/leaderboard?mode=survival&ranking=score',
+    '/api/leaderboard?mode=survival&ranking=score&department=d001',
     '/api/leaderboard',
     '/api/leaderboard?department=d001',
     '/api/leaderboard?mode=survival',

@@ -37,7 +37,7 @@ export const BOSSES = [
       'https://epaper.cqcb.com/attachment/202311/29/e5210d78-0b86-4e8c-bfe3-e332dd2f3740.pdf',
     year: '2023',
     background:
-      '改编自清北学生争抢鹅腿的排队热潮，Boss 是虚构的抢号机器，鹅腿阿姨仍是补给 NPC。',
+      '改编自清北学生争抢鹅腿的排队热潮，大考是虚构的抢号机器，鹅腿阿姨仍是补给 NPC。',
   },
   {
     id: 'bike',
@@ -99,10 +99,10 @@ export const BOSSES = [
     color: '#ffd582',
     glyph: '清华',
     move: '二校门镇压 / 四年总复习',
-    tip: '躲开盖章区域，再穿过弹幕空隙；击破它才停止计时。',
+    tip: '躲开盖章区域，再穿过弹幕空隙；通过它才停止计时。',
     source: '',
     year: '最终关',
-    background: '游戏原创最终 Boss。合成清华校徽且前置 Boss 全部击败后登场。',
+    background: '游戏原创最终大考。合成清华校徽且前置大考全部通过后登场。',
   },
 ] as const;
 export type BossId = (typeof BOSSES)[number]['id'];

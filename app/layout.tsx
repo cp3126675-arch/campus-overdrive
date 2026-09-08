@@ -8,7 +8,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: '合成清华 · 徽章竞速挑战',
   description:
-    '手机横屏操控院徽，按合成进度挑战 Boss，合出清华并击败最终 Boss。',
+    '手机横屏操控院徽，合成清华完成毕业答辩，或参加期末周争取更高总分。',
   icons: { icon: '/badges/shuxue.png' },
 };
 export default function RootLayout({

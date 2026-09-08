@@ -2,11 +2,12 @@ export type ScoreMode = 'race' | 'survival';
 export const DEPARTMENT_RECORD_LIMIT = 10;
 export const OVERALL_RECORD_LIMIT = 20;
 export const RECORD_STORAGE_KEY = 'campus-records-v1';
-export const SURVIVAL_RECORD_STORAGE_KEY = 'campus-survival-records-v1';
+export const SURVIVAL_RECORD_STORAGE_KEY = 'campus-survival-score-records-v1';
 export const recordStorageKey = (mode: ScoreMode) =>
   mode === 'survival' ? SURVIVAL_RECORD_STORAGE_KEY : RECORD_STORAGE_KEY;
 const MAX_STORAGE_LENGTH = 500_000;
 export interface RunRecord {
+  score?: number;
   mode?: ScoreMode;
   id: string;
   departmentId: string;
@@ -30,7 +31,8 @@ export function compareRecords(
   mode: ScoreMode = 'race',
 ) {
   return (
-    (mode === 'survival' ? b.timeMs - a.timeMs : a.timeMs - b.timeMs) ||
+    (mode === 'survival' ? (b.score ?? 0) - (a.score ?? 0) : 0) ||
+    a.timeMs - b.timeMs ||
     a.completedAt - b.completedAt ||
     a.id.localeCompare(b.id)
   );
@@ -44,6 +46,10 @@ function validRecord(
   const r = value as RunRecord;
   return (
     (r.mode ?? 'race') === mode &&
+    (mode !== 'survival' ||
+      (Number.isSafeInteger(r.score) &&
+        r.score! >= 0 &&
+        r.score! <= 1000000000)) &&
     typeof r.id === 'string' &&
     r.id.length > 0 &&
     r.id.length <= 100 &&
@@ -169,14 +175,14 @@ export function saveRecord(
   } catch {
     /* Storage may be unavailable; retain this session's scores. */
   }
-  const previousBest =
-    book.departments[record.departmentId]?.[0]?.timeMs ?? null;
+  const previousRecord = book.departments[record.departmentId]?.[0] ?? null;
+  const previousBest = previousRecord?.timeMs ?? null;
   book = addRecord(book, record, known, mode);
   try {
     storage.setItem(recordStorageKey(mode), JSON.stringify(book));
-    return { book, persisted: true, previousBest };
+    return { book, persisted: true, previousBest, previousRecord };
   } catch {
-    return { book, persisted: false, previousBest };
+    return { book, persisted: false, previousBest, previousRecord };
   }
 }
 export function formatRecordTime(ms: number) {

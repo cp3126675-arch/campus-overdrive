@@ -363,6 +363,66 @@ function advance(g: GameModel, seconds: number) {
   assert.equal(g.lastHit, 12);
   assert(g.snapshot().hurtTime > 0);
 }
+// Score rewards work, never waiting or repeated recovery merges.
+{
+  const g = fresh();
+  quiet(g);
+  g.nextBossAt = 99999;
+  advance(g, 10);
+  assert.equal(g.score, 0);
+  const clearPractice = () => {
+    for (let i = 0; i < 20; i++) {
+      const e = g.makeEnemy('paper', g.player.x, g.player.y);
+      e.year = 4;
+      e.hp = 0;
+      g.enemies.push(e);
+    }
+    g.checkKills();
+  };
+  clearPractice();
+  clearPractice();
+  assert.equal(g.practiceScore, 300, 'practice is capped until a pass');
+  g.onMerge(3, 100, 100);
+  assert.equal(g.badgeScore, 240);
+  g.onMerge(1, 100, 100);
+  g.onMerge(3, 100, 100);
+  assert.equal(g.badgeScore, 240, 'recovery merges cannot farm points');
+  quiet(g);
+  g.time = 35;
+  g.nextBossAt = 35;
+  g.invulnerable = 999;
+  assert(g.beginBoss());
+  const firstExam = g.enemies.find((e) => e.kind === 'boss')!.boss;
+  g.bossAttack = 9999;
+  const before = g.score;
+  advance(g, 44);
+  assert(g.bossSpawned);
+  g.togglePause();
+  advance(g, 10);
+  g.togglePause();
+  assert(g.bossSpawned, 'pause freezes submission deadline');
+  advance(g, 1.1);
+  assert(!g.bossSpawned);
+  assert.equal(g.score, before);
+  assert.equal(g.bossesDefeated, 0);
+  assert.equal(g.examsTaken, 1);
+  assert.equal(g.snapshot().survival!.practiceRemaining, 0);
+  g.time = g.nextBossAt;
+  assert(g.beginBoss());
+  assert.notEqual(g.enemies.find((e) => e.kind === 'boss')!.boss, firstExam);
+  g.time += 20;
+  g.enemies.find((e) => e.kind === 'boss')!.hp = 0;
+  g.checkKills();
+  assert.equal(g.examScore, 1250);
+  assert.equal(g.bossesDefeated, 1);
+  assert.equal(g.snapshot().survival!.practiceRemaining, 300);
+  assert.equal(g.score, g.examScore + g.practiceScore + g.badgeScore);
+  clearPractice();
+  assert.equal(g.practiceScore, 600);
+  g.start('math', 'shuxue');
+  assert.equal(g.score, 0);
+  assert.equal(g.examsTaken, 0);
+}
 // Drawing contracts without browser/visual QA: shield absent at expiry, circle absent at zero.
 {
   const calls: { name: string; args: unknown[] }[] = [];

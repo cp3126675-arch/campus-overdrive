@@ -143,9 +143,15 @@ export class CampusGame {
     const next =
       m.bossOrder[
         m instanceof SurvivalGameModel
-          ? m.bossesDefeated % m.bossOrder.length
+          ? m.examsTaken % m.bossOrder.length
           : m.bossesDefeated
       ];
+    const currentBoss = m.enemies.find((e) => e.kind === 'boss')?.boss;
+    if (currentBoss)
+      defs.push([
+        `boss-photo-${currentBoss}`,
+        `/art/${BOSS_PHOTOS[currentBoss].file}`,
+      ]);
     if (next) {
       const photo = BOSS_PHOTOS[next];
       defs.push([`boss-photo-${next}`, `/art/${photo.file}`]);
@@ -822,7 +828,7 @@ export class CampusGame {
     c.shadowBlur = 0;
     this.text(spec.name, 0, -102, 19, '#fff2e4');
     if (e.hp < e.maxHp * 0.5)
-      this.text('二阶段 · 火力全开', 0, 102, 14, '#ff91a8');
+      this.text('二阶段 · 解题效率全开', 0, 102, 14, '#ff91a8');
     c.restore();
   }
   private bossProjectile(s: Shot) {
@@ -1878,7 +1884,7 @@ export class CampusGame {
           Math.max(m.breakShieldTime, m.invulnerable) > 0
         ) {
           this.text(
-            m.breakShieldTime > 0 ? '无敌护盾' : '战斗无敌',
+            m.breakShieldTime > 0 ? '补考保护' : '应试保护',
             p.x,
             p.y - radius - 44,
             23,
@@ -2051,7 +2057,7 @@ export class CampusGame {
     }
     if (m.combo >= 3) {
       this.text(
-        `${m.combo} 连破`,
+        `${m.combo} 连对`,
         view.x + view.width - 85,
         view.y + 270,
         28,
@@ -2074,7 +2080,7 @@ export class CampusGame {
     }
     if (m.feastTime > 0)
       this.text(
-        `鹅腿火力 ×2 · ${Math.ceil(m.feastTime)}s`,
+        `鹅腿解题效率 ×2 · ${Math.ceil(m.feastTime)}s`,
         m.player.x,
         m.player.y + 80,
         17,

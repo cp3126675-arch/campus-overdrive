@@ -5,6 +5,7 @@ export interface PlayerIdentity {
   token: string;
 }
 export interface LeaderboardRow {
+  score?: number;
   playerId: string;
   nickname: string;
   departmentId: string;
@@ -139,7 +140,8 @@ export async function getLeaderboard(
       '/api/leaderboard?department=' +
       encodeURIComponent(department) +
       '&mode=' +
-      mode,
+      mode +
+      (mode === 'survival' ? '&ranking=score' : ''),
   );
   const limit = department === 'all' ? 20 : 10;
   if (!Array.isArray(data.rows)) throw new Error('榜单返回格式异常');
@@ -148,6 +150,8 @@ export async function getLeaderboard(
     .filter(
       (r: LeaderboardRow) =>
         r &&
+        (mode !== 'survival' ||
+          (Number.isSafeInteger(r.score) && r.score! >= 0)) &&
         typeof r.playerId === 'string' &&
         typeof r.nickname === 'string' &&
         typeof r.departmentId === 'string' &&
@@ -164,6 +168,7 @@ export async function submitScore(
     timeMs: number;
     version: string;
     mode?: ScoreMode;
+    score?: number;
   },
 ) {
   const base = await leaderboardEndpoint();
@@ -176,6 +181,7 @@ export async function submitScore(
     body: JSON.stringify({
       ...score,
       mode: score.mode ?? 'race',
+      ...(score.mode === 'survival' ? { ranking: 'score' } : {}),
       won: score.mode !== 'survival',
       ended: true,
     }),

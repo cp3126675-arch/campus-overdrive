@@ -81,9 +81,7 @@ export function GameRecords({
       >
         <div className="records-heading">
           <DialogTitle>
-            {mode === 'survival'
-              ? '生存排行榜 · 越久越强'
-              : '竞速排行榜 · 越快越强'}
+            {mode === 'survival' ? '期末周成绩榜' : '竞速排行榜 · 越快越强'}
           </DialogTitle>
           <DialogClose render={<Button variant="ghost" size="sm" />}>
             关闭
@@ -93,8 +91,10 @@ export function GameRecords({
           <div className="records-controls">
             <DialogDescription>
               {view === 'online'
-                ? '每人只取最佳成绩 · 院系前10名 / 总榜前20名'
-                : '本机挑战历史 · 竞速与生存分别记录'}
+                ? mode === 'survival'
+                  ? '按得分排名，同分用时短者优先 · 院系前10 / 总榜前20'
+                  : '每人只取最佳成绩 · 院系前10名 / 总榜前20名'
+                : '本机成绩单 · 毕业竞速与期末周分别记录'}
             </DialogDescription>
             <div className="records-tabs" aria-label="排行榜模式">
               {(['race', 'survival'] as const).map((value) => (
@@ -107,7 +107,7 @@ export function GameRecords({
                     setScope('all');
                   }}
                 >
-                  {value === 'survival' ? '生存 · 最长时间' : '竞速 · 最短时间'}
+                  {value === 'survival' ? '期末周 · 总得分' : '竞速 · 最短时间'}
                 </Button>
               ))}
             </div>
@@ -174,6 +174,11 @@ export function GameRecords({
                 ))}
               </select>
             </label>
+            {mode === 'survival' && (
+              <p className="records-help">
+                总分榜自 v0.6.7 起记录；旧版时长成绩保留，不混排。
+              </p>
+            )}
             <p className="records-footnote">
               {view === 'online'
                 ? '昵称与最佳成绩公开展示；换浏览器或清除数据会创建新的参榜身份。'
@@ -200,7 +205,8 @@ export function GameRecords({
                     <tr>
                       <th>排名</th>
                       <th>玩家</th>
-                      <th>{mode === 'survival' ? '存活时间' : '通关用时'}</th>
+                      {mode === 'survival' && <th>总得分</th>}
+                      <th>{mode === 'survival' ? '坚持时长' : '毕业用时'}</th>
                       <th>主修</th>
                     </tr>
                   </thead>
@@ -219,6 +225,11 @@ export function GameRecords({
                             ? '（我）'
                             : ''}
                         </td>
+                        {mode === 'survival' && (
+                          <td className="record-score">
+                            {r.score?.toLocaleString()}
+                          </td>
+                        )}
                         <td>{formatRecordTime(r.timeMs)}</td>
                         <td>{names.get(r.departmentId)}</td>
                       </tr>
@@ -237,7 +248,8 @@ export function GameRecords({
                 <thead>
                   <tr>
                     <th>排名</th>
-                    <th>{mode === 'survival' ? '存活时间' : '通关用时'}</th>
+                    {mode === 'survival' && <th>总得分</th>}
+                    <th>{mode === 'survival' ? '坚持时长' : '毕业用时'}</th>
                     <th>主修</th>
                     <th>日期</th>
                   </tr>
@@ -249,6 +261,11 @@ export function GameRecords({
                       className={i === 0 ? 'record-first' : undefined}
                     >
                       <td>{i === 0 ? '🏆' : i + 1}</td>
+                      {mode === 'survival' && (
+                        <td className="record-score">
+                          {r.score?.toLocaleString()}
+                        </td>
+                      )}
                       <td>{formatRecordTime(r.timeMs)}</td>
                       <td>{names.get(r.departmentId)}</td>
                       <td>
@@ -264,8 +281,8 @@ export function GameRecords({
             ) : (
               <p className="records-empty">
                 {mode === 'survival'
-                  ? '还没有生存纪录。完成一次生存挑战，留下你的成绩！'
-                  : '还没有通关纪录。击败最终 Boss，留下你的第一个成绩！'}
+                  ? '还没有期末周成绩。参加一次期末周，留下你的成绩！'
+                  : '还没有毕业纪录。通过最终大考，留下你的第一个成绩！'}
               </p>
             )}
           </div>

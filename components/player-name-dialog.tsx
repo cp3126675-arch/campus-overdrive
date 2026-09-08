@@ -50,7 +50,7 @@ export function PlayerNameDialog({
         </div>
         <DialogDescription>
           {editing
-            ? '修改后，竞速和生存榜上的旧成绩都会显示新昵称。'
+            ? '修改后，竞速和期末周榜上的旧成绩都会显示新昵称。'
             : '先给自己取个昵称。它会跟着徽章，也会出现在排行榜上，之后随时能改。'}
         </DialogDescription>
         <form

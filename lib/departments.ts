@@ -32,20 +32,20 @@ export const DEFAULT_DEPARTMENTS = {
 export const department = (id: string) =>
   DEPARTMENTS.find((d) => d.id === id) ?? DEPARTMENTS[41];
 export const SKILL_RULES: Record<SkillKind, string> = {
-  guard: '展开蓝图盾，反射敌弹、减伤 45% 并灼伤近敌',
-  blades: '旋转长刃，切割身边的敌人',
-  wave: '连续扩散冲击环，按环面命中',
-  heal: '治疗光场缓慢回血，同时伤害近敌',
-  frost: '冻结领域大幅减速，Boss 受到部分减速',
-  drones: '多架无人机独立发射追踪弹',
-  gravity: '引力场拉近敌人，中心造成更高伤害',
-  beam: '旋转贯穿光束，切割整条射线',
-  flame: '朝移动方向喷射扇形持续火焰',
-  rush: '提高移动速度，碾压近身敌人',
-  storm: '闪电连续锁定最近的多个敌人',
-  rain: '在敌人位置投放范围轰炸',
-  execute: '审判近敌，对低血量目标追加伤害',
-  orbit: '多枚轨道卫星绕身碰撞攻击',
+  guard: '蓝图护航：退回飞来的题目，减轻45%压力并持续解答近处练习',
+  blades: '旋转批注长刃，快速处理身边练习',
+  wave: '连续扩散知识环，解答环面上的题目',
+  heal: '学习光场缓慢恢复精力，同时处理近处练习',
+  frost: '冻结DDL，显著放慢题目；大考只受部分影响',
+  drones: '多架助教无人机独立追踪答题',
+  gravity: '把题目吸入引力场，越靠中心解题越快',
+  beam: '贯穿知识光束，扫过整列题目',
+  flame: '朝移动方向持续喷出扇形复习火焰',
+  rush: '加速赶课，顺路处理身边练习',
+  storm: '灵感闪电连续解答最近的多份练习',
+  rain: '在题目位置空投范围批注',
+  execute: '集中批阅近处练习，对快答完的题目加速收尾',
+  orbit: '多枚助学卫星绕身，碰到题目就作答',
 };
 export type SkillZone = {
   x: number;
@@ -106,14 +106,12 @@ export function skillZones(
       },
     ];
   if (d.kind === 'storm' || d.kind === 'rain')
-    return targets
-      .slice(0, d.count)
-      .map((e) => ({
-        ...base,
-        x: e.x,
-        y: e.y,
-        radius: d.kind === 'storm' ? 25 : 55,
-      }));
+    return targets.slice(0, d.count).map((e) => ({
+      ...base,
+      x: e.x,
+      y: e.y,
+      radius: d.kind === 'storm' ? 25 : 55,
+    }));
   return [
     {
       ...base,

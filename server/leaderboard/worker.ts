@@ -72,6 +72,11 @@ async function player(request: Request, env: Env) {
   if (!found) throw new ApiError(401, '参榜身份已失效，请重新设置昵称');
   return found;
 }
+function scoreRanking(mode: string, value: unknown) {
+  if (value === undefined || value === null || value === 'time') return false;
+  if (mode === 'survival' && value === 'score') return true;
+  throw new ApiError(400, '榜单计分规则无效');
+}
 function validNickname(value: unknown) {
   const nickname =
     typeof value === 'string' ? value.trim().normalize('NFC') : '';
@@ -91,7 +96,8 @@ export async function route(request: Request, env: Env) {
     return json({
       ok: true,
       modes: ['race', 'survival'],
-      schema: 2,
+      schema: 3,
+      survivalRanking: 'score',
       nicknameEditing: true,
     });
   if (request.method === 'POST' && url.pathname === '/api/player') {
@@ -119,22 +125,32 @@ export async function route(request: Request, env: Env) {
   }
   if (request.method === 'GET' && url.pathname === '/api/leaderboard') {
     const mode = scoreMode(url.searchParams.get('mode'));
-    const prefix = mode === 'survival' ? 'survival_' : '';
+    const ranked = scoreRanking(mode, url.searchParams.get('ranking'));
+    const prefix = ranked
+      ? 'survival_score_'
+      : mode === 'survival'
+        ? 'survival_'
+        : '';
     const direction = mode === 'survival' ? 'DESC' : 'ASC';
+    const order = ranked
+      ? 'b.score DESC, b.time_ms ASC'
+      : `b.time_ms ${direction}`;
     const department = url.searchParams.get('department') || 'all';
     if (department !== 'all' && !known.has(department))
       throw new ApiError(400, '院系无效');
     const select =
-      'SELECT b.player_id AS playerId, p.nickname, b.department_id AS departmentId, b.time_ms AS timeMs, b.completed_at AS completedAt FROM ';
+      'SELECT b.player_id AS playerId, p.nickname, b.department_id AS departmentId, b.time_ms AS timeMs, b.completed_at AS completedAt' +
+      (ranked ? ', b.score' : '') +
+      ' FROM ';
     const query =
       department === 'all'
         ? env.DB.prepare(
             select +
-              `${prefix}overall_best b JOIN players p ON p.id = b.player_id ORDER BY b.time_ms ${direction}, b.completed_at, b.player_id LIMIT 20`,
+              `${prefix}overall_best b JOIN players p ON p.id = b.player_id ORDER BY ${order}, b.completed_at, b.player_id LIMIT 20`,
           )
         : env.DB.prepare(
             select +
-              `${prefix}best_runs b JOIN players p ON p.id = b.player_id WHERE b.department_id = ?1 ORDER BY b.time_ms ${direction}, b.completed_at, b.player_id LIMIT 10`,
+              `${prefix}best_runs b JOIN players p ON p.id = b.player_id WHERE b.department_id = ?1 ORDER BY ${order}, b.completed_at, b.player_id LIMIT 10`,
           ).bind(department);
     const rows = await query.all();
     return json({ rows: rows.results });
@@ -143,10 +159,19 @@ export async function route(request: Request, env: Env) {
     const owner = await player(request, env);
     const data = await body(request);
     const mode = scoreMode(data.mode);
-    const prefix = mode === 'survival' ? 'survival_' : '';
+    const ranked = scoreRanking(mode, data.ranking);
+    const prefix = ranked
+      ? 'survival_score_'
+      : mode === 'survival'
+        ? 'survival_'
+        : '';
     const comparison = mode === 'survival' ? '>' : '<';
     if (
       !known.has(data.departmentId) ||
+      (ranked &&
+        (!Number.isSafeInteger(data.score) ||
+          data.score < 0 ||
+          data.score > 1000000000)) ||
       !Number.isSafeInteger(data.timeMs) ||
       data.timeMs < 1000 ||
       data.timeMs > 604800000 ||
@@ -159,10 +184,28 @@ export async function route(request: Request, env: Env) {
       throw new ApiError(
         400,
         mode === 'survival'
-          ? '只接受有效的生存结算成绩'
-          : '只接受有效的完整通关成绩',
+          ? '只接受有效的期末周结算成绩'
+          : '只接受有效的完整毕业成绩',
       );
     const now = Date.now();
+    if (ranked) {
+      await env.DB.batch(
+        ['survival_score_best_runs', 'survival_score_overall_best'].map(
+          (table) =>
+            env.DB.prepare(
+              `INSERT INTO ${table}(player_id, department_id, score, time_ms, completed_at, version) VALUES (?1, ?2, ?3, ?4, ?5, ?6) ON CONFLICT(${table.endsWith('best_runs') ? 'player_id, department_id' : 'player_id'}) DO UPDATE SET department_id=excluded.department_id, score=excluded.score, time_ms=excluded.time_ms, completed_at=excluded.completed_at, version=excluded.version WHERE excluded.score > ${table}.score OR (excluded.score = ${table}.score AND excluded.time_ms < ${table}.time_ms)`,
+            ).bind(
+              owner.id,
+              data.departmentId,
+              data.score,
+              data.timeMs,
+              now,
+              data.version,
+            ),
+        ),
+      );
+      return json({ ok: true });
+    }
     await env.DB.batch(
       [`${prefix}best_runs`, `${prefix}overall_best`].map((table) =>
         env.DB.prepare(

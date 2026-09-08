@@ -73,7 +73,7 @@ export const initialSnapshot: Snapshot = {
   time: 0,
   phase: 0,
   broadcast: '',
-  questTitle: '高数作业：消灭 10 只作业怪',
+  questTitle: '高数作业：完成10份练习',
   questText: '截止前完成，获得 2 学分',
   questRemaining: 35,
   bossHp: 0,
@@ -191,17 +191,17 @@ export type FX = {
   vy: number;
 };
 export const ASSIGNMENTS = [
-  { title: '高数作业', kind: 'kills', target: 10, label: '击败作业怪' },
+  { title: '高数作业', kind: 'kills', target: 10, label: '完成课程练习' },
   { title: '院徽实验', kind: 'merges', target: 2, label: '完成徽章合成' },
   {
     title: '小组作业（只有你在做）',
     kind: 'kills',
     target: 18,
-    label: '击败作业怪',
+    label: '完成课程练习',
   },
   { title: '资料收集报告', kind: 'collected', target: 8, label: '拾取院徽' },
   { title: '合成进阶作业', kind: 'merges', target: 3, label: '完成徽章合成' },
-  { title: '期末复习清单', kind: 'kills', target: 22, label: '击败作业怪' },
+  { title: '期末复习清单', kind: 'kills', target: 22, label: '完成课程练习' },
 ] as const;
 export const clamp = (n: number, a: number, b: number) =>
   Math.min(b, Math.max(a, n));
@@ -382,7 +382,7 @@ export class GameModel {
     this.chain = buildChain(target, this.rng);
     this.inventory = [0, 0];
     this.mode = 'playing';
-    this.notify('操控中央院徽 · E 合成 · 合出清华，再击破最终 Boss', 7);
+    this.notify('操控中央院徽 · E 合成 · 合出清华，再通过最终大考', 7);
     this.broadcast = this.department.joke;
     for (let i = 0; i < 2; i++)
       this.spawnDrop(390 + i * 90, 360 + (i % 2) * 100, 0);
@@ -507,7 +507,7 @@ export class GameModel {
       this.feastTime = 5;
       this.chargeSkill(8);
       this.events.push('goose');
-      this.notify('鹅腿 +24 生命！5 秒火力加餐', 3);
+      this.notify('鹅腿 +24 精力！5 秒解题效率加餐', 3);
       this.effect(this.player.x, this.player.y, 'burst', '#a6ff8b', 100, 0.5);
       this.effect(
         this.player.x,
@@ -516,7 +516,7 @@ export class GameModel {
         '#baff9b',
         0,
         1.2,
-        '鹅腿 +24 · 火力加餐',
+        '鹅腿 +24 · 解题效率加餐',
       );
     } else {
       // Eating is a choice of pickup; combat invulnerability does not cancel its HP cost.
@@ -526,7 +526,7 @@ export class GameModel {
       this.shake = Math.max(this.shake, 10);
       this.shake = 6;
       this.events.push('hurt');
-      this.notify('吃成鸭腿了！生命 -12', 3);
+      this.notify('吃成鸭腿了！精力 -12', 3);
       this.effect(
         this.player.x,
         this.player.y - 40,
@@ -560,7 +560,7 @@ export class GameModel {
     this.dashCooldown = 4;
     this.invulnerable = Math.max(this.invulnerable, 0.85);
     this.bikeHits.clear();
-    this.notify('学堂路车神！骑车可转向 · 撞穿怪群', 1.4);
+    this.notify('学堂路车神！骑车可转向 · 穿梭题海', 1.4);
     this.events.push('dash');
     this.effect(this.player.x, this.player.y, 'ring', '#a3dffe', 70);
     return true;
@@ -607,8 +607,8 @@ export class GameModel {
       level === 13
         ? '距离清华只差最后一次合成！'
         : level === 14
-          ? '清华校徽已合成！击败剩余 Boss 和最终审核机才能毕业。'
-          : `合成 ${this.chain[level].name} · 攻击提升 + 冲击波`,
+          ? '清华校徽已合成！通过剩余大考和最终审核机才能毕业。'
+          : `合成 ${this.chain[level].name} · 答题提升 + 冲击波`,
       3.4,
     );
     if (level === this.chain.length - 1) {
@@ -828,8 +828,8 @@ export class GameModel {
     this.broadcast = spec.tip;
     this.notify(
       this.isFinalBoss
-        ? '最终答辩！击破审核机才算通关'
-        : '进度检查点！击破 Boss，解锁下一场挑战',
+        ? '最终答辩！通过审核机才算毕业'
+        : '进度检查点！通过大考，解锁下一场挑战',
       5,
     );
     this.events.push('alarm');
@@ -866,7 +866,7 @@ export class GameModel {
       return;
     }
     this.notify(
-      `Boss 击破！${this.bossesDefeated}/${BOSS_LEVELS.length} · 下一节点 ${mergePercent(this.nextBossLevel!)}%`,
+      `大考通过！${this.bossesDefeated}/${BOSS_LEVELS.length} · 下一节点 ${mergePercent(this.nextBossLevel!)}%`,
       4,
     );
     this.events.push('credit');
@@ -892,7 +892,7 @@ export class GameModel {
       `-${amount}`,
     );
     if (this.hp <= 0)
-      this.finish(false, '被作业淹没了。多走位，合成冲击波和冲刺都能救命。');
+      this.finish(false, '被作业淹没了。多走位，合成助学圈和冲刺都能救命。');
   }
   fireBadge(level: number, origin: { x: number; y: number }, support = false) {
     const near = this.enemies
@@ -1213,7 +1213,7 @@ export class GameModel {
         damage: 25,
       });
     }
-    // Link every newly authored danger zone to its Boss; preserve the three Sun motifs.
+    // Link every newly authored danger zone to its 大考; preserve the three Sun motifs.
     for (const h of this.hazards.slice(hazardStart)) h.motif ??= boss.boss;
   }
 
@@ -1324,7 +1324,7 @@ export class GameModel {
           '#ffe194',
           0,
           1,
-          `${this.combo} 连破！`,
+          `${this.combo} 连对！`,
         );
         this.shake = Math.max(this.shake, 4);
       }
@@ -1365,8 +1365,8 @@ export class GameModel {
       this.events.push('credit');
       this.notify(
         healed
-          ? '作业已提交！+2 学分 · 生命恢复'
-          : '作业已提交！+2 学分 · 圈尽后仅合成回血',
+          ? '作业已提交！+2 学分 · 精力恢复'
+          : '作业已提交！+2 学分 · 圈尽后仅合成恢复精力',
         4,
       );
       this.effect(
@@ -1390,7 +1390,7 @@ export class GameModel {
       this.failed++;
       this.spawnEnemy('clock', 1);
       this.spawnEnemy('clock', 1);
-      this.notify('DDL 已过！追债闹钟出动，击败它们可补修学分', 6);
+      this.notify('DDL 已过！追债闹钟出动，通过它们可补修学分', 6);
       this.broadcast = '“已读不交？那我亲自过来。”';
       this.events.push('alarm');
     }
@@ -1895,7 +1895,7 @@ export class GameModel {
             '#a4f3c3',
             0,
             0.8,
-            healed ? '+8' : '仅合成可回血',
+            healed ? '+8' : '仅合成可恢复精力',
           );
         } else if (this.inventory.length < 5) {
           this.inventory.push(d.level);
@@ -1996,7 +1996,7 @@ export class GameModel {
     this.hazards = this.hazards.filter((h) => h.age < h.warn + h.duration);
     if (this.year !== this.lastYear) {
       this.lastYear = this.year;
-      this.notify(`${YEAR_NAMES[this.year]}开学！教材伤害与血量升级`, 4);
+      this.notify(`${YEAR_NAMES[this.year]}开学！教材压力与精力升级`, 4);
     }
     if (this.exam) {
       const exam = this.exam;
