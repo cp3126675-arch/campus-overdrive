@@ -2033,3 +2033,39 @@ a {
 .hp-panel.is-taking-damage b { color:#fff; }
 
 .records-scroll .record-score { color: #ffe0a3; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* v0.6.11: score is the primary live survival metric; reuse the existing HUD slot. */
+.battle-hud .survival-score-clock {
+  min-width: 0;
+  width: 100%;
+  padding: 5px;
+  border-color: #ffdc8480;
+}
+.battle-hud .survival-score-clock strong {
+  display: block;
+  color: #ffe18e;
+  white-space: nowrap;
+  letter-spacing: 0;
+  line-height: 1.15;
+}
+.battle-hud .survival-score-clock .survival-clock-time {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  color: #bac8dc;
+  white-space: nowrap;
+}
+:where(.challenge[data-width-max-900='true']) .battle-hud.has-survival-score,
+.challenge.touch-controls .battle-hud.has-survival-score {
+  grid-template-columns: 106px 112px minmax(120px, 1fr) 92px;
+}
+.challenge.touch-controls[data-width-max-680='true'] .battle-hud.has-survival-score {
+  grid-template-columns: 84px 100px minmax(110px, 1fr) 92px;
+}
+
+.challenge.touch-controls .battle-hud.has-survival-score .hp-panel {
+  width: 100%;
+  min-width: 0;
+}

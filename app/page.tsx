@@ -484,7 +484,7 @@ export default function Home() {
         </div>
       ) : (
         <>
-          <div className="battle-hud">
+          <div className={`battle-hud ${survival ? 'has-survival-score' : ''}`}>
             <div
               className={`hp-panel ${snap.hurtTime ? 'is-taking-damage' : ''} ${snap.hp <= 35 ? 'is-critical' : ''}`}
             >
@@ -501,13 +501,38 @@ export default function Home() {
                 <i style={{ width: `${snap.hp}%` }} />
               </div>
             </div>
-            <div className="race-clock">
-              <small>
-                {survival
-                  ? `期末周 · ${survival.score.toLocaleString()} 分`
-                  : '毕业用时'}
-              </small>
-              <strong>{fmt(snap.time)}</strong>
+            <div
+              className={`race-clock ${survival ? 'survival-score-clock' : ''}`}
+            >
+              {survival ? (
+                <>
+                  <small>本局得分</small>
+                  <strong
+                    aria-label={`本局得分 ${survival.score} 分`}
+                    style={{
+                      fontSize: Math.min(
+                        26,
+                        Math.max(
+                          10,
+                          Math.floor(
+                            135 / survival.score.toLocaleString().length,
+                          ),
+                        ),
+                      ),
+                    }}
+                  >
+                    {survival.score.toLocaleString()}
+                  </strong>
+                  <span className="survival-clock-time">
+                    坚持 {fmt(snap.time)}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <small>毕业用时</small>
+                  <strong>{fmt(snap.time)}</strong>
+                </>
+              )}
             </div>
             <div className="wave-hud">
               <b>
