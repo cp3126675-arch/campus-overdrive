@@ -1,0 +1,20 @@
+{
+  "version": "0.6.11",
+  "status": "published and verified",
+  "sourceCommit": "3d372cb91d9862eafbdc3afb8e6b606e9a0dc83f",
+  "publicSourceCommit": "a9e8de42a7673fabcfa9d4ff124fb16557a76ee4",
+  "deploymentCommit": "57f7f4bc7aa18c15fba7963a041066fc39e3a309",
+  "archiveSha256": "fda4848aa185458f4494495edabfe0f8468b082e4292e3605ec3fc86500d8b30",
+  "pr": 13,
+  "ciRun": 34588621502,
+  "pagesRun": 34588733372,
+  "liveFilesMatched": 247,
+  "backendChanged": false,
+  "release": "https://github.com/cp3126675-arch/campus-overdrive/releases/tag/v0.6.11",
+  "rollback": {
+    "version": "0.6.10",
+    "deploymentCommit": "78480fc8c35fb3984bbe2ef38a93cd4f7d634317",
+    "archiveSha256": "91c6d874507cf8e67ab983ab87c92c257afba6d538b5f4c6861e2cf7d4e1238b"
+  },
+  "physicalPhoneQa": false
+}
