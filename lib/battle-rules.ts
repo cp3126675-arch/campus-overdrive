@@ -1,3 +1,4 @@
+export const DASH_COOLDOWN_SECONDS = 5;
 // Discrete badge levels give visible, repeatable checkpoints. Final node is always Lv.15.
 export const BOSS_LEVELS = [2, 4, 6, 8, 9, 10, 11, 13, 14] as const;
 export const mergePercent = (level: number) =>

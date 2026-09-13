@@ -7,7 +7,7 @@ import { SurvivalGameModel } from './survival-model';
 import colleges from './colleges.json';
 import { assetUrl } from './asset-url';
 import { GameMusic } from './music';
-import { needsLandscape } from './battle-rules';
+import { needsLandscape, DASH_COOLDOWN_SECONDS } from './battle-rules';
 import { ImageLoader, loadImageBatch } from './image-loader';
 import { roundRect } from './canvas-compat';
 import { bossEdgeCue, layoutAttributes } from './mobile-display';
@@ -2076,7 +2076,8 @@ export class CampusGame {
         m.player.y,
         45 + m.centralLevel * 0.65,
         -Math.PI / 2,
-        -Math.PI / 2 + Math.PI * 2 * (1 - m.dashCooldown / 4),
+        -Math.PI / 2 +
+          Math.PI * 2 * (1 - m.dashCooldown / DASH_COOLDOWN_SECONDS),
       );
       c.stroke();
     }

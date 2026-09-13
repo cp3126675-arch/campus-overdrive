@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { SurvivalGameModel } from '../lib/survival-model';
+import { DASH_COOLDOWN_SECONDS } from '../lib/battle-rules';
 import { GameModel, MAX_GROUND_BADGES } from '../lib/game-model';
 import {
   SURVIVAL,
@@ -311,37 +312,64 @@ function advance(g: GameModel, seconds: number) {
   g.damage(100000);
   assert.equal(g.mode, 'lost', 'enemy damage can finish the last badge');
 }
-// At maximum attack rate, using dash requires three actual Boss volleys, not merely a timer.
-{
+// Fixed elapsed-time cooldown in both modes; boss volleys cannot gate or recharge dash.
+for (const Model of [GameModel, SurvivalGameModel]) {
   for (const healthRatio of [1, 0.4]) {
-    const g = fresh();
+    const g = new Model(() => 0.4);
+    g.start('math', 'shuxue');
     quiet(g);
     g.time = 400;
+    g.highest = 14;
     g.beginBoss();
     const boss = g.enemies.find((e) => e.kind === 'boss')!;
     boss.hp = boss.maxHp * healthRatio;
-    g.invulnerable = 999;
-    const uses: number[] = [];
-    for (let i = 0; i < 4000; i++) {
-      if (g.dash()) uses.push(g.bossVolleyCount);
-      g.update(0.01, 0, 0);
-    }
-    assert(uses.length >= 4, 'dash still has regular opportunities');
-    for (let i = 1; i < uses.length; i++)
-      assert.equal(
-        uses[i] - uses[i - 1],
-        3,
-        'exactly three volleys between dash uses',
-      );
-    const remaining = g.dashVolleysRemaining;
+    assert(g.dash());
+    assert.equal(g.dashCooldown, DASH_COOLDOWN_SECONDS);
+    for (let i = 0; i < 6; i++) g.bossVolley(boss);
+    assert.equal(g.dashCooldown, 5, 'volleys do not shorten cooldown');
+    assert(!g.dash());
+    g.enemies = [];
+    g.shots = [];
+    g.hazards = [];
+    g.hitstop = 9999; // Recharge must continue even while combat simulation is frozen.
+    advance(g, 2);
+    assert(Math.abs(g.dashCooldown - 3) < 1e-8);
     g.togglePause();
-    advance(g, 3);
-    assert.equal(
-      g.dashVolleysRemaining,
-      remaining,
-      'pausing cannot recharge an attack round',
+    advance(g, 10);
+    assert(Math.abs(g.dashCooldown - 3) < 1e-8, 'pause freezes recharge');
+    assert(!g.dash());
+    g.togglePause();
+    g.orientationBlocked = true;
+    advance(g, 2);
+    assert(Math.abs(g.dashCooldown - 3) < 1e-8);
+    g.orientationBlocked = false;
+    g.update(2.99, 0, 0); // Slow frames use elapsed time, not the 50ms physics step.
+    assert(g.dashCooldown > 0 && g.dashCooldown < 0.011);
+    assert(!g.dash());
+    g.update(0.01, 0, 0);
+    assert.equal(g.dashCooldown, 0);
+    assert(
+      g.dash(),
+      'ready exactly at five active seconds without another boss volley',
     );
+    assert.equal(g.dashCooldown, 5);
   }
+}
+// A still-present examiner can stop attacking entirely; elapsed cooldown alone grants use.
+for (const Model of [GameModel, SurvivalGameModel]) {
+  const g = new Model(() => 0.4);
+  g.start('math', 'shuxue');
+  quiet(g);
+  g.time = 400;
+  g.highest = 14;
+  assert(g.beginBoss());
+  g.hitstop = 9999;
+  assert(g.dash());
+  advance(g, 5);
+  assert(g.enemies.some((e) => e.kind === 'boss'));
+  assert.equal(g.bossVolleyCount, 0);
+  assert.equal(g.dashCooldown, 0);
+  assert(g.dash(), 'a living boss with zero volleys cannot block a ready dash');
 }
 // Feedback applies to both modes and does not invent damage while invincible.
 {

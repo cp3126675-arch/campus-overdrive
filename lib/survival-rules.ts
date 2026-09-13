@@ -84,7 +84,6 @@ export type SurvivalSnapshot = {
   practiceRemaining: number;
   examRemaining: number;
   examsTaken: number;
-  dashVolleysRemaining: number;
   maxHp: number;
   nextBossIn: number;
   cycle: number;
