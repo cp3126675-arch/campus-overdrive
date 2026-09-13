@@ -648,11 +648,9 @@ export default function Home() {
               >
                 <Bike />
                 <b>
-                  {survival?.dashVolleysRemaining
-                    ? `再躲${survival.dashVolleysRemaining}轮`
-                    : snap.dashCooldown > 0
-                      ? `${snap.dashCooldown.toFixed(1)}s`
-                      : '车神'}
+                  {snap.dashCooldown > 0
+                    ? `${(Math.ceil(snap.dashCooldown * 10) / 10).toFixed(1)}s`
+                    : '车神'}
                 </b>
                 <kbd>SPACE</kbd>
               </button>

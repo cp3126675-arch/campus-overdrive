@@ -32,7 +32,6 @@ export class SurvivalGameModel extends GameModel {
   private shieldUntil = 0;
   private announcedRound = 1;
   private stormFeedback = 0;
-  dashVolleysRemaining = 0;
   stormPulseUntil = 0;
   override get world() {
     return SURVIVAL_WORLD;
@@ -49,7 +48,6 @@ export class SurvivalGameModel extends GameModel {
     this.shieldUntil = 0;
     this.announcedRound = 1;
     this.stormFeedback = 0;
-    this.dashVolleysRemaining = 0;
     this.hurtUntil = this.stormPulseUntil = 0;
     this.lastHit = 0;
     super.start(major, target, departmentId);
@@ -255,7 +253,6 @@ export class SurvivalGameModel extends GameModel {
       `大考通过 +${points}分`,
     );
     // No finite checkpoint completion or win path in survival.
-    this.dashVolleysRemaining = 0;
     this.bossesDefeated++;
     this.bossDead = true;
     this.credits += 4;
@@ -311,7 +308,6 @@ export class SurvivalGameModel extends GameModel {
     this.shots = this.shots.filter((s) => !s.enemy);
     this.bossSpawned = false;
     this.bossMax = 0;
-    this.dashVolleysRemaining = 0;
     this.nextBossAt = this.time + EXAM_SCORE.nextAfterTimeout;
     this.invulnerable = Math.max(this.invulnerable, 1.2);
     this.notify('收卷铃响！本场未通过，不计大考分；8秒后下一场', 5);
@@ -336,27 +332,7 @@ export class SurvivalGameModel extends GameModel {
     }
     super.finish(false, reason);
   }
-  override dash() {
-    if (this.dashVolleysRemaining > 0) return false;
-    const used = super.dash();
-    const boss = this.enemies.find((e) => e.kind === 'boss');
-    if (
-      used &&
-      this.dashTime > 0 &&
-      boss &&
-      survivalScaling(this.time).attackRate >= SURVIVAL.attackRateCap
-    ) {
-      this.dashVolleysRemaining = 3;
-      this.dashCooldown = Math.max(
-        4,
-        this.bossAttack / SURVIVAL.attackRateCap +
-          (2 * this.bossAttackInterval(boss)) / SURVIVAL.attackRateCap,
-      );
-    }
-    return used;
-  }
   override bossVolley(boss: Enemy) {
-    this.dashVolleysRemaining = Math.max(0, this.dashVolleysRemaining - 1);
     const first = this.shots.length;
     super.bossVolley(boss);
     const originals = this.shots.slice(first);
@@ -485,17 +461,6 @@ export class SurvivalGameModel extends GameModel {
       enemy.maxHp *= after / scaling.hp;
       this.bossMax = enemy.maxHp;
     }
-    const activeBoss = this.enemies.find((e) => e.kind === 'boss');
-    if (!activeBoss) this.dashVolleysRemaining = 0;
-    if (activeBoss && this.dashVolleysRemaining > 0) {
-      this.dashCooldown = Math.max(
-        this.dashCooldown,
-        Math.max(0, this.bossAttack) / scaling.attackRate +
-          ((this.dashVolleysRemaining - 1) *
-            this.bossAttackInterval(activeBoss)) /
-            scaling.attackRate,
-      );
-    }
     super.update(dt, moveX, moveY);
     this.view.x = clamp(
       this.player.x - this.view.width / 2,
@@ -559,7 +524,6 @@ export class SurvivalGameModel extends GameModel {
           ? Math.max(0, EXAM_SCORE.examLimit - (this.time - this.examStartedAt))
           : 0,
         examsTaken: this.examsTaken,
-        dashVolleysRemaining: this.dashVolleysRemaining,
         maxHp: this.maxHp,
         nextBossIn: Math.max(0, this.nextBossAt - this.time),
         cycle:

@@ -7,7 +7,12 @@ import {
   skillZones,
   skillHits,
 } from './departments';
-import { BOSS_LEVELS, mergePercent, supplyPolicy } from './battle-rules';
+import {
+  BOSS_LEVELS,
+  DASH_COOLDOWN_SECONDS,
+  mergePercent,
+  supplyPolicy,
+} from './battle-rules';
 import { TEXTBOOKS, textbook, YEAR_NAMES, type TextbookId } from './textbooks';
 import { badgeWeapon, type WeaponPattern } from './badge-weapons';
 import {
@@ -566,7 +571,7 @@ export class GameModel {
     )
       return false;
     this.dashTime = 0.72;
-    this.dashCooldown = 4;
+    this.dashCooldown = DASH_COOLDOWN_SECONDS;
     this.invulnerable = Math.max(this.invulnerable, 0.85);
     this.bikeHits.clear();
     this.notify('学堂路车神！骑车可转向 · 穿梭题海', 1.4);
@@ -1534,6 +1539,9 @@ export class GameModel {
     if (this.mode !== 'playing' || this.orientationBlocked) return;
     if (!Number.isFinite(dt) || dt <= 0) return;
     this.time += dt; // Active elapsed time includes hit-stop and slow frames, but never pause.
+    // Recharge on active elapsed time, including hit-stop and slow frames.
+    const dashRemaining = this.dashCooldown - dt;
+    this.dashCooldown = dashRemaining > 1e-9 ? dashRemaining : 0;
     dt = Math.min(dt, 0.05);
     if (this.hitstop > 0) {
       this.hitstop = Math.max(0, this.hitstop - dt);
@@ -1553,7 +1561,6 @@ export class GameModel {
     if (this.foodClock <= 0) this.throwSupplies();
     this.noticeTime -= dt;
     if (this.noticeTime <= 0) this.notice = '';
-    this.dashCooldown = Math.max(0, this.dashCooldown - dt);
     this.dashTime = Math.max(0, this.dashTime - dt);
     this.invulnerable = Math.max(0, this.invulnerable - dt);
     this.dormCooldown = Math.max(0, this.dormCooldown - dt);
