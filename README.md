@@ -2,7 +2,7 @@
 
 非官方清北校园题材的 2D 徽章合成动作竞速游戏。操控中央徽章，击败教材怪、躲避 Boss、抢鹅腿，合成清华并击败最终 Boss。
 
-[在线试玩 v0.6.2](https://cp3126675-arch.github.io/campus-overdrive/?v=0.6.2) · [贡献指南](CONTRIBUTING.md) · [配乐投稿](public/audio/README.md) · [游戏总纲](docs/游戏设计与长期开发文档.md) · [版本记录](RELEASES.md)
+[在线试玩 v0.6.12](https://cp3126675-arch.github.io/campus-overdrive/?v=0.6.12) · [贡献指南](CONTRIBUTING.md) · [配乐投稿](public/audio/README.md) · [游戏总纲](docs/游戏设计与长期开发文档.md) · [版本记录](RELEASES.md)
 
 ## 下载与运行
 
@@ -19,11 +19,13 @@ npm run dev
 
 打开终端给出的地址（默认 `http://127.0.0.1:3000/`）。已有本地副本可用 `git pull` 获取上游更新；有未提交修改时先保存自己的工作。
 
+`npm run dev` 会同时启动游戏和独立的本地排行榜，自动初始化数据库；取昵称、改名、提交成绩都能在本地完成，不需要 Cloudflare 登录。数据保存在被 Git 忽略的 `.wrangler/campus-dev/`，重启后保留；本地测试成绩不会进入正式榜单。端口占用时可用 `npm run dev -- --port 3001`。详见[本地开发说明](CONTRIBUTING.md#本地昵称与排行榜)。
+
 ## 参与贡献
 
 **Fork → 创建分支 → 修改/上传音频 → 提交 Pull Request → 自动检查 → 维护者审核合并。**
 
-欢迎只提供原创配乐，不要求会写代码；按 [配乐目录说明](public/audio/README.md) 上传音频并填写作者、许可和用途即可。目前只有程序音效，音乐目录是投稿入口，提交文件后由维护者安排接入。
+欢迎只提供原创配乐，不要求会写代码；按 [配乐目录说明](public/audio/README.md) 上传音频并填写作者、许可和用途即可。目前已接入四首配乐，新增配乐经审核、试听后安排接入。
 
 [新建 PR](https://github.com/cp3126675-arch/campus-overdrive/compare) · [提交问题](https://github.com/cp3126675-arch/campus-overdrive/issues/new/choose)
 
@@ -32,12 +34,14 @@ npm run dev
 ```sh
 npm run check
 npm test
+npm run test:dev
 npm run build:pages
 npm run build
 ```
 
 - `check`：TypeScript、lint、配乐文件与清单校验。
 - `test`：游戏规则、加载、横屏触控、贡献检查器及发布工具回归。
+- `test:dev`：自动启动本地 Worker 与 Vite，验证昵称、成绩、同源代理和数据库重启持久化。
 - `build:pages`：生成 `outputs/GitHub-Pages部署版/`，可部署到静态服务器；请通过 HTTP 访问，不能直接双击 HTML。
 - `build`：保留原 vinext 生产构建验证。普通贡献开发使用上方 Vite 入口，不依赖本机 `.openai` 设置。
 - `dev:site`：维护者的原 vinext 开发入口，可选。
