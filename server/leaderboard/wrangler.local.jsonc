@@ -1,0 +1,13 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "campus-overdrive-local",
+  "main": "worker.ts",
+  "compatibility_date": "2026-05-22",
+  "vars": { "ALLOWED_ORIGINS": "" },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "campus-local-scores",
+    "database_id": "00000000-0000-4000-8000-000000000000",
+    "migrations_dir": "migrations"
+  }]
+}

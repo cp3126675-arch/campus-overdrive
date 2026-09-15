@@ -28,12 +28,13 @@ yarn-error.log*
 
 # local environment
 .env*
+**/.dev.vars*
 
 # deployment and generated files
 .vercel
 next-env.d.ts
 /dist/
-/.wrangler/
+**/.wrangler/
 /outputs/
 /work/
 
