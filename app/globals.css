@@ -2069,3 +2069,385 @@ a {
   width: 100%;
   min-width: 0;
 }
+
+/* ===== 塔防模式 ===== */
+/* 左：可滚动的大地图（canvas）；右：2048 与状态面板 */
+/* 地图宽度跟随视口高度，保证纵向能同时看到约 10 行；2048 面板占右侧。 */
+.challenge.tower-mode {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: center;
+}
+.challenge.tower-mode canvas {
+  flex: 0 0 auto;
+  width: min(62vh, 54vw);
+  min-width: 190px;
+  height: 100%;
+  cursor: grab;
+}
+.challenge.tower-mode canvas:active {
+  cursor: grabbing;
+}
+.challenge.tower-mode .tower-hud {
+  position: relative;
+  inset: auto;
+  flex: 1 1 auto;
+  max-width: 470px;
+  min-width: 258px;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  background: #0a1020;
+  border-left: 1px solid #22304a;
+}
+.tower-hud {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+}
+.tower-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: #0b1020c0;
+  border: 1px solid #2a3550;
+  border-radius: 12px;
+  padding: 6px 12px;
+  color: #e7ecf6;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.tower-top .tower-time {
+  font-size: 18px;
+  color: #ffe18e;
+}
+.tower-top .tower-phase {
+  font-size: 13px;
+  color: #9fb4dd;
+}
+.tower-dirs {
+  display: grid;
+  grid-template-columns: repeat(3, 28px);
+  grid-template-rows: repeat(2, 28px);
+  gap: 2px;
+  margin-left: auto;
+}
+.tower-dirs button {
+  border: 1px solid #3a4a70;
+  background: #1b2540;
+  color: #cfe0ff;
+  border-radius: 7px;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+}
+.tower-dirs button:nth-child(1) { grid-column: 2; }
+.tower-dirs button:nth-child(2) { grid-column: 1; grid-row: 2; }
+.tower-dirs button:nth-child(3) { grid-column: 2; grid-row: 2; }
+.tower-dirs button:nth-child(4) { grid-column: 3; grid-row: 2; }
+.tower-top button {
+  border: 1px solid #3a4a70;
+  background: #1b2540;
+  color: #cfe0ff;
+  border-radius: 8px;
+  width: 34px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.tower-top button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.tower-structures {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 260px;
+  background: #0b1020a0;
+  border: 1px solid #2a3550;
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+.tower-struct {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+  color: #dbe4f4;
+}
+.tower-struct span {
+  display: flex;
+  justify-content: space-between;
+}
+.tower-struct i {
+  display: block;
+  height: 5px;
+  background: #7be08a;
+  border-radius: 3px;
+  transition: width 0.15s linear;
+}
+.tower-struct.tower-liujiao i {
+  background: #ff7b7b;
+}
+.tower-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  width: min(100%, 308px);
+  aspect-ratio: 1;
+  margin-top: auto;
+  align-self: center;
+  background: #0b1020c0;
+  border: 1px solid #2a3550;
+  border-radius: 14px;
+  padding: 8px;
+  box-sizing: border-box;
+}
+.tower-cell {
+  position: relative;
+  border: 1px solid #33405f;
+  background: #18203a;
+  border-radius: 10px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  overflow: hidden;
+  touch-action: none;
+}
+.tower-cell img {
+  width: 72%;
+  height: 72%;
+  object-fit: contain;
+  pointer-events: none;
+  transition: transform 0.12s ease-out;
+}
+.tower-cell:active img {
+  transform: scale(0.88);
+}
+.tower-cell b {
+  position: absolute;
+  right: 3px;
+  bottom: 1px;
+  font-size: 10px;
+  color: #ffe18e;
+  text-shadow: 0 1px 2px #000;
+  pointer-events: none;
+}
+.tower-cell.tower-empty {
+  background: #11182c;
+  cursor: default;
+  border-style: dashed;
+}
+.tower-ghost {
+  position: fixed;
+  z-index: 60;
+  width: 48px;
+  height: 48px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0.92;
+}
+.tower-ghost img {
+  width: 48px;
+  height: 48px;
+}
+.tower-ghost b {
+  position: absolute;
+  right: 2px;
+  bottom: 0;
+  font-size: 11px;
+  color: #ffe18e;
+  text-shadow: 0 1px 2px #000;
+}
+.tower-hint {
+  align-self: center;
+  max-width: 460px;
+  text-align: center;
+  font-size: 11px;
+  color: #9fb4dd;
+  background: #0b1020a0;
+  border-radius: 10px;
+  padding: 6px 10px;
+}
+
+/* --- 侧栏信息条 --- */
+.tower-stat {
+  font-size: 14px;
+  color: #dbe4f4;
+}
+.tower-stat b {
+  color: #ffe18e;
+}
+.tower-btns {
+  display: inline-flex;
+  gap: 6px;
+  margin-left: auto;
+}
+.tower-phasebar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  background: #0b1020c0;
+  border: 1px solid #2a3550;
+  border-radius: 12px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: #9fb4dd;
+}
+.tower-phasebar .tower-phase {
+  font-weight: 700;
+  color: #cfe0ff;
+}
+.tower-boss-chip {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 700;
+  animation: tower-boss-pulse 1.1s ease-in-out infinite;
+}
+.tower-boss-chip.tower-boss-coder {
+  background: #10344a;
+  border: 1px solid #3f9fd0;
+  color: #a9e4ff;
+}
+.tower-boss-chip.tower-boss-ayi {
+  background: #2c3a1a;
+  border: 1px solid #6fae3c;
+  color: #cdf0a8;
+}
+.tower-boss-chip.tower-boss-line {
+  background: #0f3a22;
+  border: 1px solid #3fbe6a;
+  color: #a7f5c2;
+}
+@keyframes tower-boss-pulse {
+  50% { box-shadow: 0 0 12px #ffffff59; }
+}
+.tower-dirpad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #9fb4dd;
+}
+.tower-dirpad .tower-dirs {
+  margin-left: 0;
+}
+.tower-dirpad .tower-dirs button {
+  width: 34px;
+  height: 30px;
+}
+
+/* --- 地图浏览提示 --- */
+.tower-scroll-hint {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: #0b1020cc;
+  border: 1px solid #2a3550;
+  color: #9fb4dd;
+  font-size: 11px;
+  pointer-events: none;
+  animation: tower-hint-fade 5s ease-out forwards;
+}
+@keyframes tower-hint-fade {
+  0%, 60% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* 提示条在侧栏内改为顶部浮层 */
+.challenge.tower-mode .battle-toast {
+  top: 96px;
+  bottom: auto;
+  max-width: calc(100% - 20px);
+  font-size: 12px;
+}
+
+/* --- 2048 动画：滑动 / 合成 / 新生 --- */
+@keyframes tower-slide-left {
+  from { transform: translateX(-36%); }
+  to { transform: translateX(0); }
+}
+@keyframes tower-slide-right {
+  from { transform: translateX(36%); }
+  to { transform: translateX(0); }
+}
+@keyframes tower-slide-up {
+  from { transform: translateY(-36%); }
+  to { transform: translateY(0); }
+}
+@keyframes tower-slide-down {
+  from { transform: translateY(36%); }
+  to { transform: translateY(0); }
+}
+@keyframes tower-new {
+  from { opacity: 0; transform: scale(0.45); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes tower-pop {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.22); }
+  100% { transform: scale(1); }
+}
+.tower-cell.tower-merge {
+  animation: tower-pop 300ms ease-out;
+  border-color: #ffe18e;
+  box-shadow: 0 0 14px #ffe18e88;
+}
+.tower-cell.tower-new {
+  animation: tower-new 180ms ease-out;
+}
+.tower-cell.tower-held {
+  border-color: #ffe18e;
+  background: #232f52;
+}
+
+/* --- 窄屏：地图在上、2048 与操作区在下（拇指区） --- */
+@media (max-width: 780px) {
+  /* DOM 顺序是 canvas → tower-hud，所以 column 即“地图在上、HUD 在下”。 */
+  .challenge.tower-mode {
+    flex-direction: column;
+  }
+  .challenge.tower-mode canvas {
+    flex: 1 1 auto;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+  }
+  .challenge.tower-mode .tower-hud {
+    flex: 0 0 auto;
+    height: min(48vh, 380px);
+    border-left: none;
+    border-bottom: 1px solid #22304a;
+  }
+  .challenge.tower-mode .tower-grid {
+    width: min(100%, 260px);
+  }
+  .challenge.tower-mode .battle-toast {
+    top: 92px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tower-cell.tower-merge,
+  .tower-cell.tower-new,
+  .tower-boss-chip,
+  .tower-scroll-hint {
+    animation: none;
+  }
+}

@@ -27,6 +27,7 @@ export type Mode = 'menu' | 'playing' | 'paused' | 'won' | 'lost';
 export type College = (typeof colleges)[number];
 export type Snapshot = {
   survival?: SurvivalSnapshot;
+  tower?: import('./tower-model').TowerSnapshot;
   hurtTime: number;
   mode: Mode;
   endProgress: number;
