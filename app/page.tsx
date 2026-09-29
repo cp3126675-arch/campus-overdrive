@@ -46,6 +46,7 @@ import {
   DialogClose,
 } from '@/components/ui/dialog';
 import { CampusGame, initialSnapshot, type Snapshot } from '@/lib/game';
+import { stagePoint } from '@/lib/mobile-display';
 import type { TowerSnapshot } from '@/lib/tower-model';
 const fmt = (seconds: number) => {
   const n = Math.floor(Math.max(0, seconds) * 10);
@@ -60,7 +61,10 @@ function tfmt(seconds: number) {
   const n = Math.floor(Math.max(0, seconds) * 10);
   return `${Math.floor(n / 600)
     .toString()
-    .padStart(2, '0')}:${Math.floor(n / 10) % 60 < 10 ? '0' : ''}${Math.floor(n / 10) % 60}.${n % 10}`;
+    .padStart(
+      2,
+      '0',
+    )}:${Math.floor(n / 10) % 60 < 10 ? '0' : ''}${Math.floor(n / 10) % 60}.${n % 10}`;
 }
 export default function Home() {
   const stage = useRef<HTMLElement>(null);
@@ -280,7 +284,7 @@ export default function Home() {
                   onClick={() => enterMode('tower')}
                 >
                   <Bike size={21} />
-                  塔防模式
+                  塔防模式（测试）
                   <ChevronRight className="menu-arrow" size={21} />
                 </Button>
                 <Button
@@ -737,7 +741,7 @@ export default function Home() {
           </div>
         </>
       )}
-      {snap.mode === 'paused' && !snap.orientationBlocked && (
+      {!snap.tower && snap.mode === 'paused' && !snap.orientationBlocked && (
         <div className="game-modal">
           <section>
             <Pause size={34} />
@@ -761,7 +765,7 @@ export default function Home() {
           </section>
         </div>
       )}
-      {ended && snap.endProgress < 1 && (
+      {!snap.tower && ended && snap.endProgress < 1 && (
         <div
           className={`ending-scene ${snap.mode === 'won' ? 'victory' : 'defeat'}`}
           aria-live="polite"
@@ -782,7 +786,7 @@ export default function Home() {
           </p>
         </div>
       )}
-      {ended && snap.endProgress >= 1 && (
+      {!snap.tower && ended && snap.endProgress >= 1 && (
         <div className="game-modal result-reveal">
           <section>
             {snap.mode === 'won' ? (
@@ -935,46 +939,81 @@ function TowerGrid({
     key: string;
   } | null>(null);
   const [held, setHeld] = useState(-1);
-  const drag = useRef<{ tileIndex: number; timer: number; active: boolean }>({
+  const drag = useRef({
     tileIndex: -1,
     timer: 0,
     active: false,
+    pointerId: -1,
   });
+  const stageRef = useRef<HTMLElement | null>(null);
+  const dropRef = useRef(onDropTile);
+  useEffect(() => {
+    dropRef.current = onDropTile;
+  }, [onDropTile]);
+  const reset = () => {
+    clearTimeout(drag.current.timer);
+    drag.current = { tileIndex: -1, timer: 0, active: false, pointerId: -1 };
+    setGhost(null);
+    setHeld(-1);
+  };
+  const ghostPoint = (x: number, y: number) => {
+    const stage = stageRef.current;
+    return stage?.dataset.rotated === 'true'
+      ? stagePoint(stage.getBoundingClientRect(), x, y, true)
+      : { x, y };
+  };
   useEffect(() => {
     const move = (e: PointerEvent) => {
-      if (drag.current.active)
-        setGhost((g) => (g ? { ...g, x: e.clientX, y: e.clientY } : g));
+      if (drag.current.active && drag.current.pointerId === e.pointerId) {
+        const p = ghostPoint(e.clientX, e.clientY);
+        setGhost((g) => (g ? { ...g, ...p } : g));
+      }
     };
     const up = (e: PointerEvent) => {
       const d = drag.current;
-      if (d.active) onDropTile(d.tileIndex, e.clientX, e.clientY);
-      if (d.timer) clearTimeout(d.timer);
-      drag.current = { tileIndex: -1, timer: 0, active: false };
-      setGhost(null);
-      setHeld(-1);
+      if (d.pointerId !== e.pointerId) return;
+      if (d.active) dropRef.current(d.tileIndex, e.clientX, e.clientY);
+      reset();
     };
+    const cancel = () => reset();
     window.addEventListener('pointermove', move);
     window.addEventListener('pointerup', up);
-    window.addEventListener('pointercancel', up);
+    window.addEventListener('pointercancel', cancel);
+    window.addEventListener('blur', cancel);
     return () => {
+      clearTimeout(drag.current.timer);
       window.removeEventListener('pointermove', move);
       window.removeEventListener('pointerup', up);
-      window.removeEventListener('pointercancel', up);
+      window.removeEventListener('pointercancel', cancel);
+      window.removeEventListener('blur', cancel);
     };
-  }, [onDropTile]);
+  }, []);
   const startDrag = (
     tileIndex: number,
     level: number,
     key: string,
     e: ReactPointerEvent,
   ) => {
+    if (
+      snap.mode !== 'playing' ||
+      e.button !== 0 ||
+      drag.current.pointerId !== -1
+    )
+      return;
     e.preventDefault();
-    drag.current.tileIndex = tileIndex;
-    drag.current.active = false;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    stageRef.current = e.currentTarget.closest<HTMLElement>('.challenge');
+    const p = ghostPoint(e.clientX, e.clientY);
+    drag.current = {
+      tileIndex,
+      timer: 0,
+      active: false,
+      pointerId: e.pointerId,
+    };
     setHeld(tileIndex);
     drag.current.timer = window.setTimeout(() => {
       drag.current.active = true;
-      setGhost({ x: e.clientX, y: e.clientY, level, key });
+      setGhost({ ...p, level, key });
     }, 240);
   };
   return (
@@ -985,7 +1024,8 @@ function TowerGrid({
             const idx = r * 4 + c;
             // key 带上 moveSeq，使滑动 / 合成动画在每次移动后重放。
             const key = `${idx}-${moveSeq}`;
-            if (!lv) return <span key={key} className="tower-cell tower-empty" />;
+            if (!lv)
+              return <span key={key} className="tower-cell tower-empty" />;
             const entry = chain[lv - 1];
             const merged = mergeCells.includes(idx);
             const isNew = spawnCell === idx;
@@ -1018,7 +1058,11 @@ function TowerGrid({
       </div>
       {ghost && (
         <div className="tower-ghost" style={{ left: ghost.x, top: ghost.y }}>
-          <img src={assetUrl(`/badges/${ghost.key}.png`)} alt="" draggable={false} />
+          <img
+            src={assetUrl(`/badges/${ghost.key}.png`)}
+            alt=""
+            draggable={false}
+          />
           <b>Lv.{ghost.level}</b>
         </div>
       )}
@@ -1094,12 +1138,19 @@ function TowerHud({
                 {g.name}
                 {g.alive ? '' : ' 💥'}
               </span>
-              <i style={{ width: `${g.alive ? (g.hp / g.maxHp) * 100 : 0}%` }} />
+              <i
+                style={{ width: `${g.alive ? (g.hp / g.maxHp) * 100 : 0}%` }}
+              />
             </div>
           ))}
           <div className="tower-struct tower-liujiao">
             <span>
-              六教 {!snap.destination.alive ? '失守' : snap.destination.breached ? '已破·清华可修' : '防御中'}
+              六教{' '}
+              {!snap.destination.alive
+                ? '失守'
+                : snap.destination.breached
+                  ? '最后防线·不可修复'
+                  : '防御中'}
             </span>
             <i
               style={{
@@ -1113,22 +1164,38 @@ function TowerHud({
             {snap.notice}
           </div>
         )}
-        {!ended && <TowerGrid snap={snap} onDropTile={onDropTile} />}
+        {!ended && (
+          <TowerGrid
+            key={`${snap.mode}-${snap.moveSeq}`}
+            snap={snap}
+            onDropTile={onDropTile}
+          />
+        )}
         {!ended && (
           <div className="tower-dirpad">
             <div className="tower-dirs">
-              <button onClick={() => onMove('up')} aria-label="上">↑</button>
-              <button onClick={() => onMove('left')} aria-label="左">←</button>
-              <button onClick={() => onMove('down')} aria-label="下">↓</button>
-              <button onClick={() => onMove('right')} aria-label="右">→</button>
+              <button onClick={() => onMove('up')} aria-label="上">
+                ↑
+              </button>
+              <button onClick={() => onMove('left')} aria-label="左">
+                ←
+              </button>
+              <button onClick={() => onMove('down')} aria-label="下">
+                ↓
+              </button>
+              <button onClick={() => onMove('right')} aria-label="右">
+                →
+              </button>
             </div>
             <span>方向键 / WASD 滑动合成</span>
           </div>
         )}
         {!ended && (
           <p className="tower-hint">
-            长按 2048 方块拖到地图：防御点建塔、道路放阻挡；进攻对象 / 六教用 11 级及以上或清华大学修复。
-            注意 Boss：码农光波会让防御塔停机 3~5 秒，鹅腿阿姨会增 / 减学生攻击力，菌液拉练截断队首即可全歼。
+            长按 2048 方块拖到地图：防御点建塔、道路放阻挡；进攻对象用 11
+            级及以上修复；六教仅在首次破防前接受清华徽章修复。 注意
+            Boss：码农光波会让防御塔停机 3~5 秒，鹅腿阿姨会增 /
+            减学生攻击力，菌液拉练截断队首即可全歼。
           </p>
         )}
       </aside>

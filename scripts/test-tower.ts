@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import { canvasPoint } from '../lib/mobile-display';
+import { CampusGame, type Snapshot } from '../lib/game';
 import { TowerModel, CELL, LINE_COUNT, type Student } from '../lib/tower-model';
 import { DEPARTMENTS } from '../lib/departments';
 import {
@@ -81,7 +83,8 @@ function sample(t: number, seconds: number) {
     ['苏世民书院', '土木馆', '人文楼'].sort(),
   );
   assert.equal(TOWER_SLOTS.length, 11);
-  for (const slot of TOWER_SLOTS) assert.equal(CELLS[slot.row][slot.col].type, 'tower');
+  for (const slot of TOWER_SLOTS)
+    assert.equal(CELLS[slot.row][slot.col].type, 'tower');
   assert.equal(CELLS[DESTINATION.row][DESTINATION.col].type, 'destination');
   for (const t of TARGETS) assert.equal(CELLS[t.row][t.col].type, 'target');
 }
@@ -90,12 +93,18 @@ function sample(t: number, seconds: number) {
 {
   const flow = buildFlowField(new Set());
   for (const s of SPAWNS)
-    assert(finite(flow[s.row][s.col]) && flow[s.row][s.col] > 0, `${s.garden} 必须能到达六教`);
+    assert(
+      finite(flow[s.row][s.col]) && flow[s.row][s.col] > 0,
+      `${s.garden} 必须能到达六教`,
+    );
   assert.equal(flow[0][5], Infinity, '空白格不可通行');
-  const cut = buildFlowField(new Set([`${DESTINATION.col},${DESTINATION.row - 1}`]));
+  const cut = buildFlowField(
+    new Set([`${DESTINATION.col},${DESTINATION.row - 1}`]),
+  );
   for (const s of SPAWNS) assert.equal(cut[s.row][s.col], Infinity);
   const detour = buildFlowField(new Set(['0,23']));
-  for (const s of SPAWNS) assert(finite(detour[s.row][s.col]), '侧向道路应可绕行');
+  for (const s of SPAWNS)
+    assert(finite(detour[s.row][s.col]), '侧向道路应可绕行');
 }
 
 // 合成链：13 个抽取专业 + 所选专业 + 清华大学 = 15 级。
@@ -155,9 +164,17 @@ function sample(t: number, seconds: number) {
   assert.equal(m.moveSeq, seq + 1);
   assert.equal(m.lastMove, 'left');
   assert.deepEqual(m.mergeCells, [0], '合并位置供 UI 播放合成特效');
-  assert.equal(m.spawnCell >= 0 && m.spawnCell !== 0, true, '新方块位置供 UI 播放新生特效');
+  assert.equal(
+    m.spawnCell >= 0 && m.spawnCell !== 0,
+    true,
+    '新方块位置供 UI 播放新生特效',
+  );
   assert.equal(m.snapshot().mergeCells.length, 1);
-  assert.equal(m.grid.flat().filter((v) => v > 0).length, 2, '合成后补充一个新方块');
+  assert.equal(
+    m.grid.flat().filter((v) => v > 0).length,
+    2,
+    '合成后补充一个新方块',
+  );
   m.grid = [
     [15, 15, 0, 0],
     [0, 0, 0, 0],
@@ -233,7 +250,10 @@ function sample(t: number, seconds: number) {
   const w = walker.students[0];
   const wc = Math.floor(w.x / CELL);
   const wr = Math.floor(w.y / CELL);
-  assert(flow[wr][wc] < start, `无目标时应沿最佳路线推进（${start} → ${flow[wr][wc]}）`);
+  assert(
+    flow[wr][wc] < start,
+    `无目标时应沿最佳路线推进（${start} → ${flow[wr][wc]}）`,
+  );
 }
 
 // 进攻对象：需 11 级及以上或清华大学修复，且不超过上限。
@@ -265,7 +285,11 @@ function sample(t: number, seconds: number) {
   const m = fresh();
   m.destination.hp = 500;
   m.grid[0][0] = 11;
-  assert.equal(m.dropTile(0, DESTINATION.col, DESTINATION.row), false, '11 级不能修六教');
+  assert.equal(
+    m.dropTile(0, DESTINATION.col, DESTINATION.row),
+    false,
+    '11 级不能修六教',
+  );
   assert.equal(m.destination.hp, 500);
   m.grid[0][0] = 15;
   assert.equal(m.dropTile(0, DESTINATION.col, DESTINATION.row), true);
@@ -287,12 +311,23 @@ function sample(t: number, seconds: number) {
   assert.equal(m.destination.repairable, false, '爆炸后不可修复');
   assert.equal(m.destination.hp, m.destination.secondHp);
   assert.equal(m.mode, 'playing');
-  assert(m.effects.some((e) => e.kind === 'explosion'), '首次攻破应产生爆炸特效');
+  assert(
+    m.effects.some((e) => e.kind === 'explosion'),
+    '首次攻破应产生爆炸特效',
+  );
 
   m.grid[0][0] = 11;
-  assert.equal(m.dropTile(0, DESTINATION.col, DESTINATION.row), false, '已破后 11 级不能修六教');
+  assert.equal(
+    m.dropTile(0, DESTINATION.col, DESTINATION.row),
+    false,
+    '已破后 11 级不能修六教',
+  );
   m.grid[0][0] = 15;
-  assert.equal(m.dropTile(0, DESTINATION.col, DESTINATION.row), false, '爆炸后清华大学也不能修六教');
+  assert.equal(
+    m.dropTile(0, DESTINATION.col, DESTINATION.row),
+    false,
+    '爆炸后清华大学也不能修六教',
+  );
 
   m.destination.hp = 0.01;
   m.update(0.05);
@@ -350,7 +385,10 @@ function sample(t: number, seconds: number) {
   );
   assert.equal(lineGroup.length, LINE_COUNT, '菌液拉练一次生成一整排');
   const lead = lineGroup.find((s) => s.lineLead);
-  assert(lead && lineGroup.filter((s) => s.lineLead).length === 1, '整排只有一个队首');
+  assert(
+    lead && lineGroup.filter((s) => s.lineLead).length === 1,
+    '整排只有一个队首',
+  );
   for (const f of lineGroup)
     if (!f.lineLead) assert.equal(f.lineLeadId, lead.id, '队员都指向队首');
   assert(lead.atkBase > 1 && lead.speed > 60, '拉练学生高速高攻');
@@ -364,11 +402,19 @@ function sample(t: number, seconds: number) {
   const tw = m.towers[0];
   const cx = 1 * CELL + CELL / 2;
   const cy = 3 * CELL + CELL / 2;
-  const coder: Student = { ...student(cx, cy), boss: 'coder', atkBase: 2.2, waveTimer: 0.01 };
+  const coder: Student = {
+    ...student(cx, cy),
+    boss: 'coder',
+    atkBase: 2.2,
+    waveTimer: 0.01,
+  };
   m.students = [coder];
   m.update(0.05);
   const off = tw.disabledUntil - m.time;
-  assert(off >= 3 && off <= 5, `命中后停机应随机 3~5 秒（实际 ${off.toFixed(2)}）`);
+  assert(
+    off >= 3 && off <= 5,
+    `命中后停机应随机 3~5 秒（实际 ${off.toFixed(2)}）`,
+  );
   const wave = m.effects.find((e) => e.kind === 'wave');
   assert(wave && wave.text === "That's pity", "光波上应闪动 That's pity");
   m.update(0.4);
@@ -393,7 +439,10 @@ function sample(t: number, seconds: number) {
   buffed.students = [ayiA, ally];
   buffed.update(0.05);
   assert(ally.auraMul > 1, '增益光环应提高周围学生攻击力');
-  assert(buffed.effects.some((e) => e.kind === 'aura'), '应产生食堂光环特效');
+  assert(
+    buffed.effects.some((e) => e.kind === 'aura'),
+    '应产生食堂光环特效',
+  );
   buffed.time = ally.auraUntil + 0.01;
   buffed.update(0.05);
   assert.equal(ally.auraMul, 1, '增益到期后回归常态');
@@ -419,7 +468,14 @@ function sample(t: number, seconds: number) {
   assert.equal(m.dropTile(0, 1, 3), true);
   const cx = 1 * CELL + CELL / 2;
   const cy = 3 * CELL + CELL / 2;
-  const lead: Student = { ...student(cx, cy - 20), boss: 'line', lineLead: true, atkBase: 2.4, hp: 12, maxHp: 12 };
+  const lead: Student = {
+    ...student(cx, cy - 20),
+    boss: 'line',
+    lineLead: true,
+    atkBase: 2.4,
+    hp: 12,
+    maxHp: 12,
+  };
   // 队员血量极高，测试窗口内不可能被塔单独打死——只有「队首阵亡」这一条路能带走它。
   const mate: Student = {
     ...student(cx, cy - 50),
@@ -449,7 +505,10 @@ function sample(t: number, seconds: number) {
   assert.equal(stuck.hp, 0, '卡死学生应在 10 秒后自爆');
   assert(!m.students.some((s) => s.id === stuck.id), '自爆后应离场');
   assert.equal(m.kills, before, '自爆不计入歼灭数');
-  assert(m.effects.some((e) => e.kind === 'explosion'), '自爆应产生爆炸特效');
+  assert(
+    m.effects.some((e) => e.kind === 'explosion'),
+    '自爆应产生爆炸特效',
+  );
 
   // 正在围攻结构的学生不算卡死：贴着防御塔打 12 秒也不会被看门狗带走。
   const siege = fresh();
@@ -486,7 +545,10 @@ function sample(t: number, seconds: number) {
   for (let i = 0; i < 20 * 12; i++) m.update(0.05);
   assert(s.y > CELL, '被封死的学生应主动走向封锁线，而不是原地发呆');
   assert(wall.hp < wall.maxHp, '学生应强拆阻挡块');
-  assert(m.students.some((k) => k.id === s.id), '拆墙不算卡死，不应被自爆');
+  assert(
+    m.students.some((k) => k.id === s.id),
+    '拆墙不算卡死，不应被自爆',
+  );
 }
 
 // 码农出击最多释放 5 次光波，防止蹲点无限放电。
@@ -545,7 +607,10 @@ function sample(t: number, seconds: number) {
     groups++;
     for (const f of line)
       assert(
-        f.x >= 0 && f.x <= GRID_COLS * CELL && f.y >= 0 && f.y <= GRID_ROWS * CELL,
+        f.x >= 0 &&
+          f.x <= GRID_COLS * CELL &&
+          f.y >= 0 &&
+          f.y <= GRID_ROWS * CELL,
         `菌液拉练成员生成在地图外 (${f.x.toFixed(1)}, ${f.y.toFixed(1)})，会永久卡死`,
       );
   }
@@ -555,7 +620,14 @@ function sample(t: number, seconds: number) {
 // 特效到期后必须清理。
 {
   const m = fresh();
-  m.effects.push({ kind: 'spark', x: 0, y: 0, color: '#fff', life: 0.2, maxLife: 0.2 });
+  m.effects.push({
+    kind: 'spark',
+    x: 0,
+    y: 0,
+    color: '#fff',
+    life: 0.2,
+    maxLife: 0.2,
+  });
   assert.equal(m.snapshot().effects.length, 1);
   m.update(0.3);
   assert.equal(m.effects.length, 0);
@@ -572,14 +644,16 @@ function sample(t: number, seconds: number) {
 // 完全不建塔必定失守；满级塔可稳住前两分钟——证明难度有上下界。
 {
   const doomed = fresh();
-  for (let i = 0; i < 20 * 400 && doomed.mode === 'playing'; i++) doomed.update(0.05);
+  for (let i = 0; i < 20 * 400 && doomed.mode === 'playing'; i++)
+    doomed.update(0.05);
   assert.equal(doomed.mode, 'lost', '完全不建塔必须会失败');
   assert(doomed.endReason.length > 0);
 
   const held = fresh();
   held.grid[0][0] = 15;
   assert.equal(held.dropTile(0, 1, 3), true);
-  for (let i = 0; i < 20 * 120 && held.mode === 'playing'; i++) held.update(0.05);
+  for (let i = 0; i < 20 * 120 && held.mode === 'playing'; i++)
+    held.update(0.05);
   assert.equal(held.mode, 'playing', '满级防御应能守住 120 秒');
   assert(held.kills > 50, `满级塔应大量歼灭学生（实际 ${held.kills}）`);
   assert.equal(held.towers.length, 1, '满级塔不应被轻易摧毁');
@@ -588,3 +662,90 @@ function sample(t: number, seconds: number) {
 console.log(
   'Tower regressions passed: 6x26 map, five gardens, three targets, unique per-level logos, spawn phases, 2048 merge cap, tower/blocker drop, blocked routing, target and 六教 repair rules, two-stage breach, coder/ayi/line bosses, effect cleanup, rising pressure, and both defence extremes.',
 );
+
+// Consuming the final tile must leave a playable board, rather than soft-locking it.
+{
+  const m = fresh();
+  m.grid = Array.from({ length: 4 }, () => [0, 0, 0, 0]);
+  m.grid[0][0] = 1;
+  assert(m.dropTile(0, 1, 3));
+  assert.equal(m.grid.flat().filter(Boolean).length, 1);
+  const before = m.moveSeq;
+  for (const dir of ['up', 'right', 'down', 'left'] as const) m.move2048(dir);
+  assert(m.moveSeq > before, 'board remains playable');
+  m.grid[0][0] = 9;
+  assert(m.dropTile(0, 1, 3));
+  assert.equal(m.towers[0].key, m.chain[8].key);
+  assert.equal(m.towers[0].name, m.chain[8].name);
+}
+// Landscape and rotated portrait must map to the same cell at high DPR.
+{
+  const landscape = { left: 10, top: 20, right: 250, width: 240, height: 400 };
+  const portrait = { left: 30, top: 10, right: 430, width: 400, height: 240 };
+  assert.deepEqual(canvasPoint(landscape, 70, 100, false, 480, 800), {
+    x: 120,
+    y: 160,
+  });
+  assert.deepEqual(canvasPoint(portrait, 350, 70, true, 480, 800), {
+    x: 120,
+    y: 160,
+  });
+  assert.equal(canvasPoint(landscape, 260, 100, false, 480, 800), null);
+  assert.equal(canvasPoint(portrait, 350, 260, true, 480, 800), null);
+}
+console.log(
+  'PR 16 integration regressions: empty board recovery, tower logo upgrade, rotated drop mapping and off-canvas rejection passed.',
+);
+
+// Engine focus loss uses a real event listener and must pause the tower simulation.
+{
+  const domWindow = new EventTarget();
+  const domDocument = new EventTarget();
+  const replacements = {
+    window: domWindow,
+    document: domDocument,
+    requestAnimationFrame: () => 1,
+    cancelAnimationFrame: () => {},
+    ResizeObserver: class {
+      observe() {}
+      disconnect() {}
+    },
+  };
+  const previous = new Map(
+    Object.keys(replacements).map((key) => [
+      key,
+      Object.getOwnPropertyDescriptor(globalThis, key),
+    ]),
+  );
+  for (const [key, value] of Object.entries(replacements))
+    Object.defineProperty(globalThis, key, { value, configurable: true });
+  const snapshots: Snapshot[] = [];
+  let engine: CampusGame | undefined;
+  try {
+    const canvas = Object.assign(new EventTarget(), {
+      getContext: () => ({}),
+      clientWidth: 900,
+      clientHeight: 540,
+      closest: () => null,
+    }) as unknown as HTMLCanvasElement;
+    engine = new CampusGame(canvas, (snapshot) => snapshots.push(snapshot));
+    engine.tower = fresh();
+    domWindow.dispatchEvent(new Event('blur'));
+    assert.equal(engine.tower.mode, 'paused');
+    assert.equal(snapshots.at(-1)?.tower?.mode, 'paused');
+    const elapsed = engine.tower.time;
+    engine.tower.update(1);
+    assert.equal(engine.tower.time, elapsed);
+    engine.toMenu();
+    assert.equal(engine.tower, null);
+    assert.equal(snapshots.at(-1)?.mode, 'menu');
+    assert.equal(snapshots.at(-1)?.tower, undefined);
+  } finally {
+    engine?.destroy();
+    for (const [key, descriptor] of previous) {
+      if (descriptor) Object.defineProperty(globalThis, key, descriptor);
+      else Reflect.deleteProperty(globalThis, key);
+    }
+  }
+}
+console.log('Tower engine background pause and menu cleanup passed.');

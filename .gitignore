@@ -49,3 +49,6 @@ __pycache__/
 /campus-game.zip
 /source-bootstrap.zip
 /_site/
+
+# Contributor-local assistant memories
+/.workbuddy/

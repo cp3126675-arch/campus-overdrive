@@ -2081,7 +2081,7 @@ a {
 }
 .challenge.tower-mode canvas {
   flex: 0 0 auto;
-  width: min(62vh, 54vw);
+  width: min(calc(var(--game-vh) * 62), calc(var(--game-vw) * 54));
   min-width: 190px;
   height: 100%;
   cursor: grab;
@@ -2417,30 +2417,30 @@ a {
   background: #232f52;
 }
 
-/* --- 窄屏：地图在上、2048 与操作区在下（拇指区） --- */
-@media (max-width: 780px) {
-  /* DOM 顺序是 canvas → tower-hud，所以 column 即“地图在上、HUD 在下”。 */
-  .challenge.tower-mode {
-    flex-direction: column;
-  }
-  .challenge.tower-mode canvas {
-    flex: 1 1 auto;
-    width: 100%;
-    height: auto;
-    min-height: 0;
-  }
-  .challenge.tower-mode .tower-hud {
-    flex: 0 0 auto;
-    height: min(48vh, 380px);
-    border-left: none;
-    border-bottom: 1px solid #22304a;
-  }
-  .challenge.tower-mode .tower-grid {
-    width: min(100%, 260px);
-  }
-  .challenge.tower-mode .battle-toast {
-    top: 92px;
-  }
+/* Match the logical landscape stage even inside a portrait WebView. */
+.challenge.tower-mode.touch-controls canvas { min-width: 140px; touch-action: none; }
+.challenge.tower-mode.touch-controls .tower-hud {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) minmax(110px, 1fr);
+  align-content: start;
+  gap: 6px;
+}
+.challenge.tower-mode.touch-controls .tower-top { grid-column: 1 / -1; }
+.challenge.tower-mode.touch-controls .tower-phasebar { grid-column: 2; grid-row: 2; }
+.challenge.tower-mode.touch-controls .tower-structures { grid-column: 2; grid-row: 3; }
+.challenge.tower-mode.touch-controls .tower-dirpad,
+.challenge.tower-mode.touch-controls .tower-hint { grid-column: 1 / -1; }
+.challenge.tower-mode.touch-controls .tower-grid {
+  grid-column: 1;
+  grid-row: 2 / span 2;
+  margin: 0;
+  align-self: start;
+  width: min(100%, 220px);
+}
+.challenge.tower-mode.touch-controls .tower-dirs {
+  grid-template-columns: repeat(3, 40px);
+  grid-template-rows: repeat(2, 40px);
 }
 
 @media (prefers-reduced-motion: reduce) {

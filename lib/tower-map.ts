@@ -67,9 +67,14 @@ function parseCell(text: string, col: number, row: number): TowerCell {
   }
   // 表格里同时存在“攻击目标”和“进攻目标”两种写法，都要识别为进攻对象。
   if (v.startsWith('攻击目标') || v.startsWith('进攻目标'))
-    return { type: 'target', name: v.split('：')[1]?.trim() ?? `进攻目标${row}` };
-  if (v.startsWith('目的地')) return { type: 'destination', name: v.split('：')[1]?.trim() ?? '六教' };
-  if (v.startsWith('防御点')) return { type: 'tower', name: v.split('：')[1]?.trim() ?? `防御点${row}` };
+    return {
+      type: 'target',
+      name: v.split('：')[1]?.trim() ?? `进攻目标${row}`,
+    };
+  if (v.startsWith('目的地'))
+    return { type: 'destination', name: v.split('：')[1]?.trim() ?? '六教' };
+  if (v.startsWith('防御点'))
+    return { type: 'tower', name: v.split('：')[1]?.trim() ?? `防御点${row}` };
   if (v === '道路' || v.includes('道路')) return { type: 'road' };
   return { type: 'road' };
 }

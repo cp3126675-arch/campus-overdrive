@@ -81,7 +81,7 @@ export function useRecords(snapshot: Snapshot) {
   );
   useEffect(() => {
     const run = active.current;
-    if (!run || saved.current === run.id) return;
+    if (snapshot.tower || !run || saved.current === run.id) return;
     const mode: ScoreMode = snapshot.survival ? 'survival' : 'race';
     if (
       run.mode !== mode ||
@@ -115,6 +115,6 @@ export function useRecords(snapshot: Snapshot) {
       bestMs: next.book.departments[run.departmentId][0].timeMs,
       persisted: next.persisted,
     });
-  }, [snapshot.mode, snapshot.time, snapshot.survival]);
+  }, [snapshot.mode, snapshot.time, snapshot.survival, snapshot.tower]);
   return { books, result, beginRun, latestScore };
 }

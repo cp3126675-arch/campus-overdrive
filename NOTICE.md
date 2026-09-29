@@ -15,3 +15,8 @@ v0.6.0 候选版的 `public/audio/pr1-*.mp3` 来自 [FreneticWind60 的 PR #1](h
 ## v0.6.10 阳光长跑图片
 
 `public/art/photos/boss-sunshine.jpg`来自[清华新闻网2013年阳光长跑报道](https://www.tsinghua.edu.cn/info/1181/55101.htm)，研通社记者王涵摄，许可NOASSERTION，不适用代码MIT。保留水印，仅作场景素材。详见[出处记录](docs/research/0.6.10-阳光长跑.md)。
+
+
+## PR #16 塔防候选新增图（2026-09-29）
+
+public/art/avatar/coder.jpg、public/art/avatar/ayi.png 由 FreneticWind60 在 PR #16（https://github.com/cp3126675-arch/campus-overdrive/pull/16）提交，原始提交 fc733ea6cd047cfe97bc5595aca08f6e11729a4e。两张仅按塔防模式加载，交付为 128px WebP。贡献者尚未提供原始来源/作者与独立许可，记录为 NOASSERTION，不属于代码 MIT 授权。正式发布前需补齐来源核实或替换为来源明确的素材；本次只合并测试源码。角色和机制为游戏虚构，不代表真实人物经历。

@@ -3,13 +3,9 @@
 //  - 抽取 13 个专业 + 玩家所选专业 + 清华大学，构成 15 级合成链（等级 1..15）。
 //  - 4×4 的 2048 格子里合成专业；长按把选中方块拖到地图：防御点建塔、道路放阻挡、进攻对象/六教用 11 级及以上或清华修复。
 //  - 学生从五个园按时间阶段刷新，沿道路前往六教；途中攻击防御塔、阻挡块与进攻对象。
-//  - 进攻对象被摧毁会爆炸清场；全部被摧毁则失败。六教首次被攻破爆炸后可被清华修复，再次被攻破则游戏结束。
+//  - 进攻对象被摧毁会爆炸清场；全部被摧毁则失败。六教首次被攻破爆炸后不可再修复，再次被攻破则游戏结束。
 
-import {
-  DEPARTMENTS,
-  department,
-  type SkillKind,
-} from './departments';
+import { DEPARTMENTS, department, type SkillKind } from './departments';
 import {
   CELLS,
   GRID_COLS,
@@ -160,7 +156,14 @@ export interface TowerSnapshot {
   merges: number;
   grid: number[][];
   chain: ChainEntry[];
-  targets: { name: string; hp: number; maxHp: number; alive: boolean; col: number; row: number }[];
+  targets: {
+    name: string;
+    hp: number;
+    maxHp: number;
+    alive: boolean;
+    col: number;
+    row: number;
+  }[];
   destination: {
     hp: number;
     maxHp: number;
@@ -178,7 +181,13 @@ export interface TowerSnapshot {
     maxHp: number;
     disabled: boolean;
   }[];
-  blockers: { col: number; row: number; level: number; hp: number; maxHp: number }[];
+  blockers: {
+    col: number;
+    row: number;
+    level: number;
+    hp: number;
+    maxHp: number;
+  }[];
   activeGardens: string[];
   spawnPhase: number;
   notice: string;
@@ -213,7 +222,7 @@ const STUDENT_HP_BASE = 34;
 const STUDENT_HP_STEP = 5.5; // 每 12 秒增加的血量
 const BOSS_ATK_MUL = 2.2; // 单体 Boss 对结构的伤害倍率（码农 / 鹅腿阿姨）
 const BOSS_GAP = 24; // Boss 之间的平均间隔（秒），随时间略微缩短
-// Boss 解锁时间刻意压在中局：真机体验里一局常在一两分钟内分出胜负，
+// Boss 解锁时间刻意压在中局：初版估计一局可能在一两分钟内分出胜负，
 // 若放到 100 秒后，后两种 Boss 会几乎见不到（等于废内容）。
 // —— 码农出击：释放「That's pity」光波，命中防御塔使其停机 ——
 const CODER_FROM = 60;
@@ -417,7 +426,8 @@ export class TowerModel {
   spawnTile(): number {
     const empties: [number, number][] = [];
     for (let r = 0; r < 4; r++)
-      for (let c = 0; c < 4; c++) if (this.grid[r][c] === 0) empties.push([r, c]);
+      for (let c = 0; c < 4; c++)
+        if (this.grid[r][c] === 0) empties.push([r, c]);
     if (!empties.length) return -1;
     const [r, c] = empties[Math.floor(Math.random() * empties.length)];
     this.grid[r][c] = this.spawnLevel();
@@ -494,7 +504,8 @@ export class TowerModel {
   /** tileIndex 为 0..15 的格子序号（行优先）。 */
   dropTile(tileIndex: number, col: number, row: number): boolean {
     if (this.mode !== 'playing') return false;
-    if (col < 0 || row < 0 || col >= GRID_COLS || row >= GRID_ROWS) return false;
+    if (col < 0 || row < 0 || col >= GRID_COLS || row >= GRID_ROWS)
+      return false;
     const tr = Math.floor(tileIndex / 4);
     const tc = tileIndex % 4;
     const level = this.grid[tr]?.[tc];
@@ -506,7 +517,11 @@ export class TowerModel {
       const existing = this.towers.find((t) => t.col === col && t.row === row);
       if (existing) {
         existing.level = Math.max(existing.level, level);
-        existing.hp = existing.maxHp = TOWER_HP_BASE + existing.level * TOWER_HP_PER_LEVEL;
+        const entry = this.chain[existing.level - 1];
+        existing.key = entry.key;
+        existing.name = entry.name;
+        existing.hp = existing.maxHp =
+          TOWER_HP_BASE + existing.level * TOWER_HP_PER_LEVEL;
         this.notify(`${existing.name} 升级至 Lv.${existing.level}`);
       } else {
         const entry = this.chain[level - 1];
@@ -518,7 +533,7 @@ export class TowerModel {
           level,
           key: entry.key,
           name: entry.name,
-          kind: ('beam' as SkillKind), // 视觉用；攻击为统一射线/炮弹
+          kind: 'beam' as SkillKind, // 视觉用；攻击为统一射线/炮弹
           hp: maxHp,
           maxHp,
           cooldown: 0,
@@ -529,10 +544,13 @@ export class TowerModel {
       }
       consumed = true;
     } else if (cell.type === 'road') {
-      const existing = this.blockers.find((b) => b.col === col && b.row === row);
+      const existing = this.blockers.find(
+        (b) => b.col === col && b.row === row,
+      );
       if (existing) {
         existing.level = Math.max(existing.level, level);
-        existing.hp = existing.maxHp = BLOCKER_HP_BASE + existing.level * BLOCKER_HP_PER_LEVEL;
+        existing.hp = existing.maxHp =
+          BLOCKER_HP_BASE + existing.level * BLOCKER_HP_PER_LEVEL;
       } else {
         const maxHp = BLOCKER_HP_BASE + level * BLOCKER_HP_PER_LEVEL;
         this.blockers.push({
@@ -564,14 +582,26 @@ export class TowerModel {
       if (!this.destination.alive || !this.destination.repairable) return false;
       const entry = this.chain[level - 1];
       if (entry.key === 'qinghua') {
-        this.destination.hp = Math.min(this.destination.maxHp, this.destination.hp + REPAIR_LIUJIAO);
+        this.destination.hp = Math.min(
+          this.destination.maxHp,
+          this.destination.hp + REPAIR_LIUJIAO,
+        );
         this.notify(`修复六教 +${REPAIR_LIUJIAO}`);
         consumed = true;
       } else {
         this.notify(`修复六教仅可用清华大学`);
       }
     }
-    if (consumed) this.grid[tr][tc] = 0;
+    if (consumed) {
+      this.grid[tr][tc] = 0;
+      // 用完最后一枚后补一枚，避免空棋盘永远无法移动/生成新徽章。
+      if (this.grid.every((line) => line.every((tile) => tile === 0))) {
+        this.spawnCell = this.spawnTile();
+        this.moveSeq++;
+        this.mergeCells = [];
+        this.lastMove = '';
+      }
+    }
     return consumed;
   }
 
@@ -614,7 +644,9 @@ export class TowerModel {
     const rate = 0.9 + t / 70;
     const batch = 1 + Math.floor(t / 45);
     this.spawnTimer = Math.max(0.4, batch / rate);
-    const gardens = SPAWNS.filter((s) => this.activeGardenNames().includes(s.garden));
+    const gardens = SPAWNS.filter((s) =>
+      this.activeGardenNames().includes(s.garden),
+    );
     if (!gardens.length) return;
     const hp = STUDENT_HP_BASE + Math.floor(t / 12) * STUDENT_HP_STEP;
     for (let i = 0; i < batch; i++) {
@@ -778,9 +810,14 @@ export class TowerModel {
   private codeWave(s: Student) {
     let hit = 0;
     for (const tw of this.towers) {
-      const d = Math.hypot(tw.col * CELL + CELL / 2 - s.x, tw.row * CELL + CELL / 2 - s.y);
+      const d = Math.hypot(
+        tw.col * CELL + CELL / 2 - s.x,
+        tw.row * CELL + CELL / 2 - s.y,
+      );
       if (d > CODER_WAVE_R) continue;
-      const disable = CODER_DISABLE_MIN + Math.random() * (CODER_DISABLE_MAX - CODER_DISABLE_MIN);
+      const disable =
+        CODER_DISABLE_MIN +
+        Math.random() * (CODER_DISABLE_MAX - CODER_DISABLE_MIN);
       tw.disabledUntil = Math.max(tw.disabledUntil, this.time + disable);
       hit++;
     }
@@ -823,7 +860,10 @@ export class TowerModel {
     return [Math.floor(x / CELL), Math.floor(y / CELL)];
   }
 
-  private nearestTarget(x: number, y: number): {
+  private nearestTarget(
+    x: number,
+    y: number,
+  ): {
     x: number;
     y: number;
     dmg: (d: number) => void;
@@ -855,12 +895,27 @@ export class TowerModel {
       }
     };
     for (const tw of this.towers)
-      consider(tw.col * CELL + CELL / 2, tw.row * CELL + CELL / 2, (d) => this.damageTower(tw, d), { tower: tw });
+      consider(
+        tw.col * CELL + CELL / 2,
+        tw.row * CELL + CELL / 2,
+        (d) => this.damageTower(tw, d),
+        { tower: tw },
+      );
     for (const b of this.blockers)
-      consider(b.col * CELL + CELL / 2, b.row * CELL + CELL / 2, (d) => this.damageBlocker(b, d), { blocker: b });
+      consider(
+        b.col * CELL + CELL / 2,
+        b.row * CELL + CELL / 2,
+        (d) => this.damageBlocker(b, d),
+        { blocker: b },
+      );
     for (const tg of this.targets)
       if (tg.alive)
-        consider(tg.col * CELL + CELL / 2, tg.row * CELL + CELL / 2, (d) => this.damageTarget(tg, d), { target: tg });
+        consider(
+          tg.col * CELL + CELL / 2,
+          tg.row * CELL + CELL / 2,
+          (d) => this.damageTarget(tg, d),
+          { target: tg },
+        );
     if (this.destination.alive)
       consider(
         this.destination.col * CELL + CELL / 2,
@@ -1048,12 +1103,23 @@ export class TowerModel {
       }
       if (!target) continue;
       const dmg = TOWER_BASE_DMG + tw.level * TOWER_DMG_PER_LEVEL;
-      const fireInterval = Math.max(TOWER_FIRE_MIN, TOWER_FIRE_BASE - tw.level * 0.03);
+      const fireInterval = Math.max(
+        TOWER_FIRE_MIN,
+        TOWER_FIRE_BASE - tw.level * 0.03,
+      );
       tw.cooldown = fireInterval;
       const ang = Math.atan2(target.y - cy, target.x - cx);
       const color = this.chain[tw.level - 1]?.color ?? '#ffd866';
       if (this.effects.length < EFFECT_CAP)
-        this.effects.push({ kind: 'spark', x: cx, y: cy, color, life: 0.12, maxLife: 0.12, r: 12 });
+        this.effects.push({
+          kind: 'spark',
+          x: cx,
+          y: cy,
+          color,
+          life: 0.12,
+          maxLife: 0.12,
+          r: 12,
+        });
       this.projectiles.push({
         x: cx,
         y: cy,
@@ -1077,7 +1143,15 @@ export class TowerModel {
         if (Math.hypot(target.x - p.x, target.y - p.y) < 11) {
           this.damageStudent(target, p.dmg);
           if (this.effects.length < EFFECT_CAP)
-            this.effects.push({ kind: 'spark', x: target.x, y: target.y, color: p.color, life: 0.14, maxLife: 0.14, r: 9 });
+            this.effects.push({
+              kind: 'spark',
+              x: target.x,
+              y: target.y,
+              color: p.color,
+              life: 0.14,
+              maxLife: 0.14,
+              r: 9,
+            });
           p.life = 0;
         }
       } else {
@@ -1154,7 +1228,12 @@ export class TowerModel {
     tg.hp -= d;
     if (tg.hp <= 0) {
       tg.alive = false;
-      this.explode(tg.col * CELL + CELL / 2, tg.row * CELL + CELL / 2, TARGET_EXPLODE_R, TARGET_EXPLODE_DMG);
+      this.explode(
+        tg.col * CELL + CELL / 2,
+        tg.row * CELL + CELL / 2,
+        TARGET_EXPLODE_R,
+        TARGET_EXPLODE_DMG,
+      );
       this.notify(`${tg.name} 被摧毁，发生爆炸！`);
     }
   }
@@ -1175,8 +1254,13 @@ export class TowerModel {
       d0.breached = true;
       d0.repairable = false;
       d0.hp = d0.secondHp;
-      this.explode(d0.col * CELL + CELL / 2, d0.row * CELL + CELL / 2, LIUJIAO_EXPLODE_R, LIUJIAO_EXPLODE_DMG);
-      this.notify('六教首次被攻破，大爆炸！（清华可修复）');
+      this.explode(
+        d0.col * CELL + CELL / 2,
+        d0.row * CELL + CELL / 2,
+        LIUJIAO_EXPLODE_R,
+        LIUJIAO_EXPLODE_DMG,
+      );
+      this.notify('六教首次被攻破，大爆炸！进入最后防线，无法再修复');
     }
   }
 
@@ -1185,12 +1269,21 @@ export class TowerModel {
       if (Math.hypot(s.x - x, s.y - y) <= radius) this.damageStudent(s, dmg);
     }
     if (this.effects.length < EFFECT_CAP)
-      this.effects.push({ kind: 'explosion', x, y, color: '#ff9b3d', life: 0.5, maxLife: 0.5, r: radius });
+      this.effects.push({
+        kind: 'explosion',
+        x,
+        y,
+        color: '#ff9b3d',
+        life: 0.5,
+        maxLife: 0.5,
+        r: radius,
+      });
   }
 
   private updateEffects(dt: number) {
     for (const e of this.effects) e.life -= dt;
-    if (this.effects.length) this.effects = this.effects.filter((e) => e.life > 0);
+    if (this.effects.length)
+      this.effects = this.effects.filter((e) => e.life > 0);
   }
 
   private cleanup() {
@@ -1203,8 +1296,8 @@ export class TowerModel {
       this.rebuildFlow();
     }
     this.towers = this.towers.filter((t) => t.hp > 0);
-      this.projectiles = this.projectiles.filter((p) => p.life > 0);
-      this.effects = this.effects.filter((e) => e.life > 0);
+    this.projectiles = this.projectiles.filter((p) => p.life > 0);
+    this.effects = this.effects.filter((e) => e.life > 0);
   }
 
   private checkEnd() {
@@ -1243,7 +1336,9 @@ export class TowerModel {
       })),
       destination: {
         hp: this.destination.hp,
-        maxHp: this.destination.breached ? this.destination.secondHp : this.destination.maxHp,
+        maxHp: this.destination.breached
+          ? this.destination.secondHp
+          : this.destination.maxHp,
         breached: this.destination.breached,
         repairable: this.destination.repairable,
         alive: this.destination.alive,
@@ -1266,7 +1361,8 @@ export class TowerModel {
         maxHp: b.maxHp,
       })),
       activeGardens: this.activeGardenNames(),
-      spawnPhase: this.time < 60 ? 0 : this.time < 120 ? 1 : this.time < 180 ? 2 : 3,
+      spawnPhase:
+        this.time < 60 ? 0 : this.time < 120 ? 1 : this.time < 180 ? 2 : 3,
       notice: this.notice,
       endReason: this.endReason,
       effects: this.effects.map((e) => ({ ...e })),
