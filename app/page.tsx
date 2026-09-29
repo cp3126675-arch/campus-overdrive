@@ -1097,7 +1097,7 @@ function TowerHud({
         <div className="tower-top">
           <span className="tower-time">⏱ {tfmt(snap.time)}</span>
           <span className="tower-stat">
-            歼灭 <b>{snap.kills}</b>
+            劝返 <b>{snap.kills}</b>
           </span>
           <span className="tower-btns">
             <button onClick={onToggleMute} aria-label="静音">
@@ -1195,7 +1195,7 @@ function TowerHud({
             长按 2048 方块拖到地图：防御点建塔、道路放阻挡；进攻对象用 11
             级及以上修复；六教仅在首次破防前接受清华徽章修复。 注意
             Boss：码农光波会让防御塔停机 3~5 秒，鹅腿阿姨会增 /
-            减学生攻击力，菌液拉练截断队首即可全歼。
+            减学生攻击力，菌液拉练劝返队首即可解散队伍。
           </p>
         )}
       </aside>
@@ -1225,7 +1225,7 @@ function TowerHud({
             <h2>{snap.mode === 'won' ? '塔防通关' : '防线失守'}</h2>
             <p>{snap.endReason}</p>
             <strong className="result-time">
-              歼灭 {snap.kills} 名学生 · 坚持 {tfmt(snap.time)}
+              劝返 {snap.kills} 名学生 · 坚持 {tfmt(snap.time)}
             </strong>
             <Button className="launch-button" onClick={onRestart}>
               <RotateCcw />
