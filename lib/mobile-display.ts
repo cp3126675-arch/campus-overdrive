@@ -64,3 +64,26 @@ export async function requestLandscape(touchControls: boolean) {
     /* CSS rotation already provides the complete landscape game. */
   }
 }
+
+// Inverse of the landscape-stage rotation, then CSS pixels → canvas pixels.
+export function canvasPoint(
+  rect: {
+    left: number;
+    top: number;
+    right: number;
+    width: number;
+    height: number;
+  },
+  x: number,
+  y: number,
+  rotated: boolean,
+  width: number,
+  height: number,
+) {
+  const p = stagePoint(rect, x, y, rotated);
+  const w = rotated ? rect.height : rect.width;
+  const h = rotated ? rect.width : rect.height;
+  if (w <= 0 || h <= 0 || p.x < 0 || p.y < 0 || p.x >= w || p.y >= h)
+    return null;
+  return { x: (p.x * width) / w, y: (p.y * height) / h };
+}

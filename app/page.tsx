@@ -6,6 +6,7 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  type PointerEvent as ReactPointerEvent,
 } from 'react';
 import {
   Play,
@@ -45,6 +46,8 @@ import {
   DialogClose,
 } from '@/components/ui/dialog';
 import { CampusGame, initialSnapshot, type Snapshot } from '@/lib/game';
+import { stagePoint } from '@/lib/mobile-display';
+import type { TowerSnapshot } from '@/lib/tower-model';
 const fmt = (seconds: number) => {
   const n = Math.floor(Math.max(0, seconds) * 10);
   return `${Math.floor(n / 600)
@@ -54,6 +57,15 @@ const fmt = (seconds: number) => {
       '0',
     )}:${Math.floor(n / 10) % 60 < 10 ? '0' : ''}${Math.floor(n / 10) % 60}.${n % 10}`;
 };
+function tfmt(seconds: number) {
+  const n = Math.floor(Math.max(0, seconds) * 10);
+  return `${Math.floor(n / 600)
+    .toString()
+    .padStart(
+      2,
+      '0',
+    )}:${Math.floor(n / 10) % 60 < 10 ? '0' : ''}${Math.floor(n / 10) % 60}.${n % 10}`;
+}
 export default function Home() {
   const stage = useRef<HTMLElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -69,7 +81,7 @@ export default function Home() {
   const [recordsOpen, setRecordsOpen] = useState(false);
   const [nameOpen, setNameOpen] = useState(false);
   const [chooseMajorAfterName, setChooseMajorAfterName] = useState(false);
-  const [variant, setVariant] = useState<'race' | 'survival'>('race');
+  const [variant, setVariant] = useState<'race' | 'survival' | 'tower'>('race');
   const [departmentId, setDepartmentId] = useState('d041');
   const [query, setQuery] = useState('');
   const [ready, setReady] = useState(false);
@@ -141,7 +153,7 @@ export default function Home() {
     setChooseMajorAfterName(false);
     setNameOpen(true);
   };
-  const enterMode = (mode: 'race' | 'survival') => {
+  const enterMode = (mode: 'race' | 'survival' | 'tower') => {
     setVariant(mode);
     void requestLandscape(touchControls);
     if (!onlineScores.identity) {
@@ -185,7 +197,7 @@ export default function Home() {
     try {
       const missing = await g.prepareDepartment(selected.id, variant);
       if (game.current !== g) return;
-      beginRun(selected.id, variant);
+      if (variant !== 'tower') beginRun(selected.id, variant);
       g.start(selected.profile, selected.badge, selected.id, variant);
       if (missing.length) g.model.notify('部分图片暂未载入，已启用备用显示', 4);
       setMenuStep('title');
@@ -203,7 +215,7 @@ export default function Home() {
   return (
     <main
       ref={stage}
-      className={`challenge ${menu ? 'is-lobby' : 'is-battle'} ${ended ? 'is-ending' : ''} ${touchControls ? 'touch-controls' : 'desktop-controls'}`}
+      className={`challenge ${menu ? 'is-lobby' : 'is-battle'} ${ended ? 'is-ending' : ''} ${variant === 'tower' && !menu ? 'tower-mode' : ''} ${touchControls ? 'touch-controls' : 'desktop-controls'}`}
     >
       <canvas
         ref={canvas}
@@ -268,6 +280,14 @@ export default function Home() {
                   <ChevronRight className="menu-arrow" size={21} />
                 </Button>
                 <Button
+                  className="title-start tower-start"
+                  onClick={() => enterMode('tower')}
+                >
+                  <Bike size={21} />
+                  塔防模式（测试）
+                  <ChevronRight className="menu-arrow" size={21} />
+                </Button>
+                <Button
                   className="title-help"
                   variant="ghost"
                   onClick={() => setHelpOpen(true)}
@@ -300,9 +320,11 @@ export default function Home() {
                 选择主修
               </h2>
               <p className="selection-subtitle">
-                {variant === 'survival'
-                  ? '期末周 · 通过大考，争取更高总分'
-                  : '毕业竞速 · 合成清华，挑战更短毕业用时'}
+                {variant === 'tower'
+                  ? '塔防 · 选择你的主修作为合成基底，合成专业布防'
+                  : variant === 'survival'
+                    ? '期末周 · 通过大考，争取更高总分'
+                    : '毕业竞速 · 合成清华，挑战更短毕业用时'}
               </p>
               {variant === 'survival' && (
                 <p className="survival-rules-note">
@@ -482,6 +504,20 @@ export default function Home() {
             </DialogContent>
           </Dialog>
         </div>
+      ) : snap.tower ? (
+        <TowerHud
+          snap={snap.tower}
+          muted={muted}
+          onMove={(d) => game.current?.moveTower(d)}
+          onPause={() => game.current?.togglePause()}
+          onToggleMute={() => {
+            setMuted(!muted);
+            game.current?.setMuted(!muted);
+          }}
+          onDropTile={(i, x, y) => game.current?.dropTowerTile(i, x, y)}
+          onRestart={start}
+          onMenu={() => game.current?.toMenu()}
+        />
       ) : (
         <>
           <div className={`battle-hud ${survival ? 'has-survival-score' : ''}`}>
@@ -705,7 +741,7 @@ export default function Home() {
           </div>
         </>
       )}
-      {snap.mode === 'paused' && !snap.orientationBlocked && (
+      {!snap.tower && snap.mode === 'paused' && !snap.orientationBlocked && (
         <div className="game-modal">
           <section>
             <Pause size={34} />
@@ -729,7 +765,7 @@ export default function Home() {
           </section>
         </div>
       )}
-      {ended && snap.endProgress < 1 && (
+      {!snap.tower && ended && snap.endProgress < 1 && (
         <div
           className={`ending-scene ${snap.mode === 'won' ? 'victory' : 'defeat'}`}
           aria-live="polite"
@@ -750,7 +786,7 @@ export default function Home() {
           </p>
         </div>
       )}
-      {ended && snap.endProgress >= 1 && (
+      {!snap.tower && ended && snap.endProgress >= 1 && (
         <div className="game-modal result-reveal">
           <section>
             {snap.mode === 'won' ? (
@@ -875,14 +911,332 @@ export default function Home() {
       {recordsOpen && (
         <GameRecords
           books={records}
-          initialMode={variant}
           online={onlineScores}
           open={recordsOpen}
           onOpenChange={setRecordsOpen}
           container={stage}
           onEditNickname={editNickname}
+          initialMode={variant === 'tower' ? 'race' : variant}
         />
       )}
     </main>
+  );
+}
+
+// ---- 塔防模式 HUD ----
+function TowerGrid({
+  snap,
+  onDropTile,
+}: {
+  snap: TowerSnapshot;
+  onDropTile: (tileIndex: number, clientX: number, clientY: number) => void;
+}) {
+  const { grid, chain, moveSeq, lastMove, mergeCells, spawnCell } = snap;
+  const [ghost, setGhost] = useState<{
+    x: number;
+    y: number;
+    level: number;
+    key: string;
+  } | null>(null);
+  const [held, setHeld] = useState(-1);
+  const drag = useRef({
+    tileIndex: -1,
+    timer: 0,
+    active: false,
+    pointerId: -1,
+  });
+  const stageRef = useRef<HTMLElement | null>(null);
+  const dropRef = useRef(onDropTile);
+  useEffect(() => {
+    dropRef.current = onDropTile;
+  }, [onDropTile]);
+  const reset = () => {
+    clearTimeout(drag.current.timer);
+    drag.current = { tileIndex: -1, timer: 0, active: false, pointerId: -1 };
+    setGhost(null);
+    setHeld(-1);
+  };
+  const ghostPoint = (x: number, y: number) => {
+    const stage = stageRef.current;
+    return stage?.dataset.rotated === 'true'
+      ? stagePoint(stage.getBoundingClientRect(), x, y, true)
+      : { x, y };
+  };
+  useEffect(() => {
+    const move = (e: PointerEvent) => {
+      if (drag.current.active && drag.current.pointerId === e.pointerId) {
+        const p = ghostPoint(e.clientX, e.clientY);
+        setGhost((g) => (g ? { ...g, ...p } : g));
+      }
+    };
+    const up = (e: PointerEvent) => {
+      const d = drag.current;
+      if (d.pointerId !== e.pointerId) return;
+      if (d.active) dropRef.current(d.tileIndex, e.clientX, e.clientY);
+      reset();
+    };
+    const cancel = () => reset();
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', cancel);
+    window.addEventListener('blur', cancel);
+    return () => {
+      clearTimeout(drag.current.timer);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', cancel);
+      window.removeEventListener('blur', cancel);
+    };
+  }, []);
+  const startDrag = (
+    tileIndex: number,
+    level: number,
+    key: string,
+    e: ReactPointerEvent,
+  ) => {
+    if (
+      snap.mode !== 'playing' ||
+      e.button !== 0 ||
+      drag.current.pointerId !== -1
+    )
+      return;
+    e.preventDefault();
+    e.currentTarget.setPointerCapture(e.pointerId);
+    stageRef.current = e.currentTarget.closest<HTMLElement>('.challenge');
+    const p = ghostPoint(e.clientX, e.clientY);
+    drag.current = {
+      tileIndex,
+      timer: 0,
+      active: false,
+      pointerId: e.pointerId,
+    };
+    setHeld(tileIndex);
+    drag.current.timer = window.setTimeout(() => {
+      drag.current.active = true;
+      setGhost({ ...p, level, key });
+    }, 240);
+  };
+  return (
+    <>
+      <div className="tower-grid">
+        {grid.flatMap((row, r) =>
+          row.map((lv, c) => {
+            const idx = r * 4 + c;
+            // key 带上 moveSeq，使滑动 / 合成动画在每次移动后重放。
+            const key = `${idx}-${moveSeq}`;
+            if (!lv)
+              return <span key={key} className="tower-cell tower-empty" />;
+            const entry = chain[lv - 1];
+            const merged = mergeCells.includes(idx);
+            const isNew = spawnCell === idx;
+            const cls = `tower-cell${merged ? ' tower-merge' : ''}${
+              isNew ? ' tower-new' : ''
+            }${held === idx ? ' tower-held' : ''}`;
+            const style =
+              merged || isNew || moveSeq === 0 || !lastMove
+                ? undefined
+                : { animation: `tower-slide-${lastMove} 150ms ease-out` };
+            return (
+              <button
+                key={key}
+                className={cls}
+                style={style}
+                onPointerDown={(e) =>
+                  startDrag(idx, lv, entry?.key ?? 'qinghua', e)
+                }
+              >
+                <img
+                  src={assetUrl(`/badges/${entry?.key}.png`)}
+                  alt={entry?.name ?? ''}
+                  draggable={false}
+                />
+                <b>Lv.{lv}</b>
+              </button>
+            );
+          }),
+        )}
+      </div>
+      {ghost && (
+        <div className="tower-ghost" style={{ left: ghost.x, top: ghost.y }}>
+          <img
+            src={assetUrl(`/badges/${ghost.key}.png`)}
+            alt=""
+            draggable={false}
+          />
+          <b>Lv.{ghost.level}</b>
+        </div>
+      )}
+    </>
+  );
+}
+
+function TowerHud({
+  snap,
+  muted,
+  onMove,
+  onPause,
+  onToggleMute,
+  onDropTile,
+  onRestart,
+  onMenu,
+}: {
+  snap: TowerSnapshot;
+  muted: boolean;
+  onMove: (d: 'up' | 'down' | 'left' | 'right') => void;
+  onPause: () => void;
+  onToggleMute: () => void;
+  onDropTile: (tileIndex: number, clientX: number, clientY: number) => void;
+  onRestart: () => void;
+  onMenu: () => void;
+}) {
+  const ended = snap.mode === 'lost' || snap.mode === 'won';
+  const phaseNames = ['紫荆园', '＋桃李园', '丁香·听涛·清芬', '五园全开'];
+  return (
+    <>
+      <aside className="tower-hud">
+        <div className="tower-top">
+          <span className="tower-time">⏱ {tfmt(snap.time)}</span>
+          <span className="tower-stat">
+            歼灭 <b>{snap.kills}</b>
+          </span>
+          <span className="tower-btns">
+            <button onClick={onToggleMute} aria-label="静音">
+              {muted ? <VolumeX /> : <Volume2 />}
+            </button>
+            <button onClick={onPause} disabled={ended} aria-label="暂停">
+              {snap.mode === 'paused' ? <Play /> : <Pause />}
+            </button>
+          </span>
+        </div>
+        <div className="tower-phasebar">
+          <span className="tower-phase">
+            阶段 {snap.spawnPhase + 1}/4 · {phaseNames[snap.spawnPhase]}
+          </span>
+          <span className="tower-gardens">
+            刷新点 {snap.activeGardens.join(' / ')}
+          </span>
+          {snap.bossCounts.coder > 0 && (
+            <span className="tower-boss-chip tower-boss-coder">
+              码农出击 ×{snap.bossCounts.coder}
+            </span>
+          )}
+          {snap.bossCounts.ayi > 0 && (
+            <span className="tower-boss-chip tower-boss-ayi">
+              鹅腿阿姨 ×{snap.bossCounts.ayi}
+            </span>
+          )}
+          {snap.bossCounts.line > 0 && (
+            <span className="tower-boss-chip tower-boss-line">
+              菌液拉练 ×{snap.bossCounts.line}
+            </span>
+          )}
+        </div>
+        <div className="tower-structures">
+          {snap.targets.map((g, i) => (
+            <div key={i} className="tower-struct">
+              <span>
+                {g.name}
+                {g.alive ? '' : ' 💥'}
+              </span>
+              <i
+                style={{ width: `${g.alive ? (g.hp / g.maxHp) * 100 : 0}%` }}
+              />
+            </div>
+          ))}
+          <div className="tower-struct tower-liujiao">
+            <span>
+              六教{' '}
+              {!snap.destination.alive
+                ? '失守'
+                : snap.destination.breached
+                  ? '最后防线·不可修复'
+                  : '防御中'}
+            </span>
+            <i
+              style={{
+                width: `${snap.destination.alive ? (snap.destination.hp / snap.destination.maxHp) * 100 : 0}%`,
+              }}
+            />
+          </div>
+        </div>
+        {!ended && snap.notice && (
+          <div className="battle-toast" aria-live="polite">
+            {snap.notice}
+          </div>
+        )}
+        {!ended && (
+          <TowerGrid
+            key={`${snap.mode}-${snap.moveSeq}`}
+            snap={snap}
+            onDropTile={onDropTile}
+          />
+        )}
+        {!ended && (
+          <div className="tower-dirpad">
+            <div className="tower-dirs">
+              <button onClick={() => onMove('up')} aria-label="上">
+                ↑
+              </button>
+              <button onClick={() => onMove('left')} aria-label="左">
+                ←
+              </button>
+              <button onClick={() => onMove('down')} aria-label="下">
+                ↓
+              </button>
+              <button onClick={() => onMove('right')} aria-label="右">
+                →
+              </button>
+            </div>
+            <span>方向键 / WASD 滑动合成</span>
+          </div>
+        )}
+        {!ended && (
+          <p className="tower-hint">
+            长按 2048 方块拖到地图：防御点建塔、道路放阻挡；进攻对象用 11
+            级及以上修复；六教仅在首次破防前接受清华徽章修复。 注意
+            Boss：码农光波会让防御塔停机 3~5 秒，鹅腿阿姨会增 /
+            减学生攻击力，菌液拉练截断队首即可全歼。
+          </p>
+        )}
+      </aside>
+      {!ended && (
+        <div className="tower-scroll-hint" aria-hidden="true">
+          滚轮 / 手指滑动浏览地图
+        </div>
+      )}
+      {snap.mode === 'paused' && !ended && (
+        <div className="game-modal">
+          <section>
+            <Pause size={34} />
+            <h2>计时暂停</h2>
+            <Button className="launch-button" onClick={onPause}>
+              <Play />
+              继续挑战
+            </Button>
+            <Button variant="ghost" onClick={onMenu}>
+              返回主菜单
+            </Button>
+          </section>
+        </div>
+      )}
+      {ended && (
+        <div className="game-modal result-reveal">
+          <section>
+            <h2>{snap.mode === 'won' ? '塔防通关' : '防线失守'}</h2>
+            <p>{snap.endReason}</p>
+            <strong className="result-time">
+              歼灭 {snap.kills} 名学生 · 坚持 {tfmt(snap.time)}
+            </strong>
+            <Button className="launch-button" onClick={onRestart}>
+              <RotateCcw />
+              再守一次
+            </Button>
+            <Button variant="ghost" onClick={onMenu}>
+              返回主菜单
+            </Button>
+          </section>
+        </div>
+      )}
+    </>
   );
 }

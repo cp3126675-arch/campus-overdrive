@@ -7,10 +7,23 @@ import { SurvivalGameModel } from './survival-model';
 import colleges from './colleges.json';
 import { assetUrl } from './asset-url';
 import { GameMusic } from './music';
+import {
+  TowerModel,
+  studentColor,
+  CELL as TOWER_CELL,
+  WORLD_W as TOWER_W,
+  WORLD_H as TOWER_H,
+} from './tower-model';
+import { CELLS, GRID_COLS, GRID_ROWS } from './tower-map';
 import { needsLandscape, DASH_COOLDOWN_SECONDS } from './battle-rules';
 import { ImageLoader, loadImageBatch } from './image-loader';
 import { roundRect } from './canvas-compat';
-import { bossEdgeCue, layoutAttributes } from './mobile-display';
+import {
+  bossEdgeCue,
+  layoutAttributes,
+  canvasPoint,
+  stagePoint,
+} from './mobile-display';
 import { textbook, YEAR_NAMES } from './textbooks';
 import { BOSS_PHOTOS, departmentBooks, enemyBookPhoto } from './combat-photos';
 import { badgeWeapon } from './badge-weapons';
@@ -49,6 +62,13 @@ interface ToolContext {
 }
 export class CampusGame {
   model: GameModel = new GameModel();
+  tower: TowerModel | null = null;
+  private towerLayout: { scale: number; ox: number; oy: number } | null = null;
+  // 塔防地图相机：towerScroll 为画布纵向偏移（<=0），towerManualScroll 记录最近一次手动滚动的时刻。
+  private towerScroll = 0;
+  private towerManualScroll = -99;
+  private towerPan: { y: number; scroll: number; pointerId: number } | null =
+    null;
   nickname = '';
   editingNickname = false;
   private canvas: HTMLCanvasElement;
@@ -83,6 +103,12 @@ export class CampusGame {
     window.addEventListener('keyup', this.keyup);
     window.addEventListener('blur', this.blur);
     document.addEventListener('visibilitychange', this.visibility);
+    // 塔防地图浏览：滚轮 / 手指拖动
+    c.addEventListener('wheel', this.towerWheel, { passive: false });
+    c.addEventListener('pointerdown', this.towerPointerDown);
+    c.addEventListener('pointermove', this.towerPointerMove);
+    c.addEventListener('pointerup', this.towerPointerUp);
+    c.addEventListener('pointercancel', this.towerPointerUp);
     this.resize();
     this.last = performance.now();
     this.raf = requestAnimationFrame(this.frame);
@@ -101,7 +127,10 @@ export class CampusGame {
       progress,
     );
   }
-  async prepareDepartment(id: string, variant: 'race' | 'survival' = 'race') {
+  async prepareDepartment(
+    id: string,
+    variant: 'race' | 'survival' | 'tower' = 'race',
+  ) {
     this.unlockAudio();
     return this.loadImages([
       ...departmentBooks(id).map((p) => [p.id, `/art/${p.file}`]),
@@ -227,8 +256,27 @@ export class CampusGame {
     major: Major,
     target: string,
     departmentId?: string,
-    variant: 'race' | 'survival' = 'race',
+    variant: 'race' | 'survival' | 'tower' = 'race',
   ) {
+    this.tower = null;
+    this.towerLayout = null;
+    this.towerPan = null;
+    if (variant === 'tower') {
+      this.model.toMenu();
+      this.unlockAudio();
+      this.keys.clear();
+      this.move = { x: 0, y: 0 };
+      this.tower = new TowerModel();
+      this.tower.start(departmentId ?? 'd041');
+      this.towerScroll = 0;
+      this.towerManualScroll = -99;
+      this.towerPan = null;
+      this.streamTowerAssets();
+      this.last = performance.now();
+      this.emitTower();
+      this.canvas.focus({ preventScroll: true });
+      return;
+    }
     if (this.model instanceof SurvivalGameModel !== (variant === 'survival'))
       this.model =
         variant === 'survival' ? new SurvivalGameModel() : new GameModel();
@@ -246,14 +294,60 @@ export class CampusGame {
     this.emit(this.model.snapshot());
     this.canvas.focus({ preventScroll: true });
   }
+  private streamTowerAssets() {
+    if (!this.tower) return;
+    const defs: [string, string][] = [
+      ...this.tower.chain.map<[string, string]>((e) => [
+        e.key,
+        `/badges/${e.key}.png`,
+      ]),
+      ['tower-boss-coder', '/art/avatar/coder.jpg'],
+      ['tower-boss-ayi', '/art/avatar/ayi.png'],
+    ];
+    for (const [key, src] of defs) {
+      if (this.assets.has(key)) continue;
+      void this.imageLoader
+        .load(assetUrl(src))
+        .then((img) => {
+          if (!this.destroyed) this.assets.set(key, img);
+        })
+        .catch(() => {});
+    }
+  }
+  private emitTower() {
+    if (!this.tower) return;
+    this.emit({
+      ...initialSnapshot,
+      mode: this.tower.mode,
+      tower: this.tower.snapshot(),
+    });
+  }
   toMenu() {
     this.keys.clear();
     this.move = { x: 0, y: 0 };
+    if (this.tower) {
+      this.tower.toMenu();
+      this.tower = null;
+      this.towerLayout = null;
+      this.towerPan = null;
+      this.model.toMenu();
+      this.music.update(this.model.hp, this.model.mode, 0);
+      this.emit(this.model.snapshot());
+      return;
+    }
     this.model.toMenu();
     this.music.update(this.model.hp, this.model.mode, 0);
     this.emit(this.model.snapshot());
   }
   togglePause() {
+    if (this.tower && this.tower.mode !== 'menu') {
+      this.tower.togglePause();
+      this.last = performance.now();
+      this.keys.clear();
+      this.move = { x: 0, y: 0 };
+      this.emitTower();
+      return;
+    }
     if (this.model.orientationBlocked) return;
     this.model.togglePause();
     this.music.update(this.model.hp, this.model.mode, 0);
@@ -283,6 +377,93 @@ export class CampusGame {
     this.model.skill();
     this.emit(this.model.snapshot());
   }
+  // 塔防：2048 滑动合成
+  moveTower(dir: 'up' | 'down' | 'left' | 'right') {
+    if (!this.tower) return;
+    this.unlockAudio();
+    this.tower.move2048(dir);
+    this.emitTower();
+  }
+  // 塔防：把 2048 方块拖到地图格
+  dropTowerTile(tileIndex: number, clientX: number, clientY: number) {
+    if (!this.tower) return false;
+    const cell = this.cellFromClient(clientX, clientY);
+    if (!cell) return false;
+    const ok = this.tower.dropTile(tileIndex, cell.col, cell.row);
+    this.emitTower();
+    return ok;
+  }
+  // 塔防：屏幕坐标 → 地图格
+  cellFromClient(
+    clientX: number,
+    clientY: number,
+  ): { col: number; row: number } | null {
+    if (!this.towerLayout) return null;
+    const rect = this.canvas.getBoundingClientRect();
+    const p = canvasPoint(
+      rect,
+      clientX,
+      clientY,
+      this.canvas.closest<HTMLElement>('.challenge')?.dataset.rotated ===
+        'true',
+      this.canvas.width,
+      this.canvas.height,
+    );
+    if (!p) return null;
+    const { x: px, y: py } = p;
+    const wx = (px - this.towerLayout.ox) / this.towerLayout.scale;
+    const wy = (py - this.towerLayout.oy) / this.towerLayout.scale;
+    const col = Math.floor(wx / TOWER_CELL);
+    const row = Math.floor(wy / TOWER_CELL);
+    if (col < 0 || row < 0 || col >= GRID_COLS || row >= GRID_ROWS) return null;
+    return { col, row };
+  }
+  // 塔防：滚轮滚动地图（画布纵向偏移，负值向上）
+  private towerWheel = (e: WheelEvent) => {
+    if (!this.tower || this.tower.mode === 'menu') return;
+    e.preventDefault();
+    const rect = this.canvas.getBoundingClientRect();
+    const k = rect.height ? this.canvas.height / rect.height : 1;
+    this.towerManualScroll = this.visualClock;
+    this.towerScroll -= e.deltaY * k;
+  };
+  // 塔防：手指 / 鼠标拖动地图
+  private towerPointerDown = (e: PointerEvent) => {
+    if (!this.tower || this.tower.mode === 'menu') return;
+    if (this.towerPan || e.button !== 0) return;
+    const rect = this.canvas.getBoundingClientRect();
+    const rotated =
+      this.canvas.closest<HTMLElement>('.challenge')?.dataset.rotated ===
+      'true';
+    const p = stagePoint(rect, e.clientX, e.clientY, rotated);
+    this.towerPan = {
+      y: p.y,
+      scroll: this.towerScroll,
+      pointerId: e.pointerId,
+    };
+    this.canvas.setPointerCapture(e.pointerId);
+  };
+  private towerPointerMove = (e: PointerEvent) => {
+    if (
+      !this.towerPan ||
+      this.towerPan.pointerId !== e.pointerId ||
+      !this.tower ||
+      this.tower.mode === 'menu'
+    )
+      return;
+    const rect = this.canvas.getBoundingClientRect();
+    const rotated =
+      this.canvas.closest<HTMLElement>('.challenge')?.dataset.rotated ===
+      'true';
+    const p = stagePoint(rect, e.clientX, e.clientY, rotated);
+    const extent = rotated ? rect.width : rect.height;
+    const k = extent ? this.canvas.height / extent : 1;
+    this.towerManualScroll = this.visualClock;
+    this.towerScroll = this.towerPan.scroll + (p.y - this.towerPan.y) * k;
+  };
+  private towerPointerUp = () => {
+    this.towerPan = null;
+  };
   setMuted(v: boolean) {
     this.muted = v;
     this.music.setMuted(v);
@@ -298,6 +479,31 @@ export class CampusGame {
   }
   private keydown = (e: KeyboardEvent) => {
     if (this.editingNickname) return;
+    if (this.tower && this.tower.mode !== 'menu') {
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(tag)) return;
+      const k = e.key.toLowerCase();
+      if (['p', 'escape', ' '].includes(k)) {
+        e.preventDefault();
+        if (!e.repeat) this.togglePause();
+        return;
+      }
+      const map: Record<string, 'up' | 'down' | 'left' | 'right'> = {
+        w: 'up',
+        arrowup: 'up',
+        s: 'down',
+        arrowdown: 'down',
+        a: 'left',
+        arrowleft: 'left',
+        d: 'right',
+        arrowright: 'right',
+      };
+      if (map[k]) {
+        e.preventDefault();
+        this.moveTower(map[k]);
+      }
+      return;
+    }
     if (this.model.orientationBlocked) return;
     const tag = (e.target as HTMLElement)?.tagName;
     if (['INPUT', 'TEXTAREA', 'SELECT'].includes(tag)) return;
@@ -334,6 +540,8 @@ export class CampusGame {
     this.keys.delete(e.key.toLowerCase());
   };
   private blur = () => {
+    this.towerPan = null;
+    if (this.tower?.mode === 'playing') this.togglePause();
     this.keys.clear();
     this.move = { x: 0, y: 0 };
     if (this.model.mode === 'playing') {
@@ -350,6 +558,11 @@ export class CampusGame {
     const dt = Math.max(0, (now - this.last) / 1000);
     this.last = now;
     this.visualClock += dt;
+    if (this.tower && this.tower.mode !== 'menu') {
+      this.frameTower(Math.min(dt, 0.05));
+      this.raf = requestAnimationFrame(this.frame);
+      return;
+    }
     const x =
       (this.keys.has('d') || this.keys.has('arrowright') ? 1 : 0) -
       (this.keys.has('a') || this.keys.has('arrowleft') ? 1 : 0) +
@@ -501,6 +714,39 @@ export class CampusGame {
         '#513975',
       );
     c.restore();
+  }
+  /** 把头像图片裁成圆形绘制（塔防 Boss 用），并可选描一圈标识色。 */
+  private avatar(key: string, x: number, y: number, r: number, ring?: string) {
+    const c = this.ctx,
+      img = this.assets.get(key);
+    c.save();
+    c.beginPath();
+    c.arc(x, y, r, 0, Math.PI * 2);
+    c.closePath();
+    c.clip();
+    if (img) c.drawImage(img, x - r, y - r, r * 2, r * 2);
+    else {
+      c.fillStyle = '#243049';
+      c.fillRect(x - r, y - r, r * 2, r * 2);
+    }
+    c.restore();
+    if (ring) {
+      c.save();
+      c.strokeStyle = ring;
+      c.lineWidth = 2.5;
+      c.beginPath();
+      c.arc(x, y, r, 0, Math.PI * 2);
+      c.stroke();
+      c.restore();
+    }
+  }
+  private bar(x: number, y: number, w: number, ratio: number, color: string) {
+    const c = this.ctx;
+    const r = Math.max(0, Math.min(1, ratio));
+    c.fillStyle = '#00000080';
+    c.fillRect(x - w / 2, y, w, 4);
+    c.fillStyle = color;
+    c.fillRect(x - w / 2, y, w * r, 4);
   }
   private sprite(
     type: keyof typeof rects,
@@ -1591,6 +1837,350 @@ export class CampusGame {
     c.fillRect(0, 0, w, h);
     c.restore();
   }
+  private frameTower(dt: number) {
+    const tw = this.tower!;
+    const prevMode = tw.mode;
+    if (tw.mode === 'playing') {
+      tw.update(dt);
+    }
+    if (prevMode === 'playing') {
+      if (tw.mode === 'lost') this.sound('lose');
+      if (tw.mode === 'won') this.sound('win');
+    }
+    this.music.update(100, tw.mode, dt, document.hidden);
+    this.drawTower();
+    this.emitClock += dt;
+    if (this.emitClock > 0.1) {
+      this.emitClock = 0;
+      this.emitTower();
+    }
+  }
+  private drawTower() {
+    const c = this.ctx,
+      tw = this.tower!,
+      t = this.visualClock;
+    const W = this.canvas.width,
+      H = this.canvas.height;
+    c.setTransform(1, 0, 0, 1, 0, 0);
+    c.fillStyle = '#0b1020';
+    c.fillRect(0, 0, W, H);
+    // 地图铺满画布宽度（可放大），纵向可滚动；自动跟随最前方学生，手动滚动后短暂接管。
+    const scale = Math.max(1, Math.min(W / TOWER_W, 3.6));
+    const ox = (W - TOWER_W * scale) / 2;
+    const maxScroll = Math.max(0, TOWER_H * scale - H);
+    let oy: number;
+    if (this.visualClock - this.towerManualScroll > 2.2 && tw.students.length) {
+      let leadY = 0;
+      for (const s of tw.students) if (s.y > leadY) leadY = s.y;
+      const desired = H * 0.58 - leadY * scale;
+      oy =
+        this.towerScroll +
+        (Math.max(-maxScroll, Math.min(0, desired)) - this.towerScroll) * 0.1;
+    } else {
+      oy = this.towerScroll;
+    }
+    oy = Math.max(-maxScroll, Math.min(0, oy));
+    this.towerScroll = oy;
+    this.towerLayout = { scale, ox, oy };
+    c.setTransform(scale, 0, 0, scale, ox, oy);
+    // 道路背景
+    for (let r = 0; r < GRID_ROWS; r++) {
+      for (let col = 0; col < GRID_COLS; col++) {
+        const cell = CELLS[r][col];
+        if (cell.type === 'empty') continue;
+        const x = col * TOWER_CELL,
+          y = r * TOWER_CELL;
+        if (cell.type === 'road') {
+          c.fillStyle = '#1b2540';
+          c.fillRect(x + 1, y + 1, TOWER_CELL - 2, TOWER_CELL - 2);
+        } else if (cell.type === 'spawn') {
+          c.fillStyle = '#3a2a52';
+          c.fillRect(x + 1, y + 1, TOWER_CELL - 2, TOWER_CELL - 2);
+          this.text(
+            cell.garden ?? '园',
+            x + TOWER_CELL / 2,
+            y + TOWER_CELL / 2,
+            9,
+            '#e7c8ff',
+          );
+        } else if (cell.type === 'tower') {
+          c.fillStyle = '#22304a';
+          c.fillRect(x + 1, y + 1, TOWER_CELL - 2, TOWER_CELL - 2);
+          c.strokeStyle = '#5b6f95';
+          c.setLineDash([4, 3]);
+          c.strokeRect(x + 4, y + 4, TOWER_CELL - 8, TOWER_CELL - 8);
+          c.setLineDash([]);
+          this.text(
+            cell.name ?? '塔',
+            x + TOWER_CELL / 2,
+            y + TOWER_CELL - 6,
+            7,
+            '#9fb4dd',
+          );
+        } else if (cell.type === 'target') {
+          const tg = tw.targets.find((g) => g.col === col && g.row === r);
+          c.fillStyle = tg && tg.alive ? '#46361f' : '#2a2018';
+          c.fillRect(x + 1, y + 1, TOWER_CELL - 2, TOWER_CELL - 2);
+        } else if (cell.type === 'destination') {
+          c.fillStyle = '#5a2020';
+          c.fillRect(x + 1, y + 1, TOWER_CELL - 2, TOWER_CELL - 2);
+        }
+      }
+    }
+    // 进攻对象
+    for (const tg of tw.targets) {
+      if (!tg.alive) continue;
+      const x = tg.col * TOWER_CELL + TOWER_CELL / 2;
+      const y = tg.row * TOWER_CELL + TOWER_CELL / 2;
+      c.fillStyle = '#d99b3a';
+      c.beginPath();
+      c.arc(x, y, TOWER_CELL * 0.36, 0, Math.PI * 2);
+      c.fill();
+      this.bar(
+        x,
+        y + TOWER_CELL * 0.5,
+        TOWER_CELL * 0.8,
+        tg.hp / tg.maxHp,
+        '#7be08a',
+      );
+      this.text(tg.name, x, y - TOWER_CELL * 0.5, 8, '#ffe9c0');
+    }
+    // 六教
+    {
+      const d = tw.destination;
+      const x = d.col * TOWER_CELL + TOWER_CELL / 2;
+      const y = d.row * TOWER_CELL + TOWER_CELL / 2;
+      c.fillStyle = d.alive ? (d.breached ? '#a83a3a' : '#c0392b') : '#3a1414';
+      c.fillRect(
+        x - TOWER_CELL * 0.45,
+        y - TOWER_CELL * 0.45,
+        TOWER_CELL * 0.9,
+        TOWER_CELL * 0.9,
+      );
+      this.text('六教', x, y + 3, 9, '#fff');
+      if (d.alive)
+        this.bar(
+          x,
+          y + TOWER_CELL * 0.6,
+          TOWER_CELL * 1.1,
+          d.hp / d.maxHp,
+          '#ff7b7b',
+        );
+      if (d.breached) this.text('已破', x, y - TOWER_CELL * 0.55, 8, '#ffb3b3');
+    }
+    // 阻挡块
+    for (const b of tw.blockers) {
+      const x = b.col * TOWER_CELL + TOWER_CELL / 2;
+      const y = b.row * TOWER_CELL + TOWER_CELL / 2;
+      c.fillStyle = b.hitFlash > 0 ? '#fff' : '#6b7a99';
+      c.fillRect(
+        x - TOWER_CELL * 0.34,
+        y - TOWER_CELL * 0.34,
+        TOWER_CELL * 0.68,
+        TOWER_CELL * 0.68,
+      );
+      this.text(`L${b.level}`, x, y + 3, 9, '#0b1020');
+      this.bar(
+        x,
+        y + TOWER_CELL * 0.45,
+        TOWER_CELL * 0.7,
+        b.hp / b.maxHp,
+        '#9fd0ff',
+      );
+    }
+    // 防御塔
+    for (const twr of tw.towers) {
+      const x = twr.col * TOWER_CELL + TOWER_CELL / 2;
+      const y = twr.row * TOWER_CELL + TOWER_CELL / 2;
+      this.badge(twr.key, x, y, TOWER_CELL * 0.62, true);
+      this.text(
+        `L${twr.level}`,
+        x,
+        y - TOWER_CELL * 0.5,
+        8,
+        tw.chain[twr.level - 1]?.color ?? '#ffd866',
+      );
+      if (twr.hp < twr.maxHp)
+        this.bar(
+          x,
+          y + TOWER_CELL * 0.5,
+          TOWER_CELL * 0.8,
+          twr.hp / twr.maxHp,
+          '#ff9b6b',
+        );
+      if (tw.time < twr.disabledUntil) {
+        // 被码农光波命中：停机（不攻击）
+        const rr = TOWER_CELL * 0.62 + 2;
+        c.save();
+        c.globalAlpha = 0.66;
+        c.fillStyle = '#0b1020';
+        c.beginPath();
+        c.arc(x, y, rr, 0, Math.PI * 2);
+        c.fill();
+        c.globalAlpha = 0.95;
+        c.strokeStyle = '#7fd4ff';
+        c.lineWidth = 2;
+        c.setLineDash([4, 3]);
+        c.beginPath();
+        c.arc(x, y, rr, 0, Math.PI * 2);
+        c.stroke();
+        c.restore();
+        this.text('停机', x, y + 3, 10, '#7fd4ff');
+      }
+    }
+    // 学生：先画码农 / 鹅腿阿姨的大头像，再画普通学生圆点，
+    // 避免 Boss 头像盖住身后排队的学生（单位之间没有实体碰撞，纯属视觉层级）。
+    for (const s of tw.students) {
+      if (s.boss !== 'coder' && s.boss !== 'ayi') continue;
+      const color = s.hitFlash > 0 ? '#ffffff' : studentColor(s);
+      const r = 13;
+      this.avatar(
+        s.boss === 'coder' ? 'tower-boss-coder' : 'tower-boss-ayi',
+        s.x,
+        s.y,
+        r,
+        color,
+      );
+      if (s.boss === 'coder') {
+        // 码农：脉动的光波源
+        c.save();
+        c.globalAlpha = 0.55 + 0.35 * Math.abs(Math.sin(t * 5));
+        c.strokeStyle = '#7fd4ff';
+        c.lineWidth = 2;
+        c.beginPath();
+        c.arc(s.x, s.y, r + 4, 0, Math.PI * 2);
+        c.stroke();
+        c.restore();
+      } else {
+        // 鹅腿阿姨：标出本次是增益还是减损
+        this.text(s.blessed ? '+' : '-', s.x + r, s.y - r, 14, color);
+      }
+      this.bar(s.x, s.y - r - 8, r * 2.2, s.hp / s.maxHp, color);
+      this.text(
+        s.boss === 'coder' ? '码农出击' : '鹅腿阿姨',
+        s.x,
+        s.y + r + 9,
+        8,
+        color,
+      );
+    }
+    for (const s of tw.students) {
+      if (s.boss === 'coder' || s.boss === 'ayi') continue;
+      const color = s.hitFlash > 0 ? '#ffffff' : studentColor(s);
+      const r = 9;
+      c.fillStyle = color;
+      c.beginPath();
+      c.arc(s.x, s.y, r, 0, Math.PI * 2);
+      c.fill();
+      c.strokeStyle = s.boss === 'line' ? '#0d5a2a' : '#7a1f29';
+      c.lineWidth = 2;
+      c.stroke();
+      if (s.boss === 'line' && s.lineLead) {
+        // 菌液拉练队首：歼灭它即可整排全灭
+        c.save();
+        c.strokeStyle = '#d8ffe4';
+        c.lineWidth = 1.5;
+        c.setLineDash([3, 3]);
+        c.beginPath();
+        c.arc(s.x, s.y, r + 5, 0, Math.PI * 2);
+        c.stroke();
+        c.restore();
+        this.text('首', s.x, s.y + 3, 9, '#06331a');
+      }
+      if (s.boss === 'line' || s.hp < s.maxHp)
+        this.bar(s.x, s.y - r - 5, r * 1.9, s.hp / s.maxHp, color);
+      if (s.auraMul > 1) this.text('▲', s.x - r - 5, s.y - r - 3, 8, '#ffa93d');
+      else if (s.auraMul < 1)
+        this.text('▼', s.x - r - 5, s.y - r - 3, 8, '#8a93a8');
+    }
+    // 炮弹
+    for (const p of tw.projectiles) {
+      c.fillStyle = p.color;
+      c.beginPath();
+      c.arc(p.x, p.y, 4, 0, Math.PI * 2);
+      c.fill();
+    }
+    // 特效：攻击射线 / 枪口火花 / 爆炸
+    for (const e of tw.effects) {
+      const a = Math.max(0, e.life / e.maxLife);
+      if (e.kind === 'beam' && e.x2 !== undefined && e.y2 !== undefined) {
+        c.save();
+        c.globalAlpha = a;
+        c.strokeStyle = e.color;
+        c.lineWidth = 2.5;
+        c.shadowColor = e.color;
+        c.shadowBlur = 6;
+        c.beginPath();
+        c.moveTo(e.x, e.y);
+        c.lineTo(e.x2, e.y2);
+        c.stroke();
+        c.restore();
+      } else if (e.kind === 'spark') {
+        const r = (e.r ?? 8) * (1.2 - a * 0.4);
+        c.save();
+        c.globalAlpha = a;
+        c.fillStyle = e.color;
+        c.shadowColor = e.color;
+        c.shadowBlur = 8;
+        c.beginPath();
+        c.arc(e.x, e.y, r, 0, Math.PI * 2);
+        c.fill();
+        c.restore();
+      } else if (e.kind === 'wave') {
+        // 码农光波：向外扩散的知识环，环上闪动 That's pity。
+        const rr = (e.r ?? 120) * (1 - a);
+        c.save();
+        c.globalAlpha = Math.min(1, a * 1.5);
+        c.strokeStyle = e.color;
+        c.lineWidth = 3;
+        c.shadowColor = e.color;
+        c.shadowBlur = 12;
+        c.beginPath();
+        c.arc(e.x, e.y, rr, 0, Math.PI * 2);
+        c.stroke();
+        if (e.text) {
+          c.globalAlpha =
+            Math.min(1, a * 1.5) * (0.45 + 0.55 * Math.abs(Math.sin(t * 11)));
+          this.text(e.text, e.x, e.y - rr, 11, e.color);
+        }
+        c.restore();
+      } else if (e.kind === 'aura') {
+        // 鹅腿阿姨的食堂光环：增益偏绿、减损偏灰。
+        const rr = (e.r ?? 140) * (0.62 + (1 - a) * 0.38);
+        c.save();
+        c.globalAlpha = a * 0.55;
+        const g = c.createRadialGradient(e.x, e.y, rr * 0.2, e.x, e.y, rr);
+        g.addColorStop(0, `${e.color}66`);
+        g.addColorStop(1, `${e.color}00`);
+        c.fillStyle = g;
+        c.beginPath();
+        c.arc(e.x, e.y, rr, 0, Math.PI * 2);
+        c.fill();
+        if (e.text) {
+          c.globalAlpha = a;
+          this.text(e.text, e.x, e.y - 22, 11, e.color);
+        }
+        c.restore();
+      } else if (e.kind === 'explosion') {
+        const rr = (e.r ?? 40) * (1 - a);
+        c.save();
+        c.globalAlpha = a;
+        c.strokeStyle = e.color;
+        c.lineWidth = 4 * a + 1;
+        c.shadowColor = e.color;
+        c.shadowBlur = 14;
+        c.beginPath();
+        c.arc(e.x, e.y, rr, 0, Math.PI * 2);
+        c.stroke();
+        c.globalAlpha = a * 0.4;
+        c.fillStyle = e.color;
+        c.beginPath();
+        c.arc(e.x, e.y, rr, 0, Math.PI * 2);
+        c.fill();
+        c.restore();
+      }
+    }
+  }
   private draw() {
     const c = this.ctx,
       m = this.model,
@@ -2289,6 +2879,11 @@ export class CampusGame {
     window.removeEventListener('keyup', this.keyup);
     window.removeEventListener('blur', this.blur);
     document.removeEventListener('visibilitychange', this.visibility);
+    this.canvas.removeEventListener('wheel', this.towerWheel);
+    this.canvas.removeEventListener('pointerdown', this.towerPointerDown);
+    this.canvas.removeEventListener('pointermove', this.towerPointerMove);
+    this.canvas.removeEventListener('pointerup', this.towerPointerUp);
+    this.canvas.removeEventListener('pointercancel', this.towerPointerUp);
     if (this.audio) void this.audio.close().catch(() => {});
   }
 }

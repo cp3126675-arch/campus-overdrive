@@ -19,7 +19,8 @@ async function walk(dir) {
     const bytes = await readFile(join('public', file));
     const atlas = file.includes('atlas');
     const campusMap = /tsinghua-campus-map/.test(file);
-    const size = file.startsWith('badges/')
+    // 徽章与 Boss 头像都是小尺寸圆形图标，按显示尺寸编码即可，避免无谓体积。
+    const size = file.startsWith('badges/') || file.includes('avatar/')
       ? 128
       : campusMap
         ? 3072
