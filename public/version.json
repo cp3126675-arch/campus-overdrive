@@ -1,7 +1,6 @@
 {
   "version": "0.6.13",
-  "name": "塔防模式（测试候选）",
+  "name": "塔防模式",
   "date": "2026-09-29",
-  "previousVersion": "0.6.12",
-  "status": "candidate"
+  "previousVersion": "0.6.12"
 }

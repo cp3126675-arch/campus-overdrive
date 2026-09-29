@@ -301,8 +301,8 @@ export class CampusGame {
         e.key,
         `/badges/${e.key}.png`,
       ]),
-      ['tower-boss-coder', '/art/avatar/coder.jpg'],
-      ['tower-boss-ayi', '/art/avatar/ayi.png'],
+      ['tower-boss-coder', '/art/coder-pity.png'],
+      ['memes', '/art/meme-atlas.png'],
     ];
     for (const [key, src] of defs) {
       if (this.assets.has(key)) continue;
@@ -2034,13 +2034,12 @@ export class CampusGame {
       if (s.boss !== 'coder' && s.boss !== 'ayi') continue;
       const color = s.hitFlash > 0 ? '#ffffff' : studentColor(s);
       const r = 13;
-      this.avatar(
-        s.boss === 'coder' ? 'tower-boss-coder' : 'tower-boss-ayi',
-        s.x,
-        s.y,
-        r,
-        color,
-      );
+      if (s.boss === 'coder') {
+        this.avatar('tower-boss-coder', s.x, s.y, r, color);
+      } else {
+        this.circle(s.x, s.y, r, '#172720', color, 2);
+        this.memeSprite(1, s.x, s.y, r * 2, r * 2);
+      }
       if (s.boss === 'coder') {
         // 码农：脉动的光波源
         c.save();

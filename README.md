@@ -4,7 +4,7 @@
 
 [在线试玩 v0.6.12](https://cp3126675-arch.github.io/campus-overdrive/?v=0.6.12) · [贡献指南](CONTRIBUTING.md) · [配乐投稿](public/audio/README.md) · [游戏总纲](docs/游戏设计与长期开发文档.md) · [版本记录](RELEASES.md)
 
-源码包含 **v0.6.13 塔防测试候选**（贡献者 FreneticWind60，PR #16），在线试玩仍为 v0.6.12。塔防暂无全服排行，手机真机和平衡待验；本地 `npm run dev` 可试。
+源码版本 **v0.6.13 塔防模式**（贡献者 FreneticWind60，PR #16），发布状态见 RELEASES.md。塔防入口保留“测试”，暂无全服排行；手机真机手感与平衡仍待反馈。
 
 ## 下载与运行
 

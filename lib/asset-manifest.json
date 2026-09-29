@@ -1,18 +1,4 @@
 {
-  "/art/avatar/ayi.png": {
-    "file": "/optimized/a5629858e083a619af78.webp",
-    "bytes": 9822,
-    "originalBytes": 515527,
-    "sourceSha256": "1b77586b1960228b7afff2f85a3e2b72deeb788efcc2541dc85a68bead9b316b",
-    "sha256": "a5629858e083a619af78b064cb4436fe62059f7ed2bc2170cf5abfcdff5b8bb0"
-  },
-  "/art/avatar/coder.jpg": {
-    "file": "/optimized/ad464b1018ddaa68e76c.webp",
-    "bytes": 780,
-    "originalBytes": 2579,
-    "sourceSha256": "52e1d59304198d8c8cfe348c341b58df8bdf484b37c56ab033b49f9abc24521f",
-    "sha256": "ad464b1018ddaa68e76c14042b35b8c5d04733fdaca133c081f72788f847fce1"
-  },
   "/art/bike-photo.jpg": {
     "file": "/optimized/bdab27c916fa43368e19.webp",
     "bytes": 17340,
